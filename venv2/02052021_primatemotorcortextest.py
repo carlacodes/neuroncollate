@@ -1,0 +1,162 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from affinewarp import ShiftWarping
+
+import h5py
+import numpy as np
+filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-68/spikeArraysBlockNellie-68BB2andBB3May-02-2021- 7-41-45-742-PM.mat'
+arrays = {}
+f = h5py.File(filepath)
+for k, v in f.items():
+    newarray=np.array(v)
+    newarrayremove=newarray[0, :]
+    arrays[k] = newarrayremove
+
+#matplotlib inline
+# Trial duration and bin size parameters.
+TMIN = -400  # ms
+TMAX = 100   # ms
+BINSIZE = 5  # ms
+NBINS = int((TMAX - TMIN) / BINSIZE)
+fS=24414.065;
+TMIN2=0
+TMAX2=1.2*fS; #I made the maximum trial length 1.2 seconds
+# LFP parameters.
+LOW_CUTOFF = 10  # Hz
+HIGH_CUTOFF = 30  # Hz
+
+# Hyperparameters for shift-only warping model.
+SHIFT_SMOOTHNESS_REG = 0.5
+SHIFT_WARP_REG = 1e-2
+MAXLAG = 0.15
+
+# Hyperparameters for linear warping model.
+LINEAR_SMOOTHNESS_REG = 1.0
+LINEAR_WARP_REG = 0.065
+
+from affinewarp import SpikeData
+
+# Spike times.
+S = dict(np.load("umi_spike_data.npz"))
+data = SpikeData(
+    trials=S["trials"],
+    spiketimes=S["spiketimes"],
+    neurons=S["unit_ids"],
+    tmin=TMIN,
+    tmax=TMAX,
+)
+# result = arrays["oneDtrialIDarray"];
+# result = x[0, :, 0]
+data2=SpikeData(
+    trials=arrays["oneDtrialIDarray"],
+    spiketimes=arrays["oneDspiketimearray"],
+    neurons=arrays["oneDspikeIDarray"],
+    tmin=TMIN2,
+    tmax=TMAX2,
+)
+data2.n_neurons=data2.n_neurons.astype(np.int64)
+data2.n_trials=data2.n_trials.astype(np.int64)
+
+# Bin and normalize (soft z-score) spike times.
+binned = data.bin_spikes(NBINS)
+binned = binned - binned.mean(axis=(0, 1), keepdims=True)
+binned = binned / (1e-2 + binned.std(axis=(0, 1), keepdims=True))
+
+# Crop spike times when visualizing rasters.
+cropped_data = data.crop_spiketimes(TMIN, TMAX)
+
+# Load LFP traces (n_trials x n_timebins). Crop traces to [TMIN, TMAX).
+L = dict(np.load("umi_lfp_data.npz"))
+
+# Define bandpass filtering function for LFP
+from scipy.signal import butter, filtfilt, freqz
+
+def bandpass(x, lowcut, highcut, fs, order=5, axis=-1, kind='butter'):
+    """
+    Bandpass filters analog time series.
+
+    Parameters
+    ----------
+    x : ndarray
+        Time series data
+    lowcut : float
+        Defines lower frequency cutoff (e.g. in Hz)
+    highcut : float
+        Defines upper frequency cutoff (e.g. in Hz)
+    fs : float
+        Sampling frequency (e.g. in Hz)
+    order : int
+        Filter order parameter
+    kind : str
+        Specifies the kind of filter
+    axis : int
+        Axis along which to bandpass filter data
+    """
+    nyq = 0.5 * fs
+    low = lowcut / nyq
+    high = highcut / nyq
+    if kind == "butter":
+        b, a = butter(order, [low, high], btype="band")
+    else:
+        raise ValueError("Filter kind not recognized.")
+    return filtfilt(b, a, x, axis=axis)
+
+# Load LFP.
+L = dict(np.load("umi_lfp_data.npz"))
+
+# Apply bandpass filter.
+lfp = bandpass(L["lfp"], LOW_CUTOFF, HIGH_CUTOFF, L["sample_rate"])
+
+# Crop LFP time base to match spike times.
+tidx = (L["lfp_time"] >= TMIN) & (L["lfp_time"] < TMAX)
+lfp = lfp[:, tidx]
+lfp_time = L["lfp_time"][tidx]
+
+# Z-score LFP.
+lfp -= lfp.mean(axis=1, keepdims=True)
+lfp /= lfp.std(axis=1, keepdims=True)
+
+
+# Specify model.
+shift_model = ShiftWarping(
+    smoothness_reg_scale=SHIFT_SMOOTHNESS_REG,
+    warp_reg_scale=SHIFT_WARP_REG,
+    maxlag=MAXLAG,
+)
+
+# Fit to binned spike times.
+shift_model.fit(binned, iterations=50)
+
+# Apply inverse warping functions to data.
+shift_aligned_data = shift_model.transform(data).crop_spiketimes(TMIN, TMAX)
+
+from affinewarp import PiecewiseWarping
+
+# Specify model.
+lin_model = PiecewiseWarping(
+    n_knots=0,
+    smoothness_reg_scale=LINEAR_SMOOTHNESS_REG,
+    warp_reg_scale=LINEAR_WARP_REG
+)
+
+# Fit to binned spike times.
+lin_model.fit(binned, iterations=50)
+
+# Apply inverse warping functions to data.
+linear_aligned_data = lin_model.transform(data).crop_spiketimes(TMIN, TMAX)
+
+
+plt.plot(shift_model.loss_hist, label="shift")
+plt.plot(lin_model.loss_hist, label="linear")
+plt.xlabel("Iteration")
+plt.ylabel("Normalized Loss")
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+
+from affinewarp.visualization import rasters
+rasters(cropped_data);
+plt.show() #original data
+rasters(shift_aligned_data);
+plt.show()
