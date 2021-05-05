@@ -4,7 +4,7 @@ from affinewarp import ShiftWarping
 
 import h5py
 import numpy as np
-filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-68/spikeArraysBlockNellie-68BB2andBB3May-02-2021- 7-41-45-742-PM.mat'
+filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-68/spikeArraysBlockNellie-68BB2andBB3May-05-2021- 1-59-30-664-PM.mat'
 arrays = {}
 f = h5py.File(filepath)
 for k, v in f.items():
@@ -124,7 +124,7 @@ shift_model = ShiftWarping(
 )
 
 # Fit to binned spike times.
-shift_model.fit(binned, iterations=50)
+shift_model.fit(binned, iterations=100)
 
 # Apply inverse warping functions to data.
 shift_aligned_data = shift_model.transform(data2).crop_spiketimes(TMIN, TMAX)
@@ -139,7 +139,7 @@ lin_model = PiecewiseWarping(
 )
 
 # Fit to binned spike times.
-lin_model.fit(binned, iterations=50)
+lin_model.fit(binned, iterations=100)
 
 # Apply inverse warping functions to data.
 linear_aligned_data = lin_model.transform(data2).crop_spiketimes(TMIN, TMAX)
@@ -179,10 +179,6 @@ plt.show()
 
 fig, axes= rasters(linear_aligned_data, subplots=(5, 8));
 fig.suptitle(' Rasters after Linear Model (18/03/2021 Zola) ', fontsize=10, color='1', y='1')
-
-#make_space_above(axes, topmargin=10)
-
+#make_space_above(axes, topmargin=10)=
 #plt.title('Rasters after Linear Model (18/03/2021 Zola)')
-fig.tight_layout()
-fig.subplots_adjust(top=10)
 plt.show();
