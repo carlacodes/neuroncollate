@@ -4,7 +4,7 @@ from affinewarp import ShiftWarping
 
 import h5py
 import numpy as np
-filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-95/spikeArraysBlockNellie-95BB2andBB3atten20May-05-2021- 8-40-32-225-PM.mat'
+filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-95/spikeArraysBlockNellie-95BB2andBB3uncleanedatten0May-05-2021-11-32-33-880-PM.mat'
 arrays = {}
 f = h5py.File(filepath)
 for k, v in f.items():
@@ -26,8 +26,8 @@ LOW_CUTOFF = 10  # Hz
 HIGH_CUTOFF = 30  # Hz
 
 # Hyperparameters for shift-only warping model.
-SHIFT_SMOOTHNESS_REG = 0.5
-SHIFT_WARP_REG = 1e-2
+SHIFT_SMOOTHNESS_REG = 2000 #0.5
+SHIFT_WARP_REG = 1e-6
 MAXLAG = 0.15
 
 # Hyperparameters for linear warping model.
