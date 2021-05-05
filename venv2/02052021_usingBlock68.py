@@ -155,9 +155,16 @@ plt.show()
 
 
 from affinewarp.visualization import rasters
-rasters(cropped_data);
+rasters(cropped_data, subplots=(5, 8));
+#plt.title('Rasters of Original Data (18/03/2021 Zola) ')
 plt.show() #original data
+
 rasters(shift_aligned_data, subplots=(5, 8));
+#plt.title('Rasters after Shift Model (18/03/2021 Zola) ')
 plt.show()
-rasters(linear_aligned_data);
-plt.show();
+
+fig, axes= rasters(linear_aligned_data, subplots=(5, 8));
+#plt.title('Rasters after Linear Model (18/03/2021 Zola)')
+fig.suptitle(' Rasters after Linear Model (18/03/2021 Zola) ', fontsize=30)
+
+fig.show();
