@@ -4,19 +4,28 @@ from affinewarp import ShiftWarping
 
 import h5py
 import numpy as np
-filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-77/spikeArraysBlockNellie-77BB2andBB3May-05-2021- 7-05-55-391-PM.mat'
+filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-77/spikeArraysBlockNellie-77BB2andBB3atten0trialsMay-05-2021- 5-56-04-002-PM.mat'
 arrays = {}
 f = h5py.File(filepath)
 for k, v in f.items():
     newarray=np.array(v)
     newarrayremove=newarray[0, :]
     arrays[k] = newarrayremove
+
+filepath2 = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-76/spikeArraysBlockNellie-76BB2andBB3atten0trialsMay-05-2021- 6-20-26-212-PM.mat'
+arrays2 = {}
+f2 = h5py.File(filepath2)
+items2=f2.items()
+for k2, v2 in f2.items():
+    newarray2=np.array(v2)
+    newarrayremove2=newarray2[0, :]
+    arrays2[k2] = newarrayremove2
 fS=24414.065;
 #matplotlib inline
 # Trial duration and bin size parameters.
 TMIN = 0  # ms
-TMAX = int(1.2*fS)   # ms
-BINSIZE = 200  # ms
+TMAX = int(1.2*fS)   # s*fS
+BINSIZE = 100  # ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
 
 TMIN2=0
@@ -47,10 +56,15 @@ S = dict(np.load("umi_spike_data.npz"))
 # )
 # result = arrays["oneDtrialIDarray"];
 # result = x[0, :, 0]
+adjustedTrial=arrays2["oneDtrialIDarray"]+max(arrays["oneDtrialIDarray"])
+combinedTrials=np.concatenate((arrays["oneDtrialIDarray"], adjustedTrial), axis=0)
+combinedSpikeTimes=np.concatenate((arrays["oneDspiketimearray"], arrays2["oneDspiketimearray"]),axis=0)
+combinedNeuron=np.concatenate((arrays["oneDspikeIDarray"], arrays2["oneDspikeIDarray"]),axis=0)
+
 data2=SpikeData(
-    trials=arrays["oneDtrialIDarray"],
-    spiketimes=arrays["oneDspiketimearray"],
-    neurons=arrays["oneDspikeIDarray"],
+    trials=combinedTrials, #arrays["oneDtrialIDarray"],
+    spiketimes=combinedSpikeTimes, #["oneDspiketimearray"],
+    neurons=combinedNeuron, #["oneDspikeIDarray"],
     tmin=TMIN,
     tmax=TMAX,
 )
@@ -124,7 +138,7 @@ shift_model = ShiftWarping(
 )
 
 # Fit to binned spike times.
-shift_model.fit(binned, iterations=100)
+shift_model.fit(binned, iterations=50)
 
 # Apply inverse warping functions to data.
 shift_aligned_data = shift_model.transform(data2).crop_spiketimes(TMIN, TMAX)
@@ -139,7 +153,7 @@ lin_model = PiecewiseWarping(
 )
 
 # Fit to binned spike times.
-lin_model.fit(binned, iterations=100)
+lin_model.fit(binned, iterations=50)
 
 # Apply inverse warping functions to data.
 linear_aligned_data = lin_model.transform(data2).crop_spiketimes(TMIN, TMAX)
