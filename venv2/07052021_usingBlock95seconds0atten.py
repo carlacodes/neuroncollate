@@ -4,7 +4,7 @@ from affinewarp import ShiftWarping
 
 import h5py
 import numpy as np
-filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-95/spikeArraysBlockNellie-95BB2andBB3uncleanedMay-06-2021- 6-06-24-484-PM.mat'
+filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-95/spikeArraysBlockNellie-95BB2andBB3uncleanedcurratten0May-07-2021- 1-12-42-622-PM.mat'
 arrays = {}
 f = h5py.File(filepath)
 for k, v in f.items():
