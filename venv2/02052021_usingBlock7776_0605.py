@@ -35,7 +35,7 @@ LOW_CUTOFF = 10  # Hz
 HIGH_CUTOFF = 30  # Hz
 
 # Hyperparameters for shift-only warping model.
-SHIFT_SMOOTHNESS_REG = 0.5
+SHIFT_SMOOTHNESS_REG = 2000
 SHIFT_WARP_REG = 1e-2
 MAXLAG = 0.15
 
