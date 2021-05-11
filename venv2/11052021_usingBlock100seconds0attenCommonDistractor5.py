@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from affinewarp import ShiftWarping
-
+import os
 import h5py
 import numpy as np
-filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-95/spikeArraysBlockNellie-95BB2andBB3uncleanedMay-06-2021- 6-06-24-484-PM.mat'
+filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-100/commondistractor5/spikeArraysBlockNellie-100BB2andBB3curratten0May-11-2021-11-52-55-988-AM.mat'
 arrays = {}
 f = h5py.File(filepath)
 for k, v in f.items():
@@ -26,7 +26,7 @@ LOW_CUTOFF = 10  # Hz
 HIGH_CUTOFF = 30  # Hz
 
 # Hyperparameters for shift-only warping model.
-SHIFT_SMOOTHNESS_REG = 0.0005
+SHIFT_SMOOTHNESS_REG = 0.5
 SHIFT_WARP_REG = 1e-2
 MAXLAG = 0.15
 
@@ -186,3 +186,9 @@ fig.suptitle(' Rasters after Linear Model (18/03/2021 Zola) ', fontsize=10, colo
 fig.tight_layout()
 fig.subplots_adjust(top=10)
 plt.show();
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-100/commondistractor5/'
+file_name='alignedDataBlock100ShiftModeldistractor5'
+np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
+np.save(os.path.join(BASE_PATH, 'neuronIDs'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'trialIDs'), shift_aligned_data["trials"])
+
