@@ -4,7 +4,7 @@ from affinewarp import ShiftWarping
 import os
 import h5py
 import numpy as np
-filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-108/spikeArraysBlockNellie-108BB2andBB3atten0trialsMay-16-2021- 2-54-09-187-PM.mat'
+filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-108/commondistractor20/spikeArraysBlockNellie-108BB2andBB3curratten0dist20May-16-2021- 3-17-15-694-PM.mat'
 arrays = {}
 f = h5py.File(filepath)
 for k, v in f.items():
@@ -12,11 +12,28 @@ for k, v in f.items():
     newarrayremove=newarray[0, :]
     arrays[k] = newarrayremove
 fS=24414.065;
+filepath2 = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-106/commondistractor20/spikeArraysBlockNellie-106BB2andBB3curratten0dist20May-16-2021- 3-46-21-462-PM.mat'
+arrays2 = {}
+f2 = h5py.File(filepath2)
+items2=f2.items()
+for k2, v2 in f2.items():
+    newarray2=np.array(v2)
+    newarrayremove2=newarray2[0, :]
+    arrays2[k2] = newarrayremove2
+
+filepath3 = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-110/commondistractor20/spikeArraysBlockNellie-110BB2andBB3curratten0dist20May-16-2021- 4-18-49-546-PM.mat'
+arrays3 = {}
+f3 = h5py.File(filepath3)
+items3=f3.items()
+for k3, v3 in f3.items():
+    newarray3=np.array(v3)
+    newarrayremove3=newarray3[0, :]
+    arrays3[k3] = newarrayremove3
 #matplotlib inline
 # Trial duration and bin size parameters.
 TMIN = 0  # s
 TMAX = 1.2 # s
-BINSIZE = 0.01  # s
+BINSIZE = 0.01  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
 
 TMIN2=0
@@ -47,10 +64,16 @@ S = dict(np.load("umi_spike_data.npz"))
 # )
 # result = arrays["oneDtrialIDarray"];
 # result = x[0, :, 0]
+adjustedTrial=arrays2["oneDtrialIDarray"]+max(arrays["oneDtrialIDarray"])
+adjustedTrial2=arrays3["oneDtrialIDarray"]+max(adjustedTrial)
+combinedTrials=np.concatenate((arrays["oneDtrialIDarray"], adjustedTrial, adjustedTrial2), axis=0)
+combinedSpikeTimes=np.concatenate((arrays["oneDspiketimearray"], arrays2["oneDspiketimearray"], arrays3["oneDspiketimearray"]),axis=0)
+combinedNeuron=np.concatenate((arrays["oneDspikeIDarray"], arrays2["oneDspikeIDarray"], arrays3["oneDspikeIDarray"]),axis=0)
+
 data2=SpikeData(
-    trials=arrays["oneDtrialIDarray"],
-    spiketimes=arrays["oneDspiketimearray"],
-    neurons=arrays["oneDspikeIDarray"],
+    trials=combinedTrials, #arrays["oneDtrialIDarray"],
+    spiketimes=combinedSpikeTimes, #["oneDspiketimearray"],
+    neurons=combinedNeuron, #["oneDspikeIDarray"],
     tmin=TMIN,
     tmax=TMAX,
 )
@@ -186,8 +209,8 @@ fig.suptitle(' Rasters after Linear Model (18/03/2021 Zola) ', fontsize=10, colo
 fig.tight_layout()
 fig.subplots_adjust(top=10)
 plt.show();
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-108/'
-file_name='alignedDataBlock108ShiftModel'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-108/commondistractor20/'
+file_name='alignedDataBlock108106110ShiftModeldistractor20'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'neuronIDs'), shift_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'trialIDs'), shift_aligned_data["trials"])

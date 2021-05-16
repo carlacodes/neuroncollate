@@ -4,7 +4,7 @@ from affinewarp import ShiftWarping
 import os
 import h5py
 import numpy as np
-filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-108/spikeArraysBlockNellie-108BB2andBB3atten0trialsMay-16-2021- 2-54-09-187-PM.mat'
+filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-108/commondistractor20/spikeArraysBlockNellie-108BB2andBB3curratten0dist20May-16-2021- 3-17-15-694-PM.mat'
 arrays = {}
 f = h5py.File(filepath)
 for k, v in f.items():
@@ -186,8 +186,8 @@ fig.suptitle(' Rasters after Linear Model (18/03/2021 Zola) ', fontsize=10, colo
 fig.tight_layout()
 fig.subplots_adjust(top=10)
 plt.show();
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-108/'
-file_name='alignedDataBlock108ShiftModel'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-108/commondistractor20/'
+file_name='alignedDataBlock108ShiftModeldistractor20'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'neuronIDs'), shift_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'trialIDs'), shift_aligned_data["trials"])
