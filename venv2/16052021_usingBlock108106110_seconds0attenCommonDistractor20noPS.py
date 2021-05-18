@@ -4,7 +4,7 @@ from affinewarp import ShiftWarping
 import os
 import h5py
 import numpy as np
-filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-108/commondistractor20/PitchShift/spikeArraysBlockNellie-108BB2andBB3curratten0dist20May-18-2021-11-40-30-067-AM.mat'
+filepath = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-108/commondistractor20/noPitchShift/spikeArraysBlockNellie-108BB2andBB3curratten0dist20May-18-2021-11-44-49-346-AM.mat'
 arrays = {}
 f = h5py.File(filepath)
 for k, v in f.items():
@@ -12,8 +12,8 @@ for k, v in f.items():
     newarrayremove=newarray[0, :]
     arrays[k] = newarrayremove
 fS=24414.065;
-filepath2 = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-106/commondistractor20/PitchShift/spikeArraysBlockNellie-106BB2andBB3curratten0dist20May-18-2021-11-35-35-707-AM.mat'
-arrays2 = {}
+filepath2 = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-106/commondistractor20/noPitchShift/spikeArraysBlockNellie-106BB2andBB3curratten0dist20May-18-2021-12-16-26-604-PM.mat'
+arrays2={}
 f2 = h5py.File(filepath2)
 items2=f2.items()
 for k2, v2 in f2.items():
@@ -21,7 +21,7 @@ for k2, v2 in f2.items():
     newarrayremove2=newarray2[0, :]
     arrays2[k2] = newarrayremove2
 
-filepath3 = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-110/commondistractor20/pitchshift/spikeArraysBlockNellie-110BB2andBB3curratten0dist20May-17-2021-12-38-08-141-PM.mat'
+filepath3 = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-110/commondistractor20/nopitchshift/spikeArraysBlockNellie-110BB2andBB3curratten0dist20May-18-2021-11-46-31-506-AM.mat'
 arrays3 = {}
 f3 = h5py.File(filepath3)
 items3=f3.items()
@@ -209,13 +209,13 @@ fig.suptitle(' Rasters after Linear Model (13-14/05 Zola) ', fontsize=10, color=
 fig.tight_layout()
 fig.subplots_adjust(top=10)
 plt.show();
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-108/commondistractor20/PitchShift'
-file_name='alignedDataBlock108106110ShiftModeldistractor20PS'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-108/commondistractor20/noPitchShift'
+file_name='alignedDataBlock108106110ShiftModeldistractor20nPS'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'neuronIDsPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'trialIDsPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'neuronIDsnPS'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'trialIDsnPS'), shift_aligned_data["trials"])
 
-file_name='alignedDataBlock108106110LinearModeldistractor20PS'
+file_name='alignedDataBlock108106110LinearModeldistractor20nPS'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPS'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPS'), shift_aligned_data["trials"])
