@@ -166,19 +166,19 @@ def make_space_above(axes, topmargin=1):
 
 from affinewarp.visualization import rasters
 fig, axes=rasters(cropped_data, subplots=(5, 8));
-fig.suptitle('Original Data (18/03/2021 Zola) ', fontsize=10, color='1', y='1')
+fig.suptitle('Original Data (Block106 Zola) ', fontsize=10, color='1', y='1')
 
 #plt.title('Rasters of Original Data (18/03/2021 Zola) ')
 plt.show() #original data
 
 fig, axes=rasters(shift_aligned_data, subplots=(5, 8));
-fig.suptitle(' Rasters after Shift Model (18/03/2021 Zola) ', fontsize=10, color='1', y='1')
+fig.suptitle(' Rasters after Shift Model (Block106 Zola) ', fontsize=10, color='1', y='1')
 
 #plt.title('Rasters after Shift Model (18/03/2021 Zola) ')
 plt.show()
 
 fig, axes= rasters(linear_aligned_data, subplots=(5, 8));
-fig.suptitle(' Rasters after Linear Model (18/03/2021 Zola) ', fontsize=10, color='1', y='1')
+fig.suptitle(' Rasters after Linear Model (Block106 Zola) ', fontsize=10, color='1', y='1')
 
 #make_space_above(axes, topmargin=10)
 
