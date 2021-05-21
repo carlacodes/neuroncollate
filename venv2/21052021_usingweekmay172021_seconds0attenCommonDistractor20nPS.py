@@ -71,13 +71,13 @@ LOW_CUTOFF = 10  # Hz
 HIGH_CUTOFF = 30  # Hz
 
 # Hyperparameters for shift-only warping model.
-SHIFT_SMOOTHNESS_REG = 0.5*1e-3
-SHIFT_WARP_REG = 1e-2*1e-3
-MAXLAG = 0.15*1e-3
+SHIFT_SMOOTHNESS_REG = 0.5
+SHIFT_WARP_REG = 1e-2
+MAXLAG = 0.15
 
 # Hyperparameters for linear warping model.
-LINEAR_SMOOTHNESS_REG = 1.0*1e-3
-LINEAR_WARP_REG = 0.065*1e-3
+LINEAR_SMOOTHNESS_REG = 1.0
+LINEAR_WARP_REG = 0.065
 
 from affinewarp import SpikeData
 
@@ -264,6 +264,6 @@ np.save(os.path.join(BASE_PATH, 'neuronIDsnPS'), shift_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'trialIDsnPS'), shift_aligned_data["trials"])
 
 file_name='alignedDataBlockweekmay172021LinearModeldistractor20nPS'
-np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
+np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPS'), linear_aligned_data["trials"])
