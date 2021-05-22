@@ -260,10 +260,10 @@ plt.show();
 BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-111/PitchShiftTarget'
 file_name='alignedDataBlockweekmay172021ShiftModeltargetPS'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'neuronIDsnPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'trialIDsnPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'neuronIDsPS'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'trialIDsPS'), shift_aligned_data["trials"])
 
 file_name='alignedDataBlockweekmay172021LinearModeltargetPS'
-np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
+np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsPS'), linear_aligned_data["trials"])

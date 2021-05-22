@@ -216,6 +216,6 @@ np.save(os.path.join(BASE_PATH, 'neuronIDsPS'), shift_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'trialIDsPS'), shift_aligned_data["trials"])
 
 file_name='alignedDataBlock108106110LinearModeldistractor20PS'
-np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
+np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsPS'), linear_aligned_data["trials"])
