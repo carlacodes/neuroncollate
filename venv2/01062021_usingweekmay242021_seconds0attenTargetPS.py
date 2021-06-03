@@ -60,12 +60,12 @@ for i in blocksOfInterest:
 
 
 TMIN = 0  # s
-TMAX = 0.*1000# s
+TMAX = 0.8*1000# s
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
 
 TMIN2=0
-TMAX2=1.2*1000; #I made the maximum trial length 1.2 seconds
+TMAX2=0.8*1000; #I made the maximum trial length 1.2 seconds
 # LFP parameters.
 LOW_CUTOFF = 10  # Hz
 HIGH_CUTOFF = 30  # Hz
@@ -237,19 +237,19 @@ def make_space_above(axes, topmargin=1):
 
 from affinewarp.visualization import rasters
 fig, axes=rasters(cropped_data, subplots=(5, 8));
-fig.suptitle('Original Data (17-20/05/2021 Zola) ', fontsize=10, color='1', y='1')
+fig.suptitle('Original Data (PS 24-28/05/2021 Zola) ', fontsize=10, color='1', y='1')
 
 #plt.title('Rasters of Original Data (18/03/2021 Zola) ')
 plt.show() #original data
 
 fig, axes=rasters(shift_aligned_data, subplots=(5, 8));
-fig.suptitle(' Rasters after Shift Model (24-29/05/2021 Zola) ', fontsize=10, color='1', y='1')
+fig.suptitle(' Rasters after Shift Model (PS 24-28/05/2021 Zola) ', fontsize=10, color='1', y='1')
 
 #plt.title('Rasters after Shift Model (18/03/2021 Zola) ')
 plt.show()
 
 fig, axes= rasters(linear_aligned_data, subplots=(5, 8));
-fig.suptitle(' Rasters after Linear Model (24-29/05/2021 Zola) ', fontsize=10, color='1', y='1')
+fig.suptitle(' Rasters after Linear Model (PS 24-28/05/2021 Zola) ', fontsize=10, color='1', y='1')
 
 #make_space_above(axes, topmargin=10)
 

@@ -35,9 +35,9 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[111,114,115,116,118]
+blocksOfInterest=[123,126,127,128,129,130]
 for i in blocksOfInterest:
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/commondistractor20/pitchshift'
+    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/comdistWhenA/nopitchshift'
     directory = os.listdir(user_input)
 
     searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -60,8 +60,8 @@ for i in blocksOfInterest:
 
 
 TMIN = 0  # s
-TMAX = 1.2 # s
-BINSIZE = 0.01  # 10 ms
+TMAX = 0.8*1000 # s
+BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
 
 TMIN2=0
@@ -237,19 +237,19 @@ def make_space_above(axes, topmargin=1):
 
 from affinewarp.visualization import rasters
 fig, axes=rasters(cropped_data, subplots=(5, 8));
-fig.suptitle('Original Data (PS 17-20/05/2021 Zola) ', fontsize=10, color='1', y='1')
+fig.suptitle('Original Data (non PS 24-28/05/2021 Zola) ', fontsize=10, color='1', y='1')
 
 #plt.title('Rasters of Original Data (18/03/2021 Zola) ')
 plt.show() #original data
 
 fig, axes=rasters(shift_aligned_data, subplots=(5, 8));
-fig.suptitle(' Rasters after Shift Model (PS 17-20/05/2021 Zola) ', fontsize=10, color='1', y='1')
+fig.suptitle(' Rasters after Shift Model (NPS 24-28/05/2021 Zola) ', fontsize=10, color='1', y='1')
 
 #plt.title('Rasters after Shift Model (18/03/2021 Zola) ')
 plt.show()
 
 fig, axes= rasters(linear_aligned_data, subplots=(5, 8));
-fig.suptitle(' Rasters after Linear Model (PS 17-20/05/2021 Zola) ', fontsize=10, color='1', y='1')
+fig.suptitle(' Rasters after Linear Model (NPS 24-28/05/2021 Zola) ', fontsize=10, color='1', y='1')
 
 #make_space_above(axes, topmargin=10)
 
@@ -257,13 +257,13 @@ fig.suptitle(' Rasters after Linear Model (PS 17-20/05/2021 Zola) ', fontsize=10
 fig.tight_layout()
 fig.subplots_adjust(top=10)
 plt.show();
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-111/commondistractor20/PitchShift'
-file_name='alignedDataBlockweekmay172021ShiftModeldistractor20PS'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/commondistWhenA/'
+file_name='alignedDataBlockweekmay242021ShiftModeldistractorWhenAnPS'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'neuronIDsPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'trialIDsPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'neuronIDsnPS'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'trialIDsnPS'), shift_aligned_data["trials"])
 
-file_name='alignedDataBlockweekmay172021LinearModeldistractor20PS'
+file_name='alignedDataBlockweekmay242021LinearModeldistractorWhenAnPS'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsPS'), linear_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPS'), linear_aligned_data["trials"])
