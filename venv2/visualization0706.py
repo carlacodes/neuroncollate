@@ -68,13 +68,13 @@ def rasters(data, subplots=(5, 6), fig=None, axes=None, figsize=(9*1.5, 5*1.5),
         # make raster plot
         if c is not None:
             ax.scatter(times[idx], trials[idx], c=c[idx], **scatter_kw)
-            ax.set_xticks([200, 400, 600])
-            ax.set_xticklabels([-200, 0, 200])
+            ax.set_xticks([0, 200, 400, 600, 800])
+            ax.set_xticklabels([-400, -200, 0, 200, 400])
 
         else:
             ax.scatter(times[idx], trials[idx], **scatter_kw)
-            ax.set_xticks([ 200, 400,  600])
-            ax.set_xticklabels([ -200, 0, 200])
+            ax.set_xticks([0, 200, 400, 600, 800])
+            ax.set_xticklabels([-400, -200, 0, 200, 400])
 
 
 

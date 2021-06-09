@@ -35,9 +35,9 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[123,126,127,128,130]
+blocksOfInterest=[123,126,127,128,129]
 for i in blocksOfInterest:
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/lickrelease'
+    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/lickrelease/orderingbyLRtime'
     directory = os.listdir(user_input)
 
     searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -102,13 +102,20 @@ for i2 in range(len(blocksOfInterest)-1):
 combinedTrialsAdjusted=np.concatenate([v for k,v in sorted(adjustedTrial.items())], 0)
 firsttrialarray=blockData[blocksOfInterest[0]]["oneDtrialIDarray"]
 combinedTrials=np.append(firsttrialarray, combinedTrialsAdjusted)
+for i in range(len(combinedTrials)):
+    combinedTrials[i] -= 1
+
 combinedSpikeTimes=np.array([]); #declare empty numpy array
 combinedNeuron=np.array([])
+combinedLickReleaseTimes=np.array([])
+
 for i3 in range(len(blockData)):
     selectedSpikeTimes=blockData[blocksOfInterest[i3]]["oneDspiketimearray"]
     selectedNeuronIDs=blockData[blocksOfInterest[i3]]["oneDspikeIDarray"]
+    selectedLickReleaseIDs=blockData[blocksOfInterest[i3]]["oneDlickReleaseArray"]
     combinedSpikeTimes=np.append(combinedSpikeTimes,selectedSpikeTimes)
     combinedNeuron=np.append(combinedNeuron, selectedNeuronIDs)
+    combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
 
 #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
 
@@ -127,8 +134,6 @@ data2=SpikeData(
 )
 data2.n_neurons=data2.n_neurons.astype(np.int64)
 data2.n_trials=data2.n_trials.astype(np.int64)
-
-
 # Bin and normalize (soft z-score) spike times.
 binned = data2.bin_spikes(NBINS)
 binned = binned - binned.mean(axis=(0, 1), keepdims=True)
@@ -216,7 +221,25 @@ lin_model.fit(binned, iterations=50)
 
 # Apply inverse warping functions to data.
 linear_aligned_data = lin_model.transform(data2).crop_spiketimes(TMIN, TMAX)
+#trialrows=np.array([ i in (max((combinedTrials)))])
+trialrows= np.array([])
+maxcombinedTrials=int(max(combinedTrials))
+for i in range(maxcombinedTrials+1):
+    #trialrows.append((i)+1)
+    trialrows=np.append(trialrows,float(i))
 
+trialalignment=np.concatenate((combinedLickReleaseTimes.reshape(-1,1),trialrows.reshape(-1,1)),axis=1)
+#indTrial=np.argsort(trialalignment[:,0])
+sorted_array = trialalignment[np.argsort(trialalignment[:, 0])]
+sorted_array_trial=sorted_array[:,1]
+sorted_array_trial=(sorted_array_trial).astype(np.int)
+#t3 = np.concatenate((t1.reshape(-1,1),t2.reshape(-1,1),axis=1)
+
+data3=data2.select_trials([1,2,3,4,5])
+data4=data3.reorder_trials([0,1,3,2,4])
+
+data22=data2.reorder_trials(sorted_array_trial)
+cropped_data2 = data22.crop_spiketimes(TMIN, TMAX)
 
 plt.plot(shift_model.loss_hist, label="shift")
 plt.plot(lin_model.loss_hist, label="linear")
@@ -243,6 +266,11 @@ import matplotlib.pyplot as plt
 from visualization0706 import rasters
 fig, axes=rasters(cropped_data, subplots=(5, 8), style='white');
 fig.suptitle('Original Data (all lick releases 24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
+
+plt.show() #original data
+
+fig, axes=rasters(cropped_data2, subplots=(5, 8), style='white');
+fig.suptitle('Original Data Reorganised (all lick releases 24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 

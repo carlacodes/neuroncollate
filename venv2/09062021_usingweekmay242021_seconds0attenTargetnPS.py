@@ -35,9 +35,9 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[123,126,127,128,130]
+blocksOfInterest=[122,123,126,127,128,129,130]
 for i in blocksOfInterest:
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/lickrelease'
+    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/nopitchshiftTarget'
     directory = os.listdir(user_input)
 
     searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -59,13 +59,13 @@ for i in blocksOfInterest:
             f[i].close()
 
 
-TMIN = 0*1000  # s
-TMAX = 0.8*1000 # s
+TMIN = 0  # s
+TMAX = 0.8*1000# s
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
 
 TMIN2=0
-TMAX2=1.2; #I made the maximum trial length 1.2 seconds
+TMAX2=1.2*1000; #I made the maximum trial length 1.2 seconds
 # LFP parameters.
 LOW_CUTOFF = 10  # Hz
 HIGH_CUTOFF = 30  # Hz
@@ -127,8 +127,6 @@ data2=SpikeData(
 )
 data2.n_neurons=data2.n_neurons.astype(np.int64)
 data2.n_trials=data2.n_trials.astype(np.int64)
-
-
 # Bin and normalize (soft z-score) spike times.
 binned = data2.bin_spikes(NBINS)
 binned = binned - binned.mean(axis=(0, 1), keepdims=True)
@@ -216,6 +214,24 @@ lin_model.fit(binned, iterations=50)
 
 # Apply inverse warping functions to data.
 linear_aligned_data = lin_model.transform(data2).crop_spiketimes(TMIN, TMAX)
+trialrows= np.array([])
+maxcombinedTrials=int(max(combinedTrials))
+for i in range(maxcombinedTrials+1):
+    #trialrows.append((i)+1)
+    trialrows=np.append(trialrows,float(i))
+
+trialalignment=np.concatenate((combinedLickReleaseTimes.reshape(-1,1),trialrows.reshape(-1,1)),axis=1)
+#indTrial=np.argsort(trialalignment[:,0])
+sorted_array = trialalignment[np.argsort(trialalignment[:, 0])]
+sorted_array_trial=sorted_array[:,1]
+sorted_array_trial=(sorted_array_trial).astype(np.int)
+#t3 = np.concatenate((t1.reshape(-1,1),t2.reshape(-1,1),axis=1)
+
+data3=data2.select_trials([1,2,3,4,5])
+data4=data3.reorder_trials([0,1,3,2,4])
+
+data22=data2.reorder_trials(sorted_array_trial)
+cropped_data2 = data22.crop_spiketimes(TMIN, TMAX)
 
 
 plt.plot(shift_model.loss_hist, label="shift")
@@ -236,23 +252,22 @@ def make_space_above(axes, topmargin=1):
     figh = h - (1-s.top)*h  + topmargin
     fig.subplots_adjust(bottom=s.bottom*h/figh, top=1-topmargin/figh)
     fig.set_figheight(figh)
-import numpy as np
-import matplotlib.pyplot as plt
 
+from affinewarp.visualization import rasters
+fig, axes=rasters(cropped_data, subplots=(5, 8));
+fig.suptitle('Original Data (NPS 24-28/05/2021 Zola) ', fontsize=10, color='1', y='1')
 
-from visualization0706 import rasters
-fig, axes=rasters(cropped_data, subplots=(5, 8), style='white');
-fig.suptitle('Original Data (all lick releases 24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
-
+#plt.title('Rasters of Original Data (18/03/2021 Zola) ')
 plt.show() #original data
 
-fig, axes=rasters(shift_aligned_data, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Shift Model (all lick releases  24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
+fig, axes=rasters(shift_aligned_data, subplots=(5, 8));
+fig.suptitle(' Rasters after Shift Model (NPS 24-28/05/2021 Zola) ', fontsize=10, color='1', y='1')
+
 #plt.title('Rasters after Shift Model (18/03/2021 Zola) ')
 plt.show()
 
-fig, axes= rasters(linear_aligned_data, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Linear Model (all lick releases  24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
+fig, axes= rasters(linear_aligned_data, subplots=(5, 8));
+fig.suptitle(' Rasters after Linear Model (NPS 24-28/05/2021 Zola) ', fontsize=10, color='1', y='1')
 
 #make_space_above(axes, topmargin=10)
 
@@ -260,15 +275,13 @@ fig.suptitle(' Rasters after Linear Model (all lick releases  24-28/05/2021 Zola
 fig.tight_layout()
 fig.subplots_adjust(top=10)
 plt.show();
-
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/lickrelease/'
-file_name='alignedDataBlockweekmay242021ShiftModellickrelease'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/noPitchShiftTarget'
+file_name='alignedDataBlockweekmay242021ShiftModeltargetnPS'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'neuronIDsnPS'), shift_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'trialIDsnPS'), shift_aligned_data["trials"])
 
-file_name='alignedDataBlockweekmay242021LinearModellickrelease'
+file_name='alignedDataBlockweekmay242021LinearModeltargetnPS'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPS'), linear_aligned_data["trials"])
-
