@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import math
 
 
-def rasters(data, subplots=(5, 6), fig=None, axes=None, figsize=(9*1.5, 5*1.5),
+def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*1.5, 5*1.5),
             max_spikes=7000, style='black', **scatter_kw):
     """
     Plots a series of spike raster plots.
@@ -78,6 +78,7 @@ def rasters(data, subplots=(5, 6), fig=None, axes=None, figsize=(9*1.5, 5*1.5),
 
         else:
             ax.scatter(times[idx], trials[idx], **scatter_kw)
+            ax.plot(sorted_array[:,0], sorted_array[:,1], c= "red", marker='.', linestyle=':')
             #ax.set_xlabel('milliseconds')
 
             #ax.set_xticks([0, 200, 400, 600, 800])
