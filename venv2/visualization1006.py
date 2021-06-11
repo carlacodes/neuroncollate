@@ -78,7 +78,6 @@ def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*
 
         else:
             ax.scatter(times[idx], trials[idx], **scatter_kw)
-            ax.plot(sorted_array[:,0], sorted_array[:,1], c= "red", marker='.', linestyle=':')
             #ax.set_xlabel('milliseconds')
 
             #ax.set_xticks([0, 200, 400, 600, 800])
@@ -87,9 +86,14 @@ def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*
 
 
         # format axes
+        #ax.plot(sorted_array[:, 0], sorted_array[:, 1], c="red", marker='.', linestyle=':')
         ax.set_title('neuron {}'.format(n), color=foreground)
         ax.set_facecolor(background)
         ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
+        ax.set_yticks(np.arange(math.floor(min(sorted_array[:,1])), math.floor(max(sorted_array[:,1])), math.ceil(len(sorted_array)/5)))
+
+        ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:,0])), math.floor(max(sorted_array[:,0])), 1000))
+
         ax.set_xlabel('milliseconds')
 
         #ax.set_xticklabels([i + 100 for i in times])
