@@ -35,9 +35,9 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[123,126,127,128,129]
+blocksOfInterest=[114, 115, 116, 118, 119,123,126,127,128,129]
 for i in blocksOfInterest:
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/nopitchshiftTarget/orderingbyLRtime/nomisses'
+    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/nopitchshiftTarget/orderingbyLRtime/misses'
     directory = os.listdir(user_input)
 
     searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -277,22 +277,22 @@ import matplotlib.pyplot as plt
 
 from visualization1006 import rasters
 fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
-fig.suptitle('Original Data (all lick releases 24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data (misses weeks 17, 24/05/2021 Zola) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 
 fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-fig.suptitle('Original Data Reorganised (all lick releases 24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data Reorganised (misses weeks 17, 24/05/2021 Zola) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 
 fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Shift Model (all lick releases  24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Shift Model (misses weeks 17, 24/05/2021 Zola) ', fontsize=10, color='0', y='1')
 #plt.title('Rasters after Shift Model (18/03/2021 Zola) ')
 plt.show()
 
 fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Linear Model (all lick releases  24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Linear Model (misses weeks 17, 24/05/2021 Zola) ', fontsize=10, color='0', y='1')
 #make_space_above(axes, topmargin=10)
 #plt.title('Rasters after Linear Model (18/03/2021 Zola)')
 # fig.tight_layout()
@@ -311,14 +311,14 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zol
 # fig.subplots_adjust(top=10)
 plt.show();
 
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/noPitchShiftTarget/withLRmetadata'
-file_name='alignedDataBlockweekmay242021ShiftModellickrelease'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/noPitchShiftTarget/withLRmetadata/misses'
+file_name='alignedDataBlockweekmay17242021ShiftModellickreleasemisses'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'neuronIDsnPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'trialIDsnPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'neuronIDsnPSmay1724'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'trialIDsnPSmay1724'), shift_aligned_data["trials"])
 
-file_name='alignedDataBlockweekmay242021LinearModellickrelease'
+file_name='alignedDataBlockweekmay17242021LinearModellickreleasemisses'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPS'), linear_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPSmay1724'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPSmay1724'), linear_aligned_data["trials"])
 

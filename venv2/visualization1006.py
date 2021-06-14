@@ -90,11 +90,17 @@ def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*
         ax.set_title('neuron {}'.format(n), color=foreground)
         ax.set_facecolor(background)
         ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
-        ax.set_yticks(np.arange(math.floor(min(sorted_array[:,1])), math.floor(max(sorted_array[:,1])), math.ceil(len(sorted_array)/5)))
+        #ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
+        ax.set_yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.floor(max(sorted_array[:, 1])),
+                                math.ceil(len(sorted_array) / 5)))
 
-        ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:,0])), math.floor(max(sorted_array[:,0])), 1000))
-
-        ax.set_xlabel('milliseconds')
+        #ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:, 0])), math.floor(max(sorted_array[:, 0])), 1000))
+        #ax.set_yticks(np.arange(math.floor(min(sorted_array[:,1])), math.floor(max(sorted_array[:,1])), math.ceil(max(sorted_array[:,1])/5)))
+        # if min(sorted_array[:,0])<0:
+        #     ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:,0])), math.floor(max(sorted_array[:,0])), math.ceil((max(sorted_array[:,0])-min(sorted_array[:,0]))/5)))
+        # else:
+        #     ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:,0])), math.floor(max(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])/5)))
+        # ax.set_xlabel('milliseconds')
 
         #ax.set_xticklabels([i + 100 for i in times])
         #ax.set_xticks([np.arange(min(times), max(times)+1, 100)])
