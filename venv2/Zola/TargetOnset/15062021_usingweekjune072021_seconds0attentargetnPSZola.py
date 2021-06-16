@@ -56,7 +56,7 @@ LINEAR_WARP_REG = 0.065
 from affinewarp import SpikeData
 
 # Spike times.
-S = dict(np.load("umi_spike_data.npz"))
+#S = dict(np.load("umi_spike_data.npz"))
 # data = SpikeData(
 #     trials=S["trials"],
 #     spiketimes=S["spiketimes"],
@@ -143,7 +143,7 @@ cropped_data2 = data22.crop_spiketimes(TMIN, TMAX)
 cropped_data = data2.crop_spiketimes(TMIN, TMAX)
 
 # Load LFP traces (n_trials x n_timebins). Crop traces to [TMIN, TMAX).
-L = dict(np.load("umi_lfp_data.npz"))
+#L = dict(np.load("umi_lfp_data.npz"))
 
 # Define bandpass filtering function for LFP
 from scipy.signal import butter, filtfilt, freqz
@@ -179,19 +179,19 @@ def bandpass(x, lowcut, highcut, fs, order=5, axis=-1, kind='butter'):
     return filtfilt(b, a, x, axis=axis)
 
 # Load LFP.
-L = dict(np.load("umi_lfp_data.npz"))
-
-# Apply bandpass filter.
-lfp = bandpass(L["lfp"], LOW_CUTOFF, HIGH_CUTOFF, L["sample_rate"])
-
-# Crop LFP time base to match spike times.
-tidx = (L["lfp_time"] >= TMIN) & (L["lfp_time"] < TMAX)
-lfp = lfp[:, tidx]
-lfp_time = L["lfp_time"][tidx]
-
-# Z-score LFP.
-lfp -= lfp.mean(axis=1, keepdims=True)
-lfp /= lfp.std(axis=1, keepdims=True)
+# L = dict(np.load("umi_lfp_data.npz"))
+#
+# # Apply bandpass filter.
+# lfp = bandpass(L["lfp"], LOW_CUTOFF, HIGH_CUTOFF, L["sample_rate"])
+#
+# # Crop LFP time base to match spike times.
+# tidx = (L["lfp_time"] >= TMIN) & (L["lfp_time"] < TMAX)
+# lfp = lfp[:, tidx]
+# lfp_time = L["lfp_time"][tidx]
+#
+# # Z-score LFP.
+# lfp -= lfp.mean(axis=1, keepdims=True)
+# lfp /= lfp.std(axis=1, keepdims=True)
 
 
 # Specify model.
