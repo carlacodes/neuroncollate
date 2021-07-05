@@ -290,11 +290,11 @@ plt.show();
 BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/noPitchShiftTarget/withLRmetadata'
 file_name='alignedDataBlockweekjune072021ShiftModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'neuronIDsnPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'trialIDsnPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'june0721neuronIDsnPS'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'june0721trialIDsnPS'), shift_aligned_data["trials"])
 
 file_name='alignedDataBlockweekjune072021LinearModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPS'), linear_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'june0721linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'june0721linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
