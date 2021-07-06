@@ -95,8 +95,8 @@ for i3 in range(len(blockData)):
 TMAX =0.8*1000#max(combinedLickReleaseTimes) # s
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
-TMINz=0.18*1000;
-TMAXz =0.3*1000#max(combinedLickReleaseTimes) # s
+TMINz=0.2*1000;
+TMAXz =0.27*1000#max(combinedLickReleaseTimes) # s
 BINSIZEz = 0.01*1000 #0.001*1000  # 10 ms
 NBINSz = int((TMAXz - TMINz) / BINSIZEz)
 #adjustedTrial=arrays2["oneDtrialIDarray"]+max(arrays["oneDtrialIDarray"])
@@ -143,8 +143,10 @@ binnedLR = binnedLR / (1e-2 + binnedLR.std(axis=(0, 1), keepdims=True))
 #binnedLRStdDev=binnedLR.std(axis=(0, 1), keepdims=True)
 
 binnedLRz = data2.bin_spikes(NBINSz)
+binnedmeans=binnedLRz.mean(axis=(0, 1), keepdims=True)
+
 binnedLRz = binnedLRz- binnedLRz.mean(axis=(0, 1), keepdims=True)
-binnedLRz = binnedLRz / (1e-2 + binnedLRz.std(axis=(0, 1), keepdims=True))
+binnedLRz = binnedLRz / (binnedLRz.std(axis=(0, 1), keepdims=True))
 binnedLRStdDev=binnedLRz.std(axis=(0, 1), keepdims=True)
 
 
@@ -162,24 +164,32 @@ for i in range(len(binnedLRz)):
         selectedchantoadd=neuronselect[:,i2]
         #neuronselect2=neuronselectmat[i2]
         neuronselectmat=np.append(neuronselectmat,selectedchantoadd, axis=0)
-        neuronsbychan[i2]=np.sum(neuronselectmat)
+        neuronsbychan[i2]=np.mean(neuronselectmat)
         #meanneuronselect[i]=mean(neuronselect[i])
 
 goodChanlist=np.array([])
+binnedmeans=binnedmeans[0]
+binnedmeans=binnedmeans[0]
 
 for i in range(0,len(neuronsbychan)):
     keys_list = list(neuronsbychan)
     key = keys_list[i]
     selectedChan=neuronsbychan[key]
     counter=binnedLRStdDev[:,:,i]
-    countermean=np.mean(binnedLRStdDev)
+    countermean=np.mean(binnedLRStdDev[:,:,1:33])
+    selectedmeans=binnedmeans[ int(key)]
+    bigMean=np.mean(binnedmeans[1:33])
     counter=np.squeeze(countermean)[()]
     # counter=float(counter[1])
     # print(counter)
-    if abs(selectedChan)>=4*abs(counter):
-        print('something good')
-        goodChanlist=np.append(goodChanlist, i+1)
-
+    if selectedmeans<0:
+        if (selectedmeans)<=(bigMean): #selectedmeans-counter: #-(0.1*(counter)):
+            print('something good')
+            goodChanlist=np.append(goodChanlist, int(key))
+    else:
+        if (selectedmeans) >= abs(0.80*bigMean):  # selectedmeans-counter: #-(0.1*(counter)):
+            print('something good')
+            goodChanlist = np.append(goodChanlist, int(key))
 
 
 
