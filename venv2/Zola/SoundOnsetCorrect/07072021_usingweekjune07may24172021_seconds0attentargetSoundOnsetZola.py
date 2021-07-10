@@ -9,7 +9,7 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[ 118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
+blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
 for i in blocksOfInterest:
     user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/nomisses2s'
     directory = os.listdir(user_input)
@@ -189,19 +189,26 @@ binnedLRzb = binnedLRzb / (binnedLRzb.std(axis=(0, 1), keepdims=True))
 binnedLRStdDevb=binnedLRzb.std(axis=(0, 1), keepdims=True)
 
 neuronselect=[]
+neuronselectb=[]
 meanneuronselect=[]
 neuronselectmat= np.array([])
+neuronselectmatb= np.array([])
 selectedchantoadd=np.array([])
 neuronsbychan={}
+neuronsbychanb={}
 
 for i in range(len(binnedLRz)):
     print(i)
     neuronselect=binnedLRz[i]
+    neuronselectb=binnedLRzb[i]
     for i2 in range(1,33):
         selectedchantoadd=neuronselect[:,i2]
+        selectedchantoaddb=neuronselectb[:,i2];
         #neuronselect2=neuronselectmat[i2]
         neuronselectmat=np.append(neuronselectmat,selectedchantoadd, axis=0)
+        neuronselectmatb=np.append(neuronselectmatb, selectedchantoaddb, axis=0)
         neuronsbychan[i2]=np.mean(neuronselectmat)
+        neuronsbychanb[i2]=np.mean(neuronselectmatb)
         #meanneuronselect[i]=mean(neuronselect[i])
 
 goodChanlist=np.array([])
@@ -357,7 +364,7 @@ fig.suptitle('Original Data (all lick releases 07/06/2021 Zola) ', fontsize=10, 
 plt.show() #original data
 
 fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-fig.suptitle('Original Data Reorganised (CORRECT releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data Reorganised (CORRECT releases weeks 17/05-07/06/2021 Zola) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 
