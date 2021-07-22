@@ -92,7 +92,7 @@ for i3 in range(len(blockData)):
     combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
 
 #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
-TMAX =0.8*1000#max(combinedLickReleaseTimes) # s
+TMAX =0.6*1000#max(combinedLickReleaseTimes) # s
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
 #adjustedTrial=arrays2["oneDtrialIDarray"]+max(arrays["oneDtrialIDarray"])
@@ -257,7 +257,7 @@ fig.suptitle('Original Data (all lick releases 21/06/2021 FloJo) ', fontsize=10,
 
 plt.show() #original data
 
-fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
+fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='black');
 fig.suptitle('Original Data Reorganised (CORRECT releases 21/06/2021 FloJo) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data

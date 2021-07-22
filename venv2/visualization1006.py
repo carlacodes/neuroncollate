@@ -90,7 +90,7 @@ def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*
         ax.set_title('neuron {}'.format(n), color=foreground)
         ax.set_facecolor(background)
         ax.set_xticks(np.arange(math.floor(min(times)), math.ceil(max(times)), math.ceil(max(times))/4))
-        ax.set_xticklabels(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
+        #ax.set_xticklabels(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
 
         #ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
         ax.set_yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
