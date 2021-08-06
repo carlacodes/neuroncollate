@@ -9,9 +9,9 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[135,136, 137,139,140,141,142,143]
+blocksOfInterest=[187,189,190,192,193,194,195]
 for i in blocksOfInterest:
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/nopitchshiftTarget/orderingbyLRtime/nomisses2s'
+    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/pitchshiftTarget/orderingbyLRtime/nomisses2s'
     directory = os.listdir(user_input)
 
     searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -34,9 +34,7 @@ for i in blocksOfInterest:
 
 
 TMIN = 0*1000  # s
-#TMAX = 0.8*1000 # s
-# BINSIZE = 0.01*1000  # 10 ms
-# NBINS = int((TMAX - TMIN) / BINSIZE)
+
 
 TMIN2=0
 TMAX2=1.2; #I made the maximum trial length 1.2 seconds
@@ -90,11 +88,11 @@ for i3 in range(len(blockData)):
     combinedSpikeTimes=np.append(combinedSpikeTimes,selectedSpikeTimes)
     combinedNeuron=np.append(combinedNeuron, selectedNeuronIDs)
     combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
-
-#combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
-TMAX =0.8*1000#max(combinedLickReleaseTimes) # s
+TMAX = 1.06*1000#max(combinedLickReleaseTimes)# ms
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
+#combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
+
 #adjustedTrial=arrays2["oneDtrialIDarray"]+max(arrays["oneDtrialIDarray"])
 #adjustedTrial2=arrays3["oneDtrialIDarray"]+max(adjustedTrial)
 # combinedTrials=np.concatenate((arrays["oneDtrialIDarray"], adjustedTrial, adjustedTrial2), axis=0)
@@ -258,17 +256,17 @@ fig.suptitle('Original Data (all lick releases 07/06/2021 Zola) ', fontsize=10, 
 plt.show() #original data
 
 fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-fig.suptitle('Original Data Reorganised (CORRECT releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data Reorganised (CORRECT PITCH SHIFT lick releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 
 fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Shift Model (CORRECT releases  07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Shift Model (CORRECT PITCH SHIFT lick releases  07/06/2021 Zola) ', fontsize=10, color='0', y='1')
 #plt.title('Rasters after Shift Model (18/03/2021 Zola) ')
 plt.show()
 
 fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Linear Model (CORRECT releases  07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Linear Model (CORRECT PITCH SHIFT lick releases  07/06/2021 Zola) ', fontsize=10, color='0', y='1')
 #make_space_above(axes, topmargin=10)
 #plt.title('Rasters after Linear Model (18/03/2021 Zola)')
 # fig.tight_layout()
@@ -278,7 +276,7 @@ plt.show();
 
 
 fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Linear Model (ordered by LR onset 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
 
 #make_space_above(axes, topmargin=10)
 
@@ -287,14 +285,14 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 07/06/2021 Zola) 
 # fig.subplots_adjust(top=10)
 plt.show();
 
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/noPitchShiftTarget/withLRmetadata'
-file_name='alignedDataBlockweekjune072021ShiftModellickrelease'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/PitchShiftTarget/withLRmetadata'
+file_name='alignedDataBlockweekjuly192021ShiftModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'june07neuronIDsnPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'june07trialIDsnPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'july19neuronIDsPS'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'july19trialIDsPS'), shift_aligned_data["trials"])
 
-file_name='alignedDataBlockweekjune072021LinearModellickrelease'
+file_name='alignedDataBlockweekjuly192021LinearModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'june07linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'june07linearModeltrialIDsnPS'), linear_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'july19linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'july19linearModeltrialIDsPS'), linear_aligned_data["trials"])
 

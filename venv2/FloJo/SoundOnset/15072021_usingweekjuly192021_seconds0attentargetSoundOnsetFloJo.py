@@ -9,9 +9,11 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[135,136, 137,139,140,141,142,143]
+#blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
+#187, 188, 189,190, 192, 193,  196, 197,198,199,200,201,203,204, 205, 206, 207, 208, 210,211,212,213,240, 241,242,243, 244, 245
+blocksOfInterest=[271,272, 274, 276, 277, 279,  282, 283]
 for i in blocksOfInterest:
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/nopitchshiftTarget/orderingbyLRtime/nomisses2s'
+    user_input = 'D:/Electrophysiological Data/F1704_FloJo/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/nomisses2s'
     directory = os.listdir(user_input)
 
     searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -33,13 +35,13 @@ for i in blocksOfInterest:
             f[i].close()
 
 
-TMIN = 0*1000  # s
+TMIN = 0.1*1000  # s
 #TMAX = 0.8*1000 # s
 # BINSIZE = 0.01*1000  # 10 ms
 # NBINS = int((TMAX - TMIN) / BINSIZE)
-
-TMIN2=0
-TMAX2=1.2; #I made the maximum trial length 1.2 seconds
+#
+# TMIN2=0
+# TMAX2=1.2; #I made the maximum trial length 1.2 seconds
 # LFP parameters.
 LOW_CUTOFF = 10  # Hz
 HIGH_CUTOFF = 30  # Hz
@@ -92,9 +94,18 @@ for i3 in range(len(blockData)):
     combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
 
 #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
-TMAX =0.8*1000#max(combinedLickReleaseTimes) # s
+TMAX =1*1000#max(combinedLickReleaseTimes) # s
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
+TMINz=0.2*1000;
+TMAXz =0.29*1000#max(combinedLickReleaseTimes) # s
+BINSIZEz = 0.001*1000 #0.001*1000  # 10 ms
+NBINSz = int((TMAXz - TMINz) / BINSIZEz)
+
+TMINzb=0.0*1000;
+TMAXzb =0.09*1000#max(combinedLickReleaseTimes) # s
+BINSIZEzb = 0.001*1000 #0.001*1000  # 10 ms
+NBINSzb = int((TMAXzb - TMINzb) / BINSIZEzb)
 #adjustedTrial=arrays2["oneDtrialIDarray"]+max(arrays["oneDtrialIDarray"])
 #adjustedTrial2=arrays3["oneDtrialIDarray"]+max(adjustedTrial)
 # combinedTrials=np.concatenate((arrays["oneDtrialIDarray"], adjustedTrial, adjustedTrial2), axis=0)
@@ -108,8 +119,35 @@ data2=SpikeData(
     tmin=TMIN,
     tmax=TMAX,
 )
+
+
 data2.n_neurons=data2.n_neurons.astype(np.int64)
 data2.n_trials=data2.n_trials.astype(np.int64)
+
+data2z=SpikeData(
+    trials=combinedTrials, #arrays["oneDtrialIDarray"],
+    spiketimes=combinedSpikeTimes, #["oneDspiketimearray"],
+    neurons=combinedNeuron, #["oneDspikeIDarray"],
+    tmin=TMINz,
+    tmax=TMAXz,
+)
+
+
+data2z.n_neurons=data2z.n_neurons.astype(np.int64)
+data2z.n_trials=data2z.n_trials.astype(np.int64)
+
+data2zb=SpikeData(
+    trials=combinedTrials, #arrays["oneDtrialIDarray"],
+    spiketimes=combinedSpikeTimes, #["oneDspiketimearray"],
+    neurons=combinedNeuron, #["oneDspikeIDarray"],
+    tmin=TMINzb,
+    tmax=TMAXzb,
+)
+
+
+data2zb.n_neurons=data2zb.n_neurons.astype(np.int64)
+data2zb.n_trials=data2zb.n_trials.astype(np.int64)
+# Bin and normalize (soft z-score) spike times.
 # Bin and normalize (soft z-score) spike times.
 binned = data2.bin_spikes(NBINS)
 binned = binned - binned.mean(axis=(0, 1), keepdims=True)
@@ -136,6 +174,78 @@ data22=data2.reorder_trials(sorted_array_trial)
 binnedLR = data2.bin_spikes(NBINS)
 binnedLR = binnedLR - binnedLR.mean(axis=(0, 1), keepdims=True)
 binnedLR = binnedLR / (1e-2 + binnedLR.std(axis=(0, 1), keepdims=True))
+#binnedLRStdDev=binnedLR.std(axis=(0, 1), keepdims=True)
+data2z=data2z.reorder_trials(sorted_array_trial)
+binnedLRz = data2z.bin_spikes(NBINSz)
+binnedmeans=binnedLRz.mean(axis=(0, 1), keepdims=True)
+
+binnedLRz = binnedLRz- binnedLRz.mean(axis=(0, 1), keepdims=True)
+binnedLRz = binnedLRz / (binnedLRz.std(axis=(0, 1), keepdims=True))
+binnedLRStdDev=binnedLRz.std(axis=(0, 1), keepdims=True)
+
+
+data2zb=data2zb.reorder_trials(sorted_array_trial)
+binnedLRzb = data2zb.bin_spikes(NBINSzb)
+binnedmeansb=binnedLRzb.mean(axis=(0, 1), keepdims=True)
+
+binnedLRzb = binnedLRzb- binnedLRzb.mean(axis=(0, 1), keepdims=True)
+binnedLRzb = binnedLRzb / (binnedLRzb.std(axis=(0, 1), keepdims=True))
+binnedLRStdDevb=binnedLRzb.std(axis=(0, 1), keepdims=True)
+
+neuronselect=[]
+neuronselectb=[]
+meanneuronselect=[]
+neuronselectmat= np.array([])
+neuronselectmatb= np.array([])
+selectedchantoadd=np.array([])
+neuronsbychan={}
+neuronsbychanb={}
+
+for i in range(len(binnedLRz)):
+    print(i)
+    neuronselect=binnedLRz[i]
+    neuronselectb=binnedLRzb[i]
+    for i2 in range(1,33):
+        selectedchantoadd=neuronselect[:,i2]
+        selectedchantoaddb=neuronselectb[:,i2];
+        #neuronselect2=neuronselectmat[i2]
+        neuronselectmat=np.append(neuronselectmat,selectedchantoadd, axis=0)
+        neuronselectmatb=np.append(neuronselectmatb, selectedchantoaddb, axis=0)
+        neuronsbychan[i2]=np.mean(neuronselectmat)
+        neuronsbychanb[i2]=np.mean(neuronselectmatb)
+        #meanneuronselect[i]=mean(neuronselect[i])
+
+goodChanlist=np.array([])
+binnedmeans=binnedmeans[0]
+binnedmeans=binnedmeans[0]
+
+binnedmeansb=binnedmeansb[0]
+binnedmeansb=binnedmeansb[0]
+
+for i in range(0,len(neuronsbychan)):
+    keys_list = list(neuronsbychan)
+    key = keys_list[i]
+    selectedChan=neuronsbychan[key]
+    counter=binnedLRStdDev[:,:,i]
+    countermean=np.mean(binnedLRStdDev[:,:,1:33])
+    selectedmeans=binnedmeans[ int(key)]
+    selectedmeansb=binnedmeansb[int(key)]
+
+    bigMean=np.mean(binnedmeans[1:33])
+    counter=np.squeeze(countermean)[()]
+    # counter=float(counter[1])
+    # print(counter)
+    if selectedmeans<0:
+        if (selectedmeans)<=(bigMean): #selectedmeans-counter: #-(0.1*(counter)):
+            print('something good')
+            goodChanlist=np.append(goodChanlist, int(key))
+    else:
+        if (selectedmeans) >= abs(1.5*selectedmeansb):  # selectedmeans-counter: #-(0.1*(counter)):
+            print('something good')
+            goodChanlist = np.append(goodChanlist, int(key))
+
+
+
 
 
 cropped_data2 = data22.crop_spiketimes(TMIN, TMAX)
@@ -227,6 +337,7 @@ lin_model.fit(binnedLR, iterations=50)
 
 # Apply inverse warping functions to data.
 linear_aligned_dataLR = lin_model.transform(data22).crop_spiketimes(TMIN, TMAX)
+shift_aligned_dataLR = shift_model.transform(data22).crop_spiketimes(TMIN, TMAX)
 
 plt.plot(shift_model.loss_hist, label="shift")
 plt.plot(lin_model.loss_hist, label="linear")
@@ -253,24 +364,24 @@ import matplotlib.pyplot as plt
 
 from visualization1006 import rasters
 fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
-fig.suptitle('Original Data (all lick releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data (all lick releases 07/06/2021 FloJo) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 
 fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-fig.suptitle('Original Data Reorganised (CORRECT releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data Reorganised (all releases week 19/07/2021 FloJo) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 
 fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Shift Model (CORRECT releases  07/06/2021 Zola) ', fontsize=10, color='0', y='1')
-#plt.title('Rasters after Shift Model (18/03/2021 Zola) ')
+fig.suptitle(' Rasters after Shift Model (CORRECT releases  07/06/2021 FloJo) ', fontsize=10, color='0', y='1')
+#plt.title('Rasters after Shift Model (18/03/2021 FloJo) ')
 plt.show()
 
 fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Linear Model (CORRECT releases  07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Linear Model (CORRECT releases  07/06/2021 FloJo) ', fontsize=10, color='0', y='1')
 #make_space_above(axes, topmargin=10)
-#plt.title('Rasters after Linear Model (18/03/2021 Zola)')
+#plt.title('Rasters after Linear Model (18/03/2021 FloJo)')
 # fig.tight_layout()
 # fig.subplots_adjust(top=10)
 plt.show();
@@ -278,23 +389,31 @@ plt.show();
 
 
 fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Linear Model (ordered by LR onset 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Linear Model (ordered by LR onset 07/06/2021 FloJo) ', fontsize=10, color='0', y='1')
 
 #make_space_above(axes, topmargin=10)
 
-#plt.title('Rasters after Linear Model (18/03/2021 Zola)')
+#plt.title('Rasters after Linear Model (18/03/2021 FloJo)')
 # fig.tight_layout()
 # fig.subplots_adjust(top=10)
 plt.show();
 
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/noPitchShiftTarget/withLRmetadata'
-file_name='alignedDataBlockweekjune072021ShiftModellickrelease'
-np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'june07neuronIDsnPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'june07trialIDsnPS'), shift_aligned_data["trials"])
+fig, axes= rasters(shift_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
+fig.suptitle(' Rasters after Linear Model (ordered by LR onset 07/06/2021 FloJo) ', fontsize=10, color='0', y='1')
 
-file_name='alignedDataBlockweekjune072021LinearModellickrelease'
+
+plt.show();
+
+BASE_PATH='D:/Electrophysiological Data/F1704_FloJo/dynamictimewarping/soundOnset/withLRmetadata'
+if not os.path.exists(BASE_PATH):
+    os.makedirs(BASE_PATH)
+file_name='alignedDataBlockweekjuly19242021ShiftModellickrelease'
+np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
+np.save(os.path.join(BASE_PATH, 'july192421neuronIDsnPS'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'july1924trialIDsnPS'), shift_aligned_data["trials"])
+
+file_name='alignedDataBlockweekjuly19242021LinearModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'june07linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'june07linearModeltrialIDsnPS'), linear_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'july192421linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'july192421linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
