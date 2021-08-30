@@ -239,7 +239,7 @@ import matplotlib.pyplot as plt
 
 ##adding yticks with the actual lick release time in ms relative to the start trial lick
 
-from visualization1006 import rasters
+from visualization2208 import rasters
 fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
 fig.suptitle('Original Data (all lick releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
 
@@ -268,6 +268,10 @@ plt.show();
 fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
 fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
 
+plt.show()
+fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(4, 8),style='white');
+fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
+
 #make_space_above(axes, topmargin=10)
 
 #plt.title('Rasters after Linear Model (18/03/2021 Zola)')
@@ -287,3 +291,7 @@ np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'july12linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'july12linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
+file_name='alignedDataBlockweekjuly122021LinearModellickrelease'
+np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
+np.save(os.path.join(BASE_PATH, 'july12linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'july12linearModeltrialIDsnPS'), linear_aligned_data["trials"])

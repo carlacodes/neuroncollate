@@ -9,9 +9,9 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[120,121,122,123,126,127,128,129,130]
+blocksOfInterest=[ 271, 272, 274, 276, 282, 283, 285]
 for i in blocksOfInterest:
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/pitchshiftTarget/orderingbyLRtime/nomisses2s'
+    user_input = 'D:/Electrophysiological Data/F1704_FloJo/HP_BlockNellie-'+str(i)+'/leftmovingTrials'
     directory = os.listdir(user_input)
 
     searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -34,7 +34,9 @@ for i in blocksOfInterest:
 
 
 TMIN = 0*1000  # s
-
+#TMAX = 0.8*1000 # s
+# BINSIZE = 0.01*1000  # 10 ms
+# NBINS = int((TMAX - TMIN) / BINSIZE)
 
 TMIN2=0
 TMAX2=1.2; #I made the maximum trial length 1.2 seconds
@@ -88,11 +90,11 @@ for i3 in range(len(blockData)):
     combinedSpikeTimes=np.append(combinedSpikeTimes,selectedSpikeTimes)
     combinedNeuron=np.append(combinedNeuron, selectedNeuronIDs)
     combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
-TMAX = 0.8*1000#max(combinedLickReleaseTimes)# ms
+
+#combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
+TMAX =0.5*1000#max(combinedLickReleaseTimes) # s
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
-#combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
-
 #adjustedTrial=arrays2["oneDtrialIDarray"]+max(arrays["oneDtrialIDarray"])
 #adjustedTrial2=arrays3["oneDtrialIDarray"]+max(adjustedTrial)
 # combinedTrials=np.concatenate((arrays["oneDtrialIDarray"], adjustedTrial, adjustedTrial2), axis=0)
@@ -141,7 +143,7 @@ cropped_data2 = data22.crop_spiketimes(TMIN, TMAX)
 cropped_data = data2.crop_spiketimes(TMIN, TMAX)
 
 # Load LFP traces (n_trials x n_timebins). Crop traces to [TMIN, TMAX).
-# L = dict(np.load("umi_lfp_data.npz"))
+#L = dict(np.load("umi_lfp_data.npz"))
 
 # Define bandpass filtering function for LFP
 from scipy.signal import butter, filtfilt, freqz
@@ -190,7 +192,7 @@ def bandpass(x, lowcut, highcut, fs, order=5, axis=-1, kind='butter'):
 # # Z-score LFP.
 # lfp -= lfp.mean(axis=1, keepdims=True)
 # lfp /= lfp.std(axis=1, keepdims=True)
-#
+
 
 # Specify model.
 shift_model = ShiftWarping(
@@ -251,24 +253,24 @@ import matplotlib.pyplot as plt
 
 from visualization1006 import rasters
 fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
-fig.suptitle('Original Data (all lick releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data (all lick releases 05/07/2021 FloJo) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 
 fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-fig.suptitle('Original Data Reorganised (CORRECT PITCH SHIFT lick releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data Reorganised (CORRECT releases 05/07/2021 FloJo) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 
 fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Shift Model (CORRECT PITCH SHIFT lick releases  07/06/2021 Zola) ', fontsize=10, color='0', y='1')
-#plt.title('Rasters after Shift Model (18/03/2021 Zola) ')
+fig.suptitle(' Rasters after Shift Model (CORRECT releases  05/07/2021 FloJo) ', fontsize=10, color='0', y='1')
+#plt.title('Rasters after Shift Model (18/03/2021 FloJo) ')
 plt.show()
 
 fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Linear Model (CORRECT PITCH SHIFT lick releases  07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Linear Model (CORRECT releases  05/07/2021 FloJo) ', fontsize=10, color='0', y='1')
 #make_space_above(axes, topmargin=10)
-#plt.title('Rasters after Linear Model (18/03/2021 Zola)')
+#plt.title('Rasters after Linear Model (18/03/2021 FloJo)')
 # fig.tight_layout()
 # fig.subplots_adjust(top=10)
 plt.show();
@@ -276,28 +278,36 @@ plt.show();
 
 
 fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Linear Model (ordered by LR onset 05/07/2021 FloJo) ', fontsize=10, color='0', y='1')
 
 #make_space_above(axes, topmargin=10)
 
-#plt.title('Rasters after Linear Model (18/03/2021 Zola)')
+#plt.title('Rasters after Linear Model (18/03/2021 FloJo)')
 # fig.tight_layout()
 # fig.subplots_adjust(top=10)
 plt.show();
+pop_mean = cropped_data2.bin_spikes(NBINS).mean(axis=2) / (BINSIZE * 1e-3)
+tx = np.linspace(TMIN, TMAX, NBINS)
 
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/PitchShiftTarget/withLRmetadata'
-file_name='alignedDataBlockweekmay242021ShiftModellickrelease'
+# Show 20 example trials.
+fig, axes = plt.subplots(4, 8, sharex=True, sharey=True, figsize=(12, 7))
+
+for k, ax in enumerate(axes.ravel()):
+    ax.plot(tx, pop_mean[5+k], "-k")
+    ax.set_ylim([-10, 100])
+    ax.set_xticks([0 , 200, 400 ,600, 800])
+    ax.set_title(str(k))
+#make_space_above(axes, topmargin=10)
+plt.show()
+BASE_PATH='D:/Electrophysiological Data/F1704_FloJo/dynamictimewarping/leftmoving/july192021'
+#os.mkdir(BASE_PATH)
+file_name='alignedDataBlockweekjuly192021ShiftModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'may24neuronIDsPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'may24trialIDsPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'neuronIDsnPS'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'trialIDsnPS'), shift_aligned_data["trials"])
 
-file_name='alignedDataBlockweekmay242021LinearModellickrelease'
+file_name='alignedDataBlockweekjuly192021LinearModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'may24linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'may24linearModeltrialIDsPS'), linear_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
-
-file_name='alignedDataBlockweekmay242021LinearModellickrelease'
-np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'may24linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'may24linearModeltrialIDsPS'), linear_aligned_data["trials"])

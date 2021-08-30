@@ -278,7 +278,7 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset week 07/06/21 Zol
 plt.show();
 
 BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/comdistPitchShift/june142021'
-os.mkdir(BASE_PATH)
+#os.mkdir(BASE_PATH)
 file_name='alignedDataBlockweekjune142021ShiftModellickreleaseDist'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'june14neuronIDsPS'), shift_aligned_data["neurons"])
@@ -289,3 +289,7 @@ np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'june14linearModelneuronIDsPS'), linear_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'june14linearModeltrialIDsPS'), linear_aligned_data["trials"])
 
+file_name='alignedDataBlockweekjune142021OriginalModellickreleaseDist'
+np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
+np.save(os.path.join(BASE_PATH, 'june14OriginalModelneuronIDsPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'june14OriginalModeltrialIDsPS'), linear_aligned_data["trials"])

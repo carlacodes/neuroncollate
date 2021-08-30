@@ -9,7 +9,7 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[120,121,122,123,126,127,128,129,130]
+blocksOfInterest=[209,210,211,212]
 for i in blocksOfInterest:
     user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/pitchshiftTarget/orderingbyLRtime/nomisses2s'
     directory = os.listdir(user_input)
@@ -88,7 +88,7 @@ for i3 in range(len(blockData)):
     combinedSpikeTimes=np.append(combinedSpikeTimes,selectedSpikeTimes)
     combinedNeuron=np.append(combinedNeuron, selectedNeuronIDs)
     combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
-TMAX = 0.8*1000#max(combinedLickReleaseTimes)# ms
+TMAX = 1.06*1000#max(combinedLickReleaseTimes)# ms
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
 #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
@@ -141,7 +141,7 @@ cropped_data2 = data22.crop_spiketimes(TMIN, TMAX)
 cropped_data = data2.crop_spiketimes(TMIN, TMAX)
 
 # Load LFP traces (n_trials x n_timebins). Crop traces to [TMIN, TMAX).
-# L = dict(np.load("umi_lfp_data.npz"))
+#L = dict(np.load("umi_lfp_data.npz"))
 
 # Define bandpass filtering function for LFP
 from scipy.signal import butter, filtfilt, freqz
@@ -190,7 +190,7 @@ def bandpass(x, lowcut, highcut, fs, order=5, axis=-1, kind='butter'):
 # # Z-score LFP.
 # lfp -= lfp.mean(axis=1, keepdims=True)
 # lfp /= lfp.std(axis=1, keepdims=True)
-#
+
 
 # Specify model.
 shift_model = ShiftWarping(
@@ -286,18 +286,17 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zol
 plt.show();
 
 BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/PitchShiftTarget/withLRmetadata'
-file_name='alignedDataBlockweekmay242021ShiftModellickrelease'
+file_name='alignedDataBlockweekaugust162021ShiftModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'may24neuronIDsPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'may24trialIDsPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'august16neuronIDsPS'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'august16trialIDsPS'), shift_aligned_data["trials"])
 
-file_name='alignedDataBlockweekmay242021LinearModellickrelease'
+file_name='alignedDataBlockweekaugust162021LinearModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'may24linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'may24linearModeltrialIDsPS'), linear_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'august16linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'august16linearModeltrialIDsPS'), linear_aligned_data["trials"])
 
-
-file_name='alignedDataBlockweekmay242021LinearModellickrelease'
-np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'may24linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'may24linearModeltrialIDsPS'), linear_aligned_data["trials"])
+file_name='alignedDataBlockweekaugust162021OriginalModellickrelease'
+np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
+np.save(os.path.join(BASE_PATH, 'august16OriginalModelneuronIDsPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'august16OriginalModeltrialIDsPS'), linear_aligned_data["trials"])
