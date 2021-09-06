@@ -9,7 +9,7 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[199, 200, 201, 202, 203, 204, 205, 206, 207, 208]
+blocksOfInterest=[202, 203, 204, 205, 206, 207, 208]
 for i in blocksOfInterest:
     user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/pitchshiftTarget/orderingbyLRtime/nomisses2s'
     directory = os.listdir(user_input)
@@ -286,17 +286,17 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zol
 plt.show();
 
 BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/PitchShiftTarget/withLRmetadata'
-file_name='alignedDataBlockweekaugust162021ShiftModellickrelease'
+file_name='alignedDataBlockweekaugust092021ShiftModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'august16neuronIDsPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'august16trialIDsPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'august09neuronIDsPS'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'august09trialIDsPS'), shift_aligned_data["trials"])
 
-file_name='alignedDataBlockweekaugust162021LinearModellickrelease'
+file_name='alignedDataBlockweekaugust092021LinearModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'august16linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'august16linearModeltrialIDsPS'), linear_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'august09linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'august09linearModeltrialIDsPS'), linear_aligned_data["trials"])
 
-file_name='alignedDataBlockweekaugust162021OriginalModellickrelease'
+file_name='alignedDataBlockweekaugust092021OriginalModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'august16OriginalModelneuronIDsPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'august16OriginalModeltrialIDsPS'), linear_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'august09OriginalModelneuronIDsPS'), cropped_data2["neurons"])
+np.save(os.path.join(BASE_PATH, 'august09OriginalModeltrialIDsPS'), cropped_data2["trials"])

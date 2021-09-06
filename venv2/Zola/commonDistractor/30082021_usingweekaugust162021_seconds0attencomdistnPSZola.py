@@ -291,5 +291,5 @@ np.save(os.path.join(BASE_PATH, 'august16linearModeltrialIDsnPS'), linear_aligne
 
 file_name='alignedDataBlockweekaugust162021OriginalModellickreleaseDist'
 np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'august16OriginalModelneuronIDsnPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'august16OriginalModeltrialIDsnPS'), linear_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'august16OriginalModelneuronIDsnPS'), cropped_data2["neurons"])
+np.save(os.path.join(BASE_PATH, 'august16OriginalModeltrialIDsnPS'), cropped_data2["trials"])
