@@ -4,6 +4,21 @@ from affinewarp import ShiftWarping
 import os
 import h5py
 import numpy as np
+import scipy
+
+
+def traverse_datasets(hdf_file):
+    def h5py_dataset_iterator(g, prefix=''):
+        for key in g.keys():
+            item = g[key]
+            path = f'{prefix}/{key}'
+            if isinstance(item, h5py.Dataset):  # test for dataset
+                yield (path, item)
+            elif isinstance(item, h5py.Group):  # test for group (go down)
+                yield from h5py_dataset_iterator(item, path)
+
+    for path, _ in h5py_dataset_iterator(hdf_file):
+        yield path
 
 
 #user_input = input('What is the name of your directory')
@@ -34,6 +49,12 @@ for i in blocksOfInterest:
 
 fLFP={}
 blockDataLFP={}
+LFPBlocktrial={}
+LFPBlocktime={}
+objMatBlock={}
+objTimeBlock={}
+
+#objMat=[]
 for i in blocksOfInterest:
     user_input = 'D:/Electrophysiological Data/F1704_FloJo/LFP_BlockNellieL22/weekjuly192021//LFP_Block'+str(i)
     directory = os.listdir(user_input)
@@ -43,9 +64,47 @@ for i in blocksOfInterest:
 
     for fname in directory:
         if searchstring in fname:
+            with h5py.File(user_input + os.sep +fname , 'r') as f:
+                for dset in traverse_datasets(f):
+                    print('Path:', dset)
+                    print('Shape:', f[dset].shape)
+                    print('Data type:', f[dset].dtype)
+
             # Full path
             fLFP[i] = h5py.File(user_input + os.sep + fname)
+            test=fLFP[i]['siteTrialMat']
+            testTime=fLFP[i]['siteTimeMat']
+
+            range2=test.value.shape
+            range2[1]
+            objMat = [[0] * (range2[1])] * (32)
+            objMatTime=[[0] * (range2[1])] * (32)
+            for i0 in range(32):
+                for i2 in range((range2[1])):
+                    st=test[i0][i2]
+                    obj = fLFP[i][st]
+                    ob2 = obj[:];
+                    stTime=testTime[i0][i2]
+                    objtime=fLFP[i][stTime]
+                    ob2time=objtime[:]
+                    #a.append([0] * m)
+
+                   # objMat.append([0]*i2)
+                    objMat[i0][i2]=ob2
+                    objMatTime[i0][i2]=ob2time
+            objMatBlock[i]=objMat
+            objTimeBlock[i]=objMatTime
+
+
+            # st = test[0][0]
+            # obj = fLFP[i][st]
+            # ob2=obj[:];
             itemsLFP = fLFP[i].items()
+            LFPBlocktrial[i]= fLFP[i]['siteTrialMat']
+            LFPBlocktime[i] = fLFP[i]['siteTimeMat']
+
+            # objMat[i]=ob2;
+
             arraysLFP = {}
             for k3, v3 in fLFP[i].items():
                 newarray3LFP = np.array(v3)
@@ -53,12 +112,20 @@ for i in blocksOfInterest:
                 arraysLFP[k3] = newarray3LFP
             blockDataLFP[i]=arraysLFP
 
-
-
             fLFP[i].close()
 
+# for i1 in blocksOfInterest:
+#     for i2 in range(len(LFPBlocktime)):
+#         test1=LFPBlocktrial[i1]
+#         objNew=test1[0][0]
+#         objNew=objNew[:]
+#         objMat[i1][i2]=objNew;
 
-TMIN = 0*1000  # s
+
+
+
+
+TMIN = 0.2*1000  # s
 #TMAX = 0.8*1000 # s
 # BINSIZE = 0.01*1000  # 10 ms
 # NBINS = int((TMAX - TMIN) / BINSIZE)
@@ -109,6 +176,7 @@ combinedNeuron=np.array([])
 combinedLickReleaseTimes=np.array([])
 
 for i3 in range(len(blockData)):
+    #data = hf.get('dataset_name').value
     selectedSpikeTimes=blockData[blocksOfInterest[i3]]["oneDspiketimearray"]
     selectedNeuronIDs=blockData[blocksOfInterest[i3]]["oneDspikeIDarray"]
     selectedLickReleaseIDs=blockData[blocksOfInterest[i3]]["oneDlickReleaseArray"]
@@ -117,20 +185,41 @@ for i3 in range(len(blockData)):
     combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
 
 
-
-
 combinedLFP={}; #declare empty numpy array
 
 #a = np.array([])
 # for x in y:
 #     a = np.append(a, x)
 for i3 in range(len(blockDataLFP)-1):
+    selectedLFPsite=blockDataLFP[blocksOfInterest[i3]]["siteTrialMat"][1,:]
+    selectedLFPMat=objMatBlock[blocksOfInterest[i3]]
+    selectedLFPMat=np.array(selectedLFPMat)
     if i3==0:
         selectedLFP=blockDataLFP[blocksOfInterest[i3]]["toCheck"]
         selectedLFP2=blockDataLFP[blocksOfInterest[i3+1]]["toCheck"]
         selectedLFP3=np.concatenate((selectedLFP,selectedLFP2), axis=1)
+
+        combinedLFPtrials1=selectedLFPMat
+        combinedLFPtrials2=np.array(objMatBlock[blocksOfInterest[i3+1]])
+        combinedLFPtrials3=np.concatenate((combinedLFPtrials1, combinedLFPtrials2), axis=1)
+
+        selectedtrial=blockDataLFP[blocksOfInterest[i3]]["LFPtimearray"]
+        selectedtrial2=blockDataLFP[blocksOfInterest[i3+1]]["LFPtimearray"]
+        selectedtrial3=np.concatenate((selectedtrial,selectedtrial2), axis=1)
+
+        combinedTimetrials1 = np.array(objTimeBlock[blocksOfInterest[i3]])
+        combinedTimetrials2 =  np.array(objTimeBlock[blocksOfInterest[i3+1]])
+        combinedTimetrials3 = np.concatenate((combinedTimetrials1, combinedTimetrials2), axis=1)
     else:
         selectedLFP3=np.concatenate((selectedLFP3, blockDataLFP[blocksOfInterest[i3+1]]["toCheck"]), axis=1)
+        selectrial3=np.concatenate((selectedtrial3, blockDataLFP[blocksOfInterest[i3+1]]["LFPtimearray"]), axis=1)
+        combinedLFPtrials3=np.concatenate((combinedLFPtrials3,np.array(objMatBlock[blocksOfInterest[i3+1]])), axis=1 )
+        combinedTimetrials3 =np.concatenate((combinedTimetrials3,np.array(objTimeBlock[blocksOfInterest[i3+1]])), axis=1)
+
+    selectedLFPsitearray=[];
+    # for i4 in range(32):
+    #     for i5 in range(len(selectedLFPsite)):
+    #         selectedLFPsitearray=selectedLFPsite[i4][1]
     # for i2 in range(len(selectedLFP)):
     #     #combinedLFP = np.append[combinedLFP, i2]
     #     if i3==0:
@@ -152,7 +241,7 @@ for i3 in range(len(blockDataLFP)-1):
 
 
 #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
-TMAX =0.8*1000#max(combinedLickReleaseTimes) # s
+TMAX =1*1000#max(combinedLickReleaseTimes) # s
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
 #adjustedTrial=arrays2["oneDtrialIDarray"]+max(arrays["oneDtrialIDarray"])
@@ -243,46 +332,48 @@ def bandpass(x, lowcut, highcut, fs, order=5, axis=-1, kind='butter'):
 
 
 # Load LFP.
-# L = dict(np.load("umi_lfp_data.npz"))
-# L2 = dict(np.load("umi_spike_data.npz"))
 #
-# # Apply bandpass filter.
-# lfp = bandpass(L["lfp"], LOW_CUTOFF, HIGH_CUTOFF, L["sample_rate"])
-#
-# # Crop LFP time base to match spike times.
-# tidx = (L["lfp_time"] >= TMIN) & (L["lfp_time"] < TMAX)
-# lfp = lfp[:, tidx]
-# lfp_time = L["lfp_time"][tidx]
+L = dict(np.load("umi_lfp_data.npz"))
 
-# # Z-score LFP.
-# lfp -= lfp.mean(axis=1, keepdims=True)
-# lfp /= lfp.std(axis=1, keepdims=True)
 
 
 ##need to fix this doesn't have a time element
 # Apply bandpass filter.
-lfp = bandpass(selectedLFP3, LOW_CUTOFF, HIGH_CUTOFF,1000)
+
+selectedsite=combinedLFPtrials3[6][:]
+selectedsite = selectedsite[:, 0, :]
+lfp = bandpass(selectedsite, LOW_CUTOFF, HIGH_CUTOFF,1000)
+
+selectedtime=combinedTimetrials3[6][:]
+selectedtime=selectedtime[0,0,:]
+tidx = (selectedtime >= TMIN) & (selectedtime < TMAX)
+lfp = lfp[:,tidx]
+lfp_time = selectedtime[tidx]
 lfp -= lfp.mean(axis=1, keepdims=True)
 lfp /= lfp.std(axis=1, keepdims=True)
 
+fSLFP=1000
+#tvec =  np.linspace(0, len(lfp[0]), len(lfp[0]))/ fSLFP
 
 imkw = dict(clim=(-2, 2), cmap='bwr', interpolation="none", aspect="auto")
 
-fig, axes = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
+fig, axes = plt.subplots(1, 1, sharey=True, figsize=(10, 3.5))
+
+axes.imshow(lfp, **imkw)
+plt.show()
 
 
 
-axes[0].imshow(lfp, **imkw)
-plt.show
+pop_meanLFP =lfp.mean(axis=0)
+tx = np.linspace(TMIN, TMAX, 800)
+plt.plot(tx, pop_meanLFP, "-k")
+plt.show()
 
 # Crop LFP time base to match spike times.
 # tidx = (L["lfp_time"] >= TMIN) & (L["lfp_time"] < TMAX)
 # lfp = lfp[:, tidx]
 # lfp_time = L["lfp_time"][tidx]
 
-# Z-score LFP.
-lfp -= lfp.mean(axis=1, keepdims=True)
-lfp /= lfp.std(axis=1, keepdims=True)
 
 
 # Specify model.
@@ -319,13 +410,13 @@ lin_model.fit(binnedLR, iterations=50)
 # Apply inverse warping functions to data.
 linear_aligned_dataLR = lin_model.transform(data22).crop_spiketimes(TMIN, TMAX)
 
-plt.plot(shift_model.loss_hist, label="shift")
-plt.plot(lin_model.loss_hist, label="linear")
-plt.xlabel("Iteration")
-plt.ylabel("Normalized Loss")
-plt.legend()
-plt.tight_layout()
-plt.show()
+# plt.plot(shift_model.loss_hist, label="shift")
+# plt.plot(lin_model.loss_hist, label="linear")
+# plt.xlabel("Iteration")
+# plt.ylabel("Normalized Loss")
+# plt.legend()
+# plt.tight_layout()
+# plt.show()
 
 def make_space_above(axes, topmargin=1):
     """ increase figure size to make topmargin (in inches) space for
@@ -380,6 +471,10 @@ plt.show();
 pop_mean = cropped_data2.bin_spikes(NBINS).mean(axis=2) / (BINSIZE * 1e-3)
 tx = np.linspace(TMIN, TMAX, NBINS)
 
+
+pop_mean2 = cropped_data2.bin_spikes(800).mean(axis=2) / (BINSIZE * 1e-3)
+tx2 = np.linspace(TMIN, TMAX, 800)
+
 # Show 20 example trials.
 fig, axes = plt.subplots(4, 8, sharex=True, sharey=True, figsize=(12, 7))
 
@@ -389,6 +484,27 @@ for k, ax in enumerate(axes.ravel()):
     ax.set_xticks([0 , 200, 400 ,600, 800])
     ax.set_title(str(k))
 #make_space_above(axes, topmargin=10)
+plt.show()
+testChan=pop_mean[5+25]
+testChan -= testChan.mean(axis=0, keepdims=True)
+testChan /= testChan.std(axis=0, keepdims=True)
+
+testChan2=pop_mean2[5+25]
+testChan2 -= testChan2.mean(axis=0, keepdims=True)
+testChan2 /= testChan2.std(axis=0, keepdims=True)
+
+plt.plot(tx, testChan, "-b")
+tx = np.linspace(TMIN, TMAX, 800)
+plt.plot(tx, pop_meanLFP, "-k")
+#plt.ylim([-10, 100])
+plt.xticks([200, 400, 600, 800, 1000])
+plt.title(['TDT', str(26), ' (WARP 24) and LFP of TDT 7 (WARP 3)'])
+plt.show()
+
+lagBtSignals=scipy.signal.signaltools.correlate( testChan2, pop_meanLFP)
+dt = np.arange(1-800, 800)
+recovered_time_shift = dt[lagBtSignals.argmax()]
+plt.plot(lagBtSignals)
 plt.show()
 BASE_PATH='D:/Electrophysiological Data/F1704_FloJo/dynamictimewarping/targetword/july192021'
 os.mkdir(BASE_PATH)
