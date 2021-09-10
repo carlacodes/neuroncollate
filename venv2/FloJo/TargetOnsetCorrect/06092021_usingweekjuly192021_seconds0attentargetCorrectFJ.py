@@ -497,17 +497,25 @@ plt.plot(tx, testChan, "-b")
 tx = np.linspace(TMIN, TMAX, 800)
 plt.plot(tx, pop_meanLFP, "-k")
 #plt.ylim([-10, 100])
-plt.xticks([200, 400, 600, 800, 1000])
+plt.xticks([200, 400, 600, 800, 1000], [0, 200, 400, 600, 800])
+
 plt.title(['TDT', str(26), ' (WARP 24) and LFP of TDT 7 (WARP 3)'])
+plt.legend(['Mean spike count', 'Mean LFP'])
+
+plt.xlabel('Time relative to target word onset (ms)')
+plt.ylabel('z-score (unitless)')
 plt.show()
 
 lagBtSignals=scipy.signal.signaltools.correlate( testChan2, pop_meanLFP)
 dt = np.arange(1-800, 800)
 recovered_time_shift = dt[lagBtSignals.argmax()]
 plt.plot(lagBtSignals)
+plt.title(['Correlation between TDT', str(26), ' (WARP 24) and LFP of TDT 7 (WARP 3)'])
+plt.xlabel('full discrete cross-correlated samples')
+plt.ylabel('correlation score (unitless)')
+
 plt.show()
 BASE_PATH='D:/Electrophysiological Data/F1704_FloJo/dynamictimewarping/targetword/july192021'
-os.mkdir(BASE_PATH)
 file_name='alignedDataBlockweekjuly192021ShiftModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'neuronIDsnPS'), shift_aligned_data["neurons"])
