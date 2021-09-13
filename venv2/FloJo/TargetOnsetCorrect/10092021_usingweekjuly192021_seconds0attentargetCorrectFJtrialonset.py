@@ -341,11 +341,11 @@ L = dict(np.load("umi_lfp_data.npz"))
 ##need to fix this doesn't have a time element
 # Apply bandpass filter.
 
-selectedsite=combinedLFPtrials3[6][:]
+selectedsite=combinedLFPtrials3[7][:]
 selectedsite = selectedsite[:, 0, :]
 lfp = bandpass(selectedsite, LOW_CUTOFF, HIGH_CUTOFF,1000)
 
-selectedtime=combinedTimetrials3[6][:]
+selectedtime=combinedTimetrials3[7][:]
 selectedtime=selectedtime[0,0,:]
 tidx = (selectedtime >= TMIN) & (selectedtime < TMAX)
 lfp = lfp[:,tidx]
@@ -486,21 +486,21 @@ for k, ax in enumerate(axes.ravel()):
     ax.set_title(str(k))
 #make_space_above(axes, topmargin=10)
 plt.show()
-testChan=pop_mean[5+8]
+testChan=pop_mean[5+16]
 testChan -= testChan.mean(axis=0, keepdims=True)
 testChan /= testChan.std(axis=0, keepdims=True)
 
-testChan2=pop_mean2[5+8]
+testChan2=pop_mean2[5+16]
 testChan2 -= testChan2.mean(axis=0, keepdims=True)
 testChan2 /= testChan2.std(axis=0, keepdims=True)
 
 plt.plot(tx, testChan, "-b")
 tx = np.linspace(TMIN, TMAX, int(TMAX-TMIN))
 plt.plot(tx, pop_meanLFP, "-k")
-plt.ylim([-1, 1])
+#plt.ylim([-1, 1])
 #plt.xticks([200, 300,400,500, 600, 700], [0, 100, 200, 300,400,500, 600, 700])
 
-plt.title(['TDT', str(26), ' (WARP 24) and LFP of TDT 7 (WARP 3)'])
+plt.title(['TDT', str(16), ' (WARP 11) and LFP of TDT 7 (WARP 3)'])
 plt.legend(['Mean spike count', 'Mean LFP'])
 
 plt.xlabel('Time relative to sound onset (ms)')
@@ -511,7 +511,7 @@ lagBtSignals=scipy.signal.signaltools.correlate(testChan2, pop_meanLFP)
 dt = np.arange(1-int(TMAX-TMIN), int(TMAX-TMIN))
 recovered_time_shift = dt[lagBtSignals.argmax()]
 plt.plot(lagBtSignals)
-plt.title(['Correlation between TDT', str(26), ' (WARP 24) and LFP of TDT 7 (WARP 3)'])
+plt.title(['Correlation between TDT', str(16), ' (WARP 11) and LFP of TDT 7 (WARP 3)'])
 plt.xlabel('full discrete cross-correlated samples')
 plt.ylabel('correlation score (unitless)')
 
