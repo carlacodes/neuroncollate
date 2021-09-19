@@ -95,7 +95,7 @@ for i3 in range(len(blockData)):
     combinedSpikeTimes=np.append(combinedSpikeTimes,selectedSpikeTimes)
     combinedNeuron=np.append(combinedNeuron, selectedNeuronIDs)
     combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
-TMAX = 1.06*1000#max(combinedLickReleaseTimes)# ms
+TMAX = 0.8*1000#max(combinedLickReleaseTimes)# ms
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
 #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)

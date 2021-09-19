@@ -14,7 +14,7 @@ blocksOfInterest=list(range(100, 186))
 
 for i in range(100, 186):
 
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/nopitchshiftTarget/orderingbyLRtime/completemiss2s'
+    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/pitchshiftTarget/orderingbyLRtime/Correct15092s'
     if os.path.isdir(user_input) is False:
         print('does not exist')
         blocksOfInterest.remove(i)
@@ -258,22 +258,22 @@ import matplotlib.pyplot as plt
 
 from visualization1006 import rasters
 fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
-fig.suptitle('Original Data (all lick releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data (all lick releases May-July 2021 Zola) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 
 fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-fig.suptitle('Original Data Reorganised (CORRECT PITCH SHIFT lick releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data Reorganised (CORRECT PITCH SHIFT lick releases May-July /2021 Zola) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 
 fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Shift Model (CORRECT PITCH SHIFT lick releases  07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Shift Model (CORRECT PITCH SHIFT lick releases  May-July /2021 Zola) ', fontsize=10, color='0', y='1')
 #plt.title('Rasters after Shift Model (18/03/2021 Zola) ')
 plt.show()
 
 fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Linear Model (CORRECT PITCH SHIFT lick releases  07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Linear Model (CORRECT PITCH SHIFT lick releases  May-July /2021 Zola) ', fontsize=10, color='0', y='1')
 #make_space_above(axes, topmargin=10)
 #plt.title('Rasters after Linear Model (18/03/2021 Zola)')
 # fig.tight_layout()
@@ -292,9 +292,10 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zol
 # fig.subplots_adjust(top=10)
 plt.show();
 
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/nPScompletemiss'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/PSbatchnomiss2'
 if os.path.isdir(BASE_PATH) is False:
       os.mkdir(BASE_PATH)
+
 file_name='alignedDataBlockweekmayjuly212021ShiftModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'mayjuly21neuronIDsPS'), shift_aligned_data["neurons"])

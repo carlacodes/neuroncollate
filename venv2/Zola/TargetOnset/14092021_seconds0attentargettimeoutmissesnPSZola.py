@@ -14,7 +14,7 @@ blocksOfInterest=list(range(100, 186))
 
 for i in range(100, 186):
 
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/nopitchshiftTarget/orderingbyLRtime/completemiss2s'
+    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/nopitchshiftTarget/orderingbyLRtime/Infmiss2s'
     if os.path.isdir(user_input) is False:
         print('does not exist')
         blocksOfInterest.remove(i)
@@ -263,17 +263,17 @@ fig.suptitle('Original Data (all lick releases 07/06/2021 Zola) ', fontsize=10, 
 plt.show() #original data
 
 fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-fig.suptitle('Original Data Reorganised (CORRECT PITCH SHIFT lick releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data Reorganised (Miss Trials 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 
 fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Shift Model (CORRECT PITCH SHIFT lick releases  07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Shift Model (Miss Trials 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
 #plt.title('Rasters after Shift Model (18/03/2021 Zola) ')
 plt.show()
 
 fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Linear Model (CORRECT PITCH SHIFT lick releases  07/06/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Linear Model (Miss Trials 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
 #make_space_above(axes, topmargin=10)
 #plt.title('Rasters after Linear Model (18/03/2021 Zola)')
 # fig.tight_layout()
@@ -292,7 +292,7 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zol
 # fig.subplots_adjust(top=10)
 plt.show();
 
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/nPScompletemiss'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/nPSInfmiss'
 if os.path.isdir(BASE_PATH) is False:
       os.mkdir(BASE_PATH)
 file_name='alignedDataBlockweekmayjuly212021ShiftModellickrelease'
@@ -306,6 +306,6 @@ np.save(os.path.join(BASE_PATH, 'mayjuly21linearModelneuronIDsPS'), linear_align
 np.save(os.path.join(BASE_PATH, 'mayjuly21linearModeltrialIDsPS'), linear_aligned_data["trials"])
 
 file_name='alignedDataBlockweekmayjuly212021OriginalModellickrelease'
-np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'mayjuly21OriginalModelneuronIDsPS'), cropped_data2["neurons"])
-np.save(os.path.join(BASE_PATH, 'mayjuly21OriginalModeltrialIDsPS'), cropped_data2["trials"])
+np.save(os.path.join(BASE_PATH, file_name), cropped_data["spiketimes"])
+np.save(os.path.join(BASE_PATH, 'mayjuly21OriginalModelneuronIDsPS'), cropped_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'mayjuly21OriginalModeltrialIDsPS'), cropped_data["trials"])

@@ -14,7 +14,7 @@ blocksOfInterest=list(range(100, 186))
 
 for i in range(100, 186):
 
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/nopitchshiftTarget/orderingbyLRtime/completemiss2s'
+    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/nopitchshiftTarget/orderingbyLRtime/Correct15092s'
     if os.path.isdir(user_input) is False:
         print('does not exist')
         blocksOfInterest.remove(i)
@@ -96,7 +96,7 @@ for i3 in range(len(blockData)):
     combinedNeuron=np.append(combinedNeuron, selectedNeuronIDs)
     combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
 TMAX = 0.8*1000#max(combinedLickReleaseTimes)# ms
-BINSIZE = 0.01*1000  # 10 ms
+BINSIZE = 0.02*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
 #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
 
@@ -292,9 +292,10 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zol
 # fig.subplots_adjust(top=10)
 plt.show();
 
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/nPScompletemiss'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/nPSbatchnomiss2'
 if os.path.isdir(BASE_PATH) is False:
       os.mkdir(BASE_PATH)
+
 file_name='alignedDataBlockweekmayjuly212021ShiftModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'mayjuly21neuronIDsPS'), shift_aligned_data["neurons"])
