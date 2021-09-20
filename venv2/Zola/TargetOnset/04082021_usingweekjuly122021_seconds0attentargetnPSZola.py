@@ -239,7 +239,33 @@ import matplotlib.pyplot as plt
 
 ##adding yticks with the actual lick release time in ms relative to the start trial lick
 
-from visualization2208 import rasters
+
+# Compute population firing rate.
+pop_mean = data22.bin_spikes(NBINS).mean(axis=2) / (BINSIZE * 1e-3)
+tx = np.linspace(TMIN, TMAX, NBINS)
+
+# Show 20 example trials.
+fig, axes = plt.subplots(4, 5, sharex=True, sharey=True, figsize=(12, 7))
+
+for k, ax in enumerate(axes.ravel()):
+    ax.plot(tx, pop_mean[5+k], "-k")
+    ax.set_ylim([-10, 100])
+
+
+plt.show()
+###
+
+
+plt.plot(tx, pop_mean[5+13],"-k")
+plt.xlabel("time")
+plt.ylabel("Spike Count")
+plt.title("PSTH for Site 14")
+
+plt.tight_layout()
+plt.show()
+
+
+from visualization2009 import rasters
 fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
 fig.suptitle('Original Data (all lick releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
 
@@ -271,7 +297,9 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zol
 plt.show()
 fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(4, 8),style='white');
 fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
-
+siteschosen=[13]
+fig=rasterSite(cropped_data2,sorted_array, siteschosen, style='white')
+plt.show()
 #make_space_above(axes, topmargin=10)
 
 #plt.title('Rasters after Linear Model (18/03/2021 Zola)')
