@@ -517,6 +517,7 @@ plt.ylabel('correlation score (unitless)')
 
 plt.show()
 BASE_PATH='D:/Electrophysiological Data/F1704_FloJo/dynamictimewarping/SoundOnset/july192021'
+#os.mkdir(BASE_PATH)
 file_name='alignedDataBlockweekjuly192021ShiftModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'neuronIDsnPS'), shift_aligned_data["neurons"])
@@ -527,3 +528,8 @@ np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
+
+file_name='alignedDataBlockweekjuly192021OriginalModellickrelease'
+np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
+np.save(os.path.join(BASE_PATH, 'july19OriginalModelneuronIDsnPS'), cropped_data2["neurons"])
+np.save(os.path.join(BASE_PATH, 'july19OriginalModeltrialIDsnPS'), cropped_data2["trials"])

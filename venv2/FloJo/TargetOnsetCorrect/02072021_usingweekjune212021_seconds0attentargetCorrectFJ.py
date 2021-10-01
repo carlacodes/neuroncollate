@@ -300,13 +300,18 @@ for k, ax in enumerate(axes.ravel()):
 #make_space_above(axes, topmargin=10)
 plt.show()
 BASE_PATH='D:/Electrophysiological Data/F1704_FloJo/dynamictimewarping/targetword/june212021'
-file_name='alignedDataBlockweekjune072021ShiftModellickrelease'
+file_name='alignedDataBlockweekjune212021ShiftModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'neuronIDsnPS'), shift_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'trialIDsnPS'), shift_aligned_data["trials"])
 
-file_name='alignedDataBlockweekjune072021LinearModellickrelease'
+file_name='alignedDataBlockweekjune212021LinearModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
+
+file_name='alignedDataBlockweekjune212021OriginalModellickrelease'
+np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
+np.save(os.path.join(BASE_PATH, 'june21OriginalModelneuronIDsnPS'), cropped_data2["neurons"])
+np.save(os.path.join(BASE_PATH, 'june21OriginalModeltrialIDsnPS'), cropped_data2["trials"])

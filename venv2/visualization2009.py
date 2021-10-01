@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+import matplotlib.patches as patches
 
 
 def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*1.5, 5*1.5),
@@ -126,7 +127,7 @@ def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*
     return fig, axes
 
 
-def rasterSite(data,sorted_array, siteschosen, subplots=(5, 6), fig=None, max_spikes=7000, style='black', **scatter_kw):
+def rasterSite(data,sorted_array, siteschosen, fig=None, max_spikes=7000, style='black', **scatter_kw):
     """
     Plots a series of spike raster plots.
 
@@ -209,13 +210,13 @@ def rasterSite(data,sorted_array, siteschosen, subplots=(5, 6), fig=None, max_sp
 
         # format axes
         #ax.plot(sorted_array[:, 0], sorted_array[:, 1], c="red", marker='.', linestyle=':')
-        plt.set_title('neuron {}'.format(n), color=foreground)
-        plt.set_facecolor(background)
-        plt.set_xticks(np.arange(math.floor(min(times)), math.ceil(max(times)), math.ceil(max(times))/2.5))
+        plt.title('neuron {}'.format(n), color=foreground)
+        #ax.set_facecolor('White')
+        plt.xticks(np.arange(math.floor(min(times)), math.ceil(max(times)), math.ceil(max(times))/2.5))
         #ax.set_xticklabels(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
 
         #ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
-        plt.set_yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
+        plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
                                math.ceil(max(sorted_array[:, 1] / 5))))
 
         #ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:, 0])), math.floor(max(sorted_array[:, 0])), 1000))
@@ -223,29 +224,29 @@ def rasterSite(data,sorted_array, siteschosen, subplots=(5, 6), fig=None, max_sp
 
 
         if min(sorted_array[:,0])<0:
-            plt.set_yticklabels(np.arange(math.floor(min(sorted_array[:,0])), math.floor(max(sorted_array[:,0])), math.ceil((max(sorted_array[:,0])-min(sorted_array[:,0]))/5)))
+            plt.yticks(np.arange(math.floor(min(sorted_array[:,0])), math.floor(max(sorted_array[:,0])), math.ceil((max(sorted_array[:,0])-min(sorted_array[:,0]))/5)))
         elif max(sorted_array[:, 0]) == 0.0:
-            plt.set_yticklabels(np.arange(math.floor(min(sorted_array[:,1])), math.ceil(max(sorted_array[:,1])), math.ceil(max(sorted_array[:,1])/5)))
+            plt.yticks(np.arange(math.floor(min(sorted_array[:,1])), math.ceil(max(sorted_array[:,1])), math.ceil(max(sorted_array[:,1])/5)))
 
         else:
-            plt.set_yticklabels(np.arange(math.floor(min(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])/5)))
-        plt.set_xlabel('milliseconds')
-        plt.set_ylabel('LR Time (ms)')
+            plt.yticks(np.arange(math.floor(min(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])/5)))
+        plt.xlabel('milliseconds')
+        plt.ylabel('Lick Release Time (ms)')
 
 
         #ax.set_xticklabels([i + 100 for i in times])
         #ax.set_xticks([np.arange(min(times), max(times)+1, 100)])
         #ax.set_xticklabels([np.arange(min(times), max(times)+1, 100)])
         #ax.set_yticks([trials])
-        plt.set_xlim([data.tmin, data.tmax])
-        for spine in ax.spines.values():
-            spine.set_visible(False)
+        plt.xlim([data.tmin, data.tmax])
+        # for spine in ax.spines.values():
+        #     spine.set_visible(False)
 
-    if fig is not None:
-        fig.tight_layout()
-        fig.patch.set_facecolor(background)
+    # if fig is not None:
+    #     fig.tight_layout()
+    #     #patches.set_facecolor(background)
 
-    return fig, axes
+    return fig
 
 
 def binned_heatmap(binned, subplots=(5, 6), figsize=(9*1.5, 5*1.5), **kwargs):

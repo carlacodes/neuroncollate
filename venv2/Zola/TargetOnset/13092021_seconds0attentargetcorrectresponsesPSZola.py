@@ -262,8 +262,8 @@ fig.suptitle('Original Data (all lick releases May-July 2021 Zola) ', fontsize=1
 
 plt.show() #original data
 
-fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-fig.suptitle('Original Data Reorganised (CORRECT PITCH SHIFT lick releases May-July /2021 Zola) ', fontsize=10, color='0', y='1')
+fig, axes=rasters(cropped_data2,sorted_array, subplots=(4, 8), style='white');
+fig.suptitle('Original Data Reorganised (Correct Intra-Trial F0 Roved Responses May-July 2021 Zola) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 

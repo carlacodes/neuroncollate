@@ -288,13 +288,18 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 17/05/2021 FloJo)
 plt.show();
 
 BASE_PATH='D:/Electrophysiological Data/F1704_FloJo/dynamictimewarping/targetword/may172021'
-file_name='alignedDataBlockweekjune072021ShiftModellickrelease'
+file_name='alignedDataBlockweekmay172021ShiftModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'neuronIDsnPS'), shift_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'trialIDsnPS'), shift_aligned_data["trials"])
 
-file_name='alignedDataBlockweekjune072021LinearModellickrelease'
+file_name='alignedDataBlockweekmay172021LinearModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
 np.save(os.path.join(BASE_PATH, 'linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
 np.save(os.path.join(BASE_PATH, 'linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
+
+file_name='alignedDataBlockweekmay172021OriginalModellickrelease'
+np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
+np.save(os.path.join(BASE_PATH, 'may17OriginalModelneuronIDsnPS'), cropped_data2["neurons"])
+np.save(os.path.join(BASE_PATH, 'may17OriginalModeltrialIDsnPS'), cropped_data2["trials"])

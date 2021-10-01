@@ -4,7 +4,7 @@ from affinewarp import ShiftWarping
 import os
 import h5py
 import numpy as np
-
+import math
 
 #user_input = input('What is the name of your directory')
 f={}
@@ -245,27 +245,37 @@ pop_mean = data22.bin_spikes(NBINS).mean(axis=2) / (BINSIZE * 1e-3)
 tx = np.linspace(TMIN, TMAX, NBINS)
 
 # Show 20 example trials.
-fig, axes = plt.subplots(4, 5, sharex=True, sharey=True, figsize=(12, 7))
+fig, axes = plt.subplots(4, 8, sharex=True, sharey=True, figsize=(12, 7))
 
 for k, ax in enumerate(axes.ravel()):
+    print(k)
     ax.plot(tx, pop_mean[5+k], "-k")
     ax.set_ylim([-10, 100])
 
 
 plt.show()
 ###
+trials, times, neurons = cropped_data2.trials, cropped_data2.spiketimes, cropped_data2.neurons
+pop_mean22 = cropped_data2.bin_spikes(NBINS).mean(axis=2) / (BINSIZE * 1e-3)
 
 
-plt.plot(tx, pop_mean[5+13],"-k")
+plt.plot(tx, pop_mean22[13],"-k")
 plt.xlabel("time")
 plt.ylabel("Spike Count")
 plt.title("PSTH for Site 14")
+plt.xticks(np.arange(math.floor(0), math.ceil(max(times)), math.ceil(max(times) /6)), np.arange(math.floor(0)-200, math.ceil(max(times))-200, math.ceil(max(times)/6)))
 
-plt.tight_layout()
+#plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/6), fontsize=6)
+
+# ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
+# plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
+#                      math.ceil(max(sorted_array[:, 1] / 7))), np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
+#                      math.ceil(max(sorted_array[:, 0] / 7))))
+
 plt.show()
 
 
-from visualization2009 import rasters
+from visualization2009 import rasters, rasterSite
 fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
 fig.suptitle('Original Data (all lick releases 07/06/2021 Zola) ', fontsize=10, color='0', y='1')
 
@@ -298,13 +308,49 @@ plt.show()
 fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(4, 8),style='white');
 fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
 siteschosen=[13]
-fig=rasterSite(cropped_data2,sorted_array, siteschosen, style='white')
 plt.show()
-#make_space_above(axes, topmargin=10)
 
-#plt.title('Rasters after Linear Model (18/03/2021 Zola)')
-# fig.tight_layout()
-# fig.subplots_adjust(top=10)
+
+trials, times, neurons = cropped_data2.trials,cropped_data2.spiketimes, cropped_data2.neurons
+
+
+idx = np.where(neurons == 14)[0]
+
+hist, edges = np.histogram(
+    times[idx],
+    bins=NBINS,
+    range=(0, 10*NBINS),
+    density=False)
+
+plt.scatter(times[idx], trials[idx],s=1, c='k')
+plt.xticks(np.arange(math.floor(0), math.ceil(max(times)), math.ceil(max(times) / 6)), np.arange(math.floor(0)-200, math.ceil(max(times))-200, math.ceil(max(times)/6)))
+
+#plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
+
+# ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
+plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
+                     math.ceil(max(sorted_array[:, 1] / 7))), np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
+                     math.ceil(max(sorted_array[:, 0] / 7))))
+
+plt.title('Raster Plot for Site 14')
+plt.xlabel('Time Relative to Target Onset (ms)')
+plt.ylabel('Lick Release Time (ms)')
+
+tvec=np.linspace(TMIN, TMAX, NBINS)
+plt.plot(tvec, hist)
+plt.xticks(np.arange(math.floor(0), math.ceil(max(times)), math.ceil(max(times) / 6)), np.arange(math.floor(0)-200, math.ceil(max(times))-200, math.ceil(max(times)/6)))
+
+#plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
+
+# ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
+# plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
+#                      math.ceil(max(sorted_array[:, 1] / 7))), np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
+#                      math.ceil(max(sorted_array[:, 0] / 7))))
+
+plt.title('PSTH Plot for Site 14')
+plt.xlabel('Time Relative to Target Onset (ms)')
+plt.ylabel('Lick Release Time (ms)')
+
 plt.show();
 
 BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/noPitchShiftTarget/withLRmetadata'

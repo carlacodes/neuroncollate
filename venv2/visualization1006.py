@@ -55,7 +55,7 @@ def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*
     for n, ax in enumerate(axes.ravel()):
 
         # select spikes for neuron n
-        idx = np.where(neurons == n)[0]
+        idx = np.where(neurons == (n+1))[0]
 
         # turn off axis if there are no spikes
         if len(idx) == 0:
@@ -87,7 +87,7 @@ def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*
 
         # format axes
         #ax.plot(sorted_array[:, 0], sorted_array[:, 1], c="red", marker='.', linestyle=':')
-        ax.set_title('neuron {}'.format(n), color=foreground)
+        ax.set_title('site {}'.format((n+1)), color=foreground)
         ax.set_facecolor(background)
         ax.set_xticks(np.arange(math.floor(min(times)), math.ceil(max(times)), math.ceil(max(times))/4))
         #ax.set_xticklabels(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
