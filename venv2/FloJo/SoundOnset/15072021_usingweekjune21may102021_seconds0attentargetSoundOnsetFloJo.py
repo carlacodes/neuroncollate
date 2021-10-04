@@ -226,8 +226,8 @@ for i in range(0,len(neuronsbychan)):
     keys_list = list(neuronsbychan)
     key = keys_list[i]
     selectedChan=neuronsbychan[key]
-    counter=binnedLRStdDev[:,:,i]
-    countermean=np.mean(binnedLRStdDev[:,:,1:33])
+    counter=binnedLRz[:,:,i]
+    countermean=np.mean(binnedLRz[:,:,1:33])
     selectedmeans=binnedmeans[ int(key)]
     selectedmeansb=binnedmeansb[int(key)]
 

@@ -72,14 +72,17 @@ for i in range(len(combinedTrials)):
 combinedSpikeTimes=np.array([]); #declare empty numpy array
 combinedNeuron=np.array([])
 combinedLickReleaseTimes=np.array([])
+combinedPitchTargs=np.array([])
 
 for i3 in range(len(blockData)):
     selectedSpikeTimes=blockData[blocksOfInterest[i3]]["oneDspiketimearray"]
     selectedNeuronIDs=blockData[blocksOfInterest[i3]]["oneDspikeIDarray"]
     selectedLickReleaseIDs=blockData[blocksOfInterest[i3]]["oneDlickReleaseArray"]
+    selectedTargPitches=blockData[blocksOfInterest[i3]]["oneDPitchTrialTargArray"]
     combinedSpikeTimes=np.append(combinedSpikeTimes,selectedSpikeTimes)
     combinedNeuron=np.append(combinedNeuron, selectedNeuronIDs)
     combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
+    combinedPitchTargs=np.append(combinedPitchTargs, selectedTargPitches)
 TMAX = 1.06*1000#np.mean(combinedLickReleaseTimes)# ms
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
@@ -122,6 +125,8 @@ sorted_array_trial=(sorted_array_trial).astype(np.int)
 #data4=data3.reorder_trials([0,1,3,2,4])
 
 data22=data2.reorder_trials(sorted_array_trial)
+redorderPitches=combinedPitchTargs[indexlist]
+
 # Bin and normalize (soft z-score) spike times.
 binnedLR = data2.bin_spikes(NBINS)
 binnedLR = binnedLR - binnedLR.mean(axis=(0, 1), keepdims=True)

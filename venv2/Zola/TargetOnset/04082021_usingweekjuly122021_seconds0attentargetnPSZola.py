@@ -323,7 +323,7 @@ hist, edges = np.histogram(
     density=False)
 
 plt.scatter(times[idx], trials[idx],s=1, c='k')
-plt.xticks(np.arange(math.floor(0), math.ceil(max(times)), math.ceil(max(times) / 6)), np.arange(math.floor(0)-200, math.ceil(max(times))-200, math.ceil(max(times)/6)))
+plt.xticks(np.arange(math.floor(0), math.ceil(1000), math.ceil(1000 / 5)), np.arange(math.floor(0)-200, math.ceil(1000)-200, math.ceil(1000/5)))
 
 #plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
 
@@ -335,10 +335,10 @@ plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_a
 plt.title('Raster Plot for Site 14')
 plt.xlabel('Time Relative to Target Onset (ms)')
 plt.ylabel('Lick Release Time (ms)')
-
+plt.show()
 tvec=np.linspace(TMIN, TMAX, NBINS)
-plt.plot(tvec, hist)
-plt.xticks(np.arange(math.floor(0), math.ceil(max(times)), math.ceil(max(times) / 6)), np.arange(math.floor(0)-200, math.ceil(max(times))-200, math.ceil(max(times)/6)))
+plt.plot(tvec, hist, 'black')
+plt.xticks(np.arange(math.floor(0), math.ceil(1000), math.ceil(1000 / 5)), np.arange(math.floor(0)-200, math.ceil(1000)-200, math.ceil(1000/5)))
 
 #plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
 
