@@ -4,6 +4,7 @@ from affinewarp import ShiftWarping
 import os
 import h5py
 import numpy as np
+import math
 
 
 #user_input = input('What is the name of your directory')
@@ -120,7 +121,9 @@ sorted_array = trialalignment[np.argsort(trialalignment[:, 0])]
 sorted_array_trial=sorted_array[:,1]
 sorted_array_trial=(sorted_array_trial).astype(np.int)
 #t3 = np.concatenate((t1.reshape(-1,1),t2.reshape(-1,1),axis=1)
-
+indexlist=sorted_array_trial.tolist()
+data22=data2.reorder_trials(sorted_array_trial)
+redorderPitches=combinedPitchTargs[indexlist]
 #data3=data2.select_trials([1,2,3,4,5])
 #data4=data3.reorder_trials([0,1,3,2,4])
 
@@ -281,6 +284,69 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset week 07/06/21 Zol
 # fig.tight_layout()
 # fig.subplots_adjust(top=10)
 plt.show();
+
+trials, times, neurons = cropped_data2.trials,cropped_data2.spiketimes, cropped_data2.neurons
+idx = np.where(neurons == 14)[0]
+
+hist, edges = np.histogram(
+    times[idx],
+    bins=NBINS,
+    range=(0, 10*NBINS),
+    density=False)
+newtrials=trials[idx]
+binHigh=np.array([])
+binLow=np.array([])
+for i in idx:
+    trialinst=trials[i]
+    pitch=redorderPitches[trialinst]
+    if pitch==5 or pitch==13:
+        binHigh=np.append(binHigh,int(i))
+    else:
+        binLow=np.append(binLow, int(i))
+binLow=binLow.astype(int)
+binHigh=binHigh.astype(int)
+# binHigh=list(binHigh)
+# binLow=list(binLow)
+one=plt.scatter(times[binHigh], trials[binHigh],s=1, c='orange')
+two=plt.scatter(times[binLow], trials[binLow],s=1, c='purple')
+plt.legend((one, two),
+           ('Higher Pitches Relative to Original F0', 'Lower Pitches Relative to Original F0'),
+           scatterpoints=1,
+           loc='upper right',
+           ncol=1,
+           fontsize=8)
+plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.arange(math.floor(0)-200, math.ceil(1200)-200, math.ceil(1200/6)))
+
+#plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
+
+# ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
+plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
+                     math.ceil(max(sorted_array[:, 1] / 7))), np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
+                     math.ceil(max(sorted_array[:, 0] / 7))))
+
+plt.title('Raster Plot for Site 14 (F0 Roved Trials)')
+plt.xlabel('Time Relative to Distractor Onset (ms)')
+plt.ylabel('Lick Release Time (ms)')
+plt.show()
+
+
+tvec=np.linspace(TMIN, TMAX, NBINS)
+plt.plot(tvec, hist, 'cyan')
+plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.arange(math.floor(0)-200, math.ceil(1200)-200, math.ceil(1200/6)))
+plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.arange(math.floor(0)-200, math.ceil(1200)-200, math.ceil(1200/6)))
+
+#plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
+
+# ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
+# plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
+#                      math.ceil(max(sorted_array[:, 1] / 7))), np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
+#                      math.ceil(max(sorted_array[:, 0] / 7))))
+
+plt.title('PSTH Plot for Site 14 (F0 Roved Trials)')
+plt.xlabel('Time Relative to Distractor Onset (ms)')
+plt.ylabel('Spike Count')
+plt.show()
+
 
 BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/comdistPitchShift/july122021'
 #os.mkdir(BASE_PATH)

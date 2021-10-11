@@ -322,10 +322,10 @@ two=plt.scatter(times[binLow], trials[binLow],s=1, c='purple')
 plt.legend((one, two),
            ('Higher Pitches Relative to Original F0', 'Lower Pitches Relative to Original F0'),
            scatterpoints=1,
-           loc='lower left',
+           loc='upper right',
            ncol=1,
            fontsize=8)
-plt.xticks(np.arange(math.floor(0), math.ceil(1000), math.ceil(1000 / 5)), np.arange(math.floor(0)-200, math.ceil(1000)-200, math.ceil(1000/5)))
+plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.arange(math.floor(0)-200, math.ceil(1200)-200, math.ceil(1200/6)))
 
 #plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
 
@@ -340,7 +340,7 @@ plt.ylabel('Lick Release Time (ms)')
 plt.show()
 tvec=np.linspace(TMIN, TMAX, NBINS)
 plt.plot(tvec, hist, 'cyan')
-plt.xticks(np.arange(math.floor(0), math.ceil(1000), math.ceil(1000 / 5)), np.arange(math.floor(0)-200, math.ceil(1000)-200, math.ceil(1000/5)))
+plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.arange(math.floor(0)-200, math.ceil(1200)-200, math.ceil(1200/6)))
 
 #plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
 
@@ -351,7 +351,7 @@ plt.xticks(np.arange(math.floor(0), math.ceil(1000), math.ceil(1000 / 5)), np.ar
 
 plt.title('PSTH Plot for Site 14 (F0 Roved Trials)')
 plt.xlabel('Time Relative to Target Onset (ms)')
-plt.ylabel('Lick Release Time (ms)')
+plt.ylabel('Spike Count')
 
 plt.show();
 

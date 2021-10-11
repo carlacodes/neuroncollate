@@ -323,7 +323,7 @@ hist, edges = np.histogram(
     density=False)
 
 plt.scatter(times[idx], trials[idx],s=1, c='k')
-plt.xticks(np.arange(math.floor(0), math.ceil(1000), math.ceil(1000 / 5)), np.arange(math.floor(0)-200, math.ceil(1000)-200, math.ceil(1000/5)))
+plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.arange(math.floor(0)-200, math.ceil(1200)-200, math.ceil(1200/6)))
 
 #plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
 
@@ -332,13 +332,13 @@ plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_a
                      math.ceil(max(sorted_array[:, 1] / 7))), np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
                      math.ceil(max(sorted_array[:, 0] / 7))))
 
-plt.title('Raster Plot for Site 14')
+plt.title('Raster Plot for Site 14 (Control F0 Trials)')
 plt.xlabel('Time Relative to Target Onset (ms)')
 plt.ylabel('Lick Release Time (ms)')
 plt.show()
 tvec=np.linspace(TMIN, TMAX, NBINS)
 plt.plot(tvec, hist, 'black')
-plt.xticks(np.arange(math.floor(0), math.ceil(1000), math.ceil(1000 / 5)), np.arange(math.floor(0)-200, math.ceil(1000)-200, math.ceil(1000/5)))
+plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.arange(math.floor(0)-200, math.ceil(1200)-200, math.ceil(1200/6)))
 
 #plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
 
@@ -347,9 +347,9 @@ plt.xticks(np.arange(math.floor(0), math.ceil(1000), math.ceil(1000 / 5)), np.ar
 #                      math.ceil(max(sorted_array[:, 1] / 7))), np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
 #                      math.ceil(max(sorted_array[:, 0] / 7))))
 
-plt.title('PSTH Plot for Site 14')
+plt.title('PSTH Plot for Site 14 (Control F0 Trials)')
 plt.xlabel('Time Relative to Target Onset (ms)')
-plt.ylabel('Lick Release Time (ms)')
+plt.ylabel('Spike Count')
 
 plt.show();
 

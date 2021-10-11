@@ -263,7 +263,7 @@ fig.suptitle('Original Data (all lick releases 07/06/2021 Zola) ', fontsize=10, 
 plt.show() #original data
 
 fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-fig.suptitle('Original Data Organised by Lick Response Time (Incorrect F0-Roved Trial Responses, May-July 2021, Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data Organised by Lick Response Time (Incorrect F0-Roved Target Responses, May-July 2021, Zola) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 

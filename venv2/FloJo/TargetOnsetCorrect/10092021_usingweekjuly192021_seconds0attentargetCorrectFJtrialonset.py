@@ -5,6 +5,7 @@ import os
 import h5py
 import numpy as np
 import scipy
+import math
 
 
 def traverse_datasets(hdf_file):
@@ -25,7 +26,7 @@ def traverse_datasets(hdf_file):
 f={}
 blockData={}
 #271, 272, 276, 277, 279,282,
-blocksOfInterest=[ 271, 272, 277, 279, 282, 283, 285]
+blocksOfInterest=[  282, 283, 285]
 for i in blocksOfInterest:
     user_input = 'D:/Electrophysiological Data/F1704_FloJo/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/nomisses2s'
     directory = os.listdir(user_input)
@@ -131,8 +132,7 @@ TMIN = 0.2*1000  # s
 # BINSIZE = 0.01*1000  # 10 ms
 # NBINS = int((TMAX - TMIN) / BINSIZE)
 
-TMIN2=0
-TMAX2=1.2; #I made the maximum trial length 1.2 seconds
+
 # LFP parameters.
 LOW_CUTOFF = 10  # Hz for lfp
 HIGH_CUTOFF = 30  # Hz for lfp
@@ -242,7 +242,7 @@ for i3 in range(len(blockDataLFP)-1):
 
 
 #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
-TMAX =0.7*1000#max(combinedLickReleaseTimes) # s
+TMAX =2*1000#max(combinedLickReleaseTimes) # s
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
 #adjustedTrial=arrays2["oneDtrialIDarray"]+max(arrays["oneDtrialIDarray"])
@@ -490,15 +490,35 @@ testChan=pop_mean[5+25]
 testChan -= testChan.mean(axis=0, keepdims=True)
 testChan /= testChan.std(axis=0, keepdims=True)
 
-testChan2=pop_mean2[5+25]
+
+
+
+
+
+trials, times, neurons = cropped_data2.trials,cropped_data2.spiketimes, cropped_data2.neurons
+
+
+idx = np.where(neurons == 19)[0]
+
+hist, edges = np.histogram(
+    times[idx],
+    bins=NBINS,
+    range=(0, 10*NBINS),
+    density=False)
+
+
+testChan2=pop_mean[5+25]
+#testChan2=testChan2.astype(float)
 testChan2 -= testChan2.mean(axis=0, keepdims=True)
 testChan2 /= testChan2.std(axis=0, keepdims=True)
 
-plt.plot(tx, testChan, "-b")
+
+plt.plot(tx, testChan2, "-b")
 tx = np.linspace(TMIN, TMAX, int(TMAX-TMIN))
 plt.plot(tx, pop_meanLFP, "-k")
 #plt.ylim([-1, 1])
 #plt.xticks([200, 300,400,500, 600, 700], [0, 100, 200, 300,400,500, 600, 700])
+plt.xticks(np.arange(math.floor(200), math.ceil(2200), math.ceil(2000 / 8)), np.arange(math.floor(0), math.ceil(2000), math.ceil(2000 / 8)))
 
 plt.title(['TDT', str(26), ' (WARP 11) and LFP of TDT 7 (WARP 3)'])
 plt.legend(['Mean spike count', 'Mean LFP'])
@@ -516,6 +536,30 @@ plt.xlabel('full discrete cross-correlated samples')
 plt.ylabel('correlation score (unitless)')
 
 plt.show()
+
+
+f, t, Sxx =scipy.signal.spectrogram(pop_meanLFP, fs=1000)
+
+plt.pcolormesh(t, f, Sxx, shading='gouraud')
+plt.ylim([0 ,20])
+plt.ylabel('Frequency [Hz]')
+plt.title('Spectrogram of Sample HPC Site')
+
+plt.xlabel('Time [sec]')
+plt.show()
+
+
+
+
+f, t2, Sxx =scipy.signal.spectrogram(testChan2, fs=100)
+
+plt.pcolormesh(t, f, Sxx, shading='gouraud')
+plt.title('Spectrogram of Sample AC Site')
+plt.ylabel('Frequency [Hz]')
+plt.xlabel('Time [sec]')
+plt.show()
+
+
 BASE_PATH='D:/Electrophysiological Data/F1704_FloJo/dynamictimewarping/SoundOnset/july192021'
 #os.mkdir(BASE_PATH)
 file_name='alignedDataBlockweekjuly192021ShiftModellickrelease'

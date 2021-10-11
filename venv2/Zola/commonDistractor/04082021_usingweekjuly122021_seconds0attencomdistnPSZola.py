@@ -4,6 +4,7 @@ from affinewarp import ShiftWarping
 import os
 import h5py
 import numpy as np
+import math
 
 
 #user_input = input('What is the name of your directory')
@@ -276,7 +277,47 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset week 07/06/2021 Z
 # fig.tight_layout()
 # fig.subplots_adjust(top=10)
 plt.show();
+trials, times, neurons = cropped_data2.trials,cropped_data2.spiketimes, cropped_data2.neurons
 
+
+idx = np.where(neurons == 14)[0]
+
+hist, edges = np.histogram(
+    times[idx],
+    bins=NBINS,
+    range=(0, 10*NBINS),
+    density=False)
+
+plt.scatter(times[idx], trials[idx],s=1, c='k')
+plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.arange(math.floor(0)-200, math.ceil(1200)-200, math.ceil(1200/6)))
+
+#plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
+
+# ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
+plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
+                     math.ceil(max(sorted_array[:, 1] / 7))), np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
+                     math.ceil(max(sorted_array[:, 0] / 7))))
+
+plt.title('Raster Plot for Site 14 (Control F0 Trials)')
+plt.xlabel('Time Relative to Distractor Onset (ms)')
+plt.ylabel('Lick Release Time (ms)')
+plt.show()
+tvec=np.linspace(TMIN, TMAX, NBINS)
+plt.plot(tvec, hist, 'black')
+plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.arange(math.floor(0)-200, math.ceil(1200)-200, math.ceil(1200/6)))
+
+#plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
+
+# ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
+# plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
+#                      math.ceil(max(sorted_array[:, 1] / 7))), np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
+#                      math.ceil(max(sorted_array[:, 0] / 7))))
+
+plt.title('PSTH Plot for Site 14 (Control F0 Trials)')
+plt.xlabel('Time Relative to Distractor Onset (ms)')
+plt.ylabel('Spike Count')
+
+plt.show();
 BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/comdistnoPitchShift/july122021'
 #os.mkdir(BASE_PATH)
 file_name='alignedDataBlockweekjuly122021ShiftModellickreleaseDist'
