@@ -9,9 +9,9 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[165,166,167,168,169,171,172,173]
+blocksOfInterest=[155,156,157,159,162]
 for i in blocksOfInterest:
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/pitchshiftTarget5/orderingbyLRtime/Correct15092s'
+    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/pitchshiftTarget3/orderingbyLRtime/Correct15092s'
     # directory = os.listdir(user_input)
 
     searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -36,7 +36,6 @@ for i in blocksOfInterest:
                 blockData[i] = arrays
 
                 f[i].close()
-
 
 TMIN = 0*1000  # s
 
@@ -261,7 +260,7 @@ fig.suptitle('Original Data (all lick releases 21/06/2021 Zola) ', fontsize=10, 
 plt.show() #original data
 
 fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-fig.suptitle('Original Data Reorganised (Correct Responses for F0-Roved Trials, 05/07/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle('Original Data Reorganised (CORRECT PITCH SHIFT lick releases 21/06/2021 Zola) ', fontsize=10, color='0', y='1')
 
 plt.show() #original data
 
@@ -281,7 +280,7 @@ plt.show();
 
 
 fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
-fig.suptitle(' Rasters after Linear Model (ordered by LR onset 05/07/2021 Zola) ', fontsize=10, color='0', y='1')
+fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zola) ', fontsize=10, color='0', y='1')
 
 #make_space_above(axes, topmargin=10)
 
@@ -290,21 +289,21 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 05/07/2021 Zola) 
 # fig.subplots_adjust(top=10)
 plt.show();
 
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/PitchShiftTarget5'
-file_name='alignedDataBlockweekjuly052021ShiftModellickrelease'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/PitchShiftTarget3'
+file_name='alignedDataBlockweekjune212021ShiftModellickrelease'
 if os.path.isdir(BASE_PATH) is False:
       os.mkdir(BASE_PATH)
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'july0521neuronIDsPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'july0521trialIDsPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'june2121neuronIDsPS'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'june2121trialIDsPS'), shift_aligned_data["trials"])
 
-file_name='alignedDataBlockweekjuly052021LinearModellickrelease'
+file_name='alignedDataBlockweekjune212021LinearModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'july0521linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'july0521linearModeltrialIDsPS'), linear_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'june2121linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'june2121linearModeltrialIDsPS'), linear_aligned_data["trials"])
 
 
-file_name='alignedDataBlockweekjuly052021OriginalModellickrelease'
+file_name='alignedDataBlockweekjune212021OriginalModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'july05OriginalModelneuronIDsPS'), cropped_data2["neurons"])
-np.save(os.path.join(BASE_PATH, 'july05OriginalModeltrialIDsPS'), cropped_data2["trials"])
+np.save(os.path.join(BASE_PATH, 'june21OriginalModelneuronIDsPS'), cropped_data2["neurons"])
+np.save(os.path.join(BASE_PATH, 'june21OriginalModeltrialIDsPS'), cropped_data2["trials"])

@@ -11,7 +11,7 @@ f={}
 blockData={}
 blocksOfInterest=[165,166,167,168,169,171,172,173]
 for i in blocksOfInterest:
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/pitchshiftTarget5/orderingbyLRtime/Correct15092s'
+    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/pitchshiftTarget3/orderingbyLRtime/Correct15092s'
     # directory = os.listdir(user_input)
 
     searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -290,7 +290,7 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 05/07/2021 Zola) 
 # fig.subplots_adjust(top=10)
 plt.show();
 
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/PitchShiftTarget5'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/PitchShiftTarget3'
 file_name='alignedDataBlockweekjuly052021ShiftModellickrelease'
 if os.path.isdir(BASE_PATH) is False:
       os.mkdir(BASE_PATH)
