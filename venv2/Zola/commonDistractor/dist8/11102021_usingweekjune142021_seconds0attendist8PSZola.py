@@ -9,9 +9,9 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[144, 145, 146, 147,  150]
+blocksOfInterest=[144, 145, 146, 147, 150, 151, 152, 153, 154]
 for i in blocksOfInterest:
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/pitchshiftTarget13/orderingbyLRtime/Correct15092s'
+    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/comdist/pitchshift8/orderingbyLRtime/nomisses2s'
     # directory = os.listdir(user_input)
 
     searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -36,6 +36,7 @@ for i in blocksOfInterest:
                 blockData[i] = arrays
 
                 f[i].close()
+
 
 
 TMIN = 0*1000  # s
@@ -290,19 +291,18 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zol
 # fig.subplots_adjust(top=10)
 plt.show();
 
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/PitchShiftTarget13'
+BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/comdist8'
 file_name='alignedDataBlockweekjune142021ShiftModellickrelease'
 if os.path.isdir(BASE_PATH) is False:
       os.mkdir(BASE_PATH)
 np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'june1421neuronIDsPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'june1421trialIDsPS'), shift_aligned_data["trials"])
+np.save(os.path.join(BASE_PATH, 'june14neuronIDsPS'), shift_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'june14trialIDsPS'), shift_aligned_data["trials"])
 
 file_name='alignedDataBlockweekjune142021LinearModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'june1421linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'june1421linearModeltrialIDsPS'), linear_aligned_data["trials"])
-
+np.save(os.path.join(BASE_PATH, 'june14linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+np.save(os.path.join(BASE_PATH, 'june14linearModeltrialIDsPS'), linear_aligned_data["trials"])
 
 file_name='alignedDataBlockweekjune142021OriginalModellickrelease'
 np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
