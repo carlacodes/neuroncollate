@@ -9,7 +9,7 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-blocksOfInterest=[144, 145, 146, 147, 150, 151, 152, 153, 154]
+blocksOfInterest=[144, 145, 146, 147,152, 153, 154]
 for i in blocksOfInterest:
     user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/comdist/pitchshift5/orderingbyLRtime/nomisses2s'
     # directory = os.listdir(user_input)
