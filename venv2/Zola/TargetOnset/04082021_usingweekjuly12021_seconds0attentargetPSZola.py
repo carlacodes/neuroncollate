@@ -334,9 +334,11 @@ plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_a
                      math.ceil(max(sorted_array[:, 1] / 7))), np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
                      math.ceil(max(sorted_array[:, 0] / 7))))
 
-plt.title('Raster Plot for Site 14 (F0 Roved Trials)')
-plt.xlabel('Time Relative to Target Onset (ms)')
-plt.ylabel('Lick Release Time (ms)')
+plt.title('Raster Plot for Site 14 (F0 Roved Trials)', fontsize=20)
+plt.xlabel('Time Relative to Target Onset (ms)', fontsize=20)
+plt.ylabel('Lick Release Time (ms)', fontsize=20)
+plt.tick_params(axis='y', which='major', labelsize=20)
+plt.tick_params(axis='x', which='major', labelsize=20)
 plt.show()
 tvec=np.linspace(TMIN, TMAX, NBINS)
 plt.plot(tvec, hist, 'purple')
@@ -349,10 +351,11 @@ plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.ar
 #                      math.ceil(max(sorted_array[:, 1] / 7))), np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
 #                      math.ceil(max(sorted_array[:, 0] / 7))))
 
-plt.title('PSTH Plot for Site 14 (F0 Roved Trials)')
-plt.xlabel('Time Relative to Target Onset (ms)')
-plt.ylabel('Spike Count')
-
+plt.title('PSTH Plot for Site 14 (F0 Roved Trials)', fontsize=20)
+plt.xlabel('Time Relative to Target Onset (ms)', fontsize=20)
+plt.ylabel('Spike Count', fontsize=20)
+plt.tick_params(axis='y', which='major', labelsize=20)
+plt.tick_params(axis='x', which='major', labelsize=20)
 plt.show();
 
 BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/PitchShiftTarget/withLRmetadata'
