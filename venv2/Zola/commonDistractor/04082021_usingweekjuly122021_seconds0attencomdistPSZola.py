@@ -331,7 +331,7 @@ plt.show()
 
 
 tvec=np.linspace(TMIN, TMAX, NBINS)
-plt.plot(tvec, hist, 'cyan')
+plt.plot(tvec, ((hist/max(combinedTrials)+1)), 'purple')
 plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.arange(math.floor(0)-200, math.ceil(1200)-200, math.ceil(1200/6)))
 plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.arange(math.floor(0)-200, math.ceil(1200)-200, math.ceil(1200/6)))
 
@@ -342,9 +342,11 @@ plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.ar
 #                      math.ceil(max(sorted_array[:, 1] / 7))), np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
 #                      math.ceil(max(sorted_array[:, 0] / 7))))
 
-plt.title('PSTH Plot for Site 14 (F0 Roved Trials)')
-plt.xlabel('Time Relative to Distractor Onset (ms)')
-plt.ylabel('Spike Count')
+plt.title('PSTH Plot for Site 14 (F0 Roved Trials)', fontsize=20)
+plt.xlabel('Time Relative to Distractor Onset (ms)', fontsize=20)
+plt.ylabel('Mean Spike Count', fontsize=20)
+plt.tick_params(axis='y', which='major', labelsize=20)
+plt.tick_params(axis='x', which='major', labelsize=20)
 plt.show()
 
 

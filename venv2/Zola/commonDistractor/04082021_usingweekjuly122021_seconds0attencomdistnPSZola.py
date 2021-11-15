@@ -305,7 +305,7 @@ plt.tick_params(axis='y', which='major', labelsize=20)
 plt.tick_params(axis='x', which='major', labelsize=20)
 plt.show()
 tvec=np.linspace(TMIN, TMAX, NBINS)
-plt.plot(tvec, hist, 'black')
+plt.plot(tvec, ((hist/max(combinedTrials)+1)), 'black')
 plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.arange(math.floor(0)-200, math.ceil(1200)-200, math.ceil(1200/6)))
 
 #plt.xtic(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
@@ -317,7 +317,7 @@ plt.xticks(np.arange(math.floor(0), math.ceil(1200), math.ceil(1200 / 6)), np.ar
 
 plt.title('PSTH Plot for Site 14 (Control F0 Trials)', fontsize=20)
 plt.xlabel('Time Relative to Distractor Onset (ms)', fontsize=20)
-plt.ylabel('Spike Count', fontsize=20)
+plt.ylabel('Mean Spike Count', fontsize=20)
 plt.tick_params(axis='y', which='major', labelsize=20)
 plt.tick_params(axis='x', which='major', labelsize=20)
 plt.show();
