@@ -78,7 +78,7 @@ for i3 in range(len(blockData)):
     combinedSpikeTimes=np.append(combinedSpikeTimes,selectedSpikeTimes)
     combinedNeuron=np.append(combinedNeuron, selectedNeuronIDs)
     combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
-TMAX = 1.06*1000#max(combinedLickReleaseTimes)# ms
+TMAX = 0.8*1000#max(combinedLickReleaseTimes)# ms
 BINSIZE = 0.01*1000  # 10 ms
 NBINS = int((TMAX - TMIN) / BINSIZE)
 #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
@@ -367,17 +367,17 @@ plt.show();
 
 BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/noPitchShiftTarget/withLRmetadata'
 #os.mkdir(BASE_PATH)
-file_name='alignedDataBlockweekjuly122021ShiftModellickrelease'
-np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'july12neuronIDsnPS'), shift_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'july12trialIDsnPS'), shift_aligned_data["trials"])
-
-file_name='alignedDataBlockweekjuly122021LinearModellickrelease'
-np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'july12linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
-np.save(os.path.join(BASE_PATH, 'july12linearModeltrialIDsnPS'), linear_aligned_data["trials"])
-
-file_name='alignedDataBlockweekjuly122021OriginalModellickrelease'
-np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
-np.save(os.path.join(BASE_PATH, 'july12OriginalModelneuronIDsnPS'), cropped_data2["neurons"])
-np.save(os.path.join(BASE_PATH, 'july12OriginalModeltrialIDsnPS'), cropped_data2["trials"])
+# file_name='alignedDataBlockweekjuly122021ShiftModellickrelease'
+# np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
+# np.save(os.path.join(BASE_PATH, 'july12neuronIDsnPS'), shift_aligned_data["neurons"])
+# np.save(os.path.join(BASE_PATH, 'july12trialIDsnPS'), shift_aligned_data["trials"])
+#
+# file_name='alignedDataBlockweekjuly122021LinearModellickrelease'
+# np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
+# np.save(os.path.join(BASE_PATH, 'july12linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
+# np.save(os.path.join(BASE_PATH, 'july12linearModeltrialIDsnPS'), linear_aligned_data["trials"])
+#
+# file_name='alignedDataBlockweekjuly122021OriginalModellickrelease'
+# np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
+# np.save(os.path.join(BASE_PATH, 'july12OriginalModelneuronIDsnPS'), cropped_data2["neurons"])
+# np.save(os.path.join(BASE_PATH, 'july12OriginalModeltrialIDsnPS'), cropped_data2["trials"])
