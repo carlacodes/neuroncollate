@@ -279,7 +279,7 @@ fig.suptitle(' Rasters after Linear Model (CORRECT PITCH SHIFT lick releases  07
 # fig.tight_layout()
 # fig.subplots_adjust(top=10)
 plt.show();
-fig, axes= psth_plots(cropped_data, sorted_array,NBINS, TMIN, TMAX, combinedTrials, 'blue', subplots=(5, 8),style='white');
+fig, axes= psth_plots(cropped_data, sorted_array,NBINS, TMIN, TMAX, combinedTrials, 'purple', subplots=(5, 8),style='white');
 fig.suptitle(' PSTHs of Original Model Data (CORRECT PITCH SHIFT lick releases  12/07/2021 Zola) ', fontsize=10, color='0', y='1')
 #make_space_above(axes, topmargin=10)
 #plt.title('Rasters after Linear Model (18/03/2021 Zola)')
