@@ -406,10 +406,13 @@ for i0 in list_of_distractors:
     # np.save(os.path.join(BASE_PATH, 'june07may172421linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
     # np.save(os.path.join(BASE_PATH, 'june07may172421linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
-    BASE_PATH = 'D:/Electrophysiological Data/F1902_Eclair/dynamictimewarping/l22nopitchshiftdistF'+str(i0)+'/bb4bb5/'
+    BASE_PATH = 'D:/Electrophysiological Data/F1902_Eclair/dynamictimewarping/'
     file_name = 'alignedDataBlockweekjanuary312022ShiftModellickrelease'
     if os.path.isdir(BASE_PATH) is False:
         os.mkdir(BASE_PATH)
+    BASE_PATH2='D:/Electrophysiological Data/F1902_Eclair/dynamictimewarping/l22nopitchshiftdistF'+str(i0)+'/bb4bb5/'
+    if os.path.isdir(BASE_PATH2) is False:
+        os.makedirs(BASE_PATH2)
     np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
     np.save(os.path.join(BASE_PATH, 'january3122neuronIDsPS'), shift_aligned_data["neurons"])
     np.save(os.path.join(BASE_PATH, 'january3122trialIDsPS'), shift_aligned_data["trials"])
