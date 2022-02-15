@@ -5,57 +5,38 @@ import os
 import h5py
 import numpy as np
 
-##IN CONTRAST TO
+
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-pitch_shift_option=[ 'nopitchshift']
-list_of_distractors=[2,3,4,5,6,7,8]
-meaning_of_word=["craft", "incontrast to", "when a", "accurate", "rev instruments", "of science", "pink noise instruments"]
-blocksOfInterest=[2,3,7,8,9]
-for k0 in pitch_shift_option:
-    for i0 in list_of_distractors:
+blocksOfInterest=[1,2,8,9,10, 11,12,13,14, 15]
+left_hand_or_right=['BB4BB5', 'BB2BB3']
+pitch_shift_or_not=['nopitchshift', 'pitchshift']
+for k00 in pitch_shift_or_not:
+    for k0 in left_hand_or_right:
         for i in blocksOfInterest:
-            user_input = 'D:/Electrophysiological Data/F1901_Crumble/HP_BlockNellie-' + str(
-                i) + '/distF'+str(i0)+'/orderingbyLRtime/'+ k0+ '2sBB2BB3'
-            #directory = os.listdir(user_input)
+            user_input = 'D:/Electrophysiological Data/F1901_Crumble/HP_BlockNellie-'+str(i)+'/targetword/targetword/orderingbyLRtime/'+k00+ '2s'+k0+'/'
+            directory = os.listdir(user_input)
 
-            searchstring = 'Arrays'  # input('What word are you trying to find?')
-            if os.path.isdir(user_input) is False:
-                print('does not exist')
-                blocksOfInterest.remove(i)
+            searchstring = 'Arrays'#input('What word are you trying to find?')
 
-            else:
-                directory = os.listdir(user_input)
-                searchstring = 'Arrays'  # input('What word are you trying to find?')
-                for fname in directory:
-                    if searchstring in fname:
-                        # Full path
-                        f[i] = h5py.File(user_input + os.sep + fname)
-                        items = f[i].items()
-                        arrays = {}
-                        for k3, v3 in f[i].items():
-                            newarray3 = np.array(v3)
-                            newarrayremove3 = newarray3[0, :]
-                            arrays[k3] = newarrayremove3
-                        blockData[i] = arrays
+            for fname in directory:
+                if searchstring in fname:
+                    # Full path
+                    f[i] = h5py.File(user_input + os.sep + fname)
+                    items = f[i].items()
+                    arrays = {}
+                    for k3, v3 in f[i].items():
+                        newarray3 = np.array(v3)
+                        newarrayremove3 = newarray3[0, :]
+                        arrays[k3] = newarrayremove3
+                    blockData[i]=arrays
 
-                        f[i].close()
 
-            # for fname in directory:
-            #     if searchstring in fname:
-            #         # Full path
-            #         f[i] = h5py.File(user_input + os.sep + fname)
-            #         items = f[i].items()
-            #         arrays = {}
-            #         for k3, v3 in f[i].items():
-            #             newarray3 = np.array(v3)
-            #             newarrayremove3 = newarray3[0, :]
-            #             arrays[k3] = newarrayremove3
-            #         blockData[i] = arrays
-            #
-            #         f[i].close()
+
+                    f[i].close()
+
 
         TMIN = 0*1000  # s
         #TMAX = 0.8*1000 # s
@@ -357,14 +338,14 @@ for k0 in pitch_shift_option:
 
         # Apply inverse warping functions to data.
         linear_aligned_dataLR = lin_model.transform(data22).crop_spiketimes(TMIN, TMAX)
-        #
-        # plt.plot(shift_model.loss_hist, label="shift")
-        # plt.plot(lin_model.loss_hist, label="linear")
-        # plt.xlabel("Iteration")
-        # plt.ylabel("Normalized Loss")
-        # plt.legend()
-        # plt.tight_layout()
-        # plt.show()
+
+        plt.plot(shift_model.loss_hist, label="shift")
+        plt.plot(lin_model.loss_hist, label="linear")
+        plt.xlabel("Iteration")
+        plt.ylabel("Normalized Loss")
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
 
         def make_space_above(axes, topmargin=1):
             """ increase figure size to make topmargin (in inches) space for
@@ -383,68 +364,57 @@ for k0 in pitch_shift_option:
 
         from visualization1006 import rasters
         fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
-        fig.suptitle('Original Data (all lick releases 07/02/2022 Aligned to Distractor Word Onset '+str(meaning_of_word[i0-2])+ ' Eclair bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
+        fig.suptitle('Original Data (all lick releases 31/01/2022 Crumble bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
 
         plt.show() #original data
 
         fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-        fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Distractor Word Onset ' +str(meaning_of_word[i0-2])+ '  07/02/2022, Eclair BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
+        fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Sound Onset 31/01/2022, Crumble BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
 
         plt.show() #original data
-        #
-        # fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-        # fig.suptitle(' Rasters after Shift Model 07/02/2022 Eclair) ', fontsize=10, color='0', y='1')
-        # #plt.title('Rasters after Shift Model (18/03/2021 Eclair) ')
-        # plt.show()
-        #
-        # fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-        # fig.suptitle(' Rasters after Linear Model (  07/02/2022 Eclair) ', fontsize=10, color='0', y='1')
-        # #make_space_above(axes, topmargin=10)
-        # #plt.title('Rasters after Linear Model (18/03/2021 Eclair)')
-        # # fig.tight_layout()
-        # # fig.subplots_adjust(top=10)
-        # plt.show();
-        #
-        #
-        #
-        # fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
-        # fig.suptitle(' Rasters after Linear Model (ordered by LR onset 07/02/2022 Eclair) ', fontsize=10, color='0', y='1')
 
+        fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
+        fig.suptitle(' Rasters after Shift Model (CORRECT releases  31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
+        #plt.title('Rasters after Shift Model (18/03/2021 Crumble) ')
+        plt.show()
+
+        fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
+        fig.suptitle(' Rasters after Linear Model (CORRECT releases  31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
         #make_space_above(axes, topmargin=10)
-
-        #plt.title('Rasters after Linear Model (18/03/2021 Eclair)')
+        #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
         # fig.tight_layout()
         # fig.subplots_adjust(top=10)
         plt.show();
-        #
-        # BASE_PATH='D:/Electrophysiological Data/F1901_Crumble/dynamictimewarping/soundOnset/withLRmetadata'
-        # file_name='alignedDataBlockweekjune07may17242021ShiftModellickrelease'
-        # np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-        # np.save(os.path.join(BASE_PATH, 'june07may172421neuronIDsnPS'), shift_aligned_data["neurons"])
-        # np.save(os.path.join(BASE_PATH, 'june07may1724trialIDsnPS'), shift_aligned_data["trials"])
-        #
-        # file_name='alignedDataBlockweekjune07may17242021LinearModellickrelease'
-        # np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-        # np.save(os.path.join(BASE_PATH, 'june07may172421linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
-        # np.save(os.path.join(BASE_PATH, 'june07may172421linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
-        BASE_PATH = 'D:/Electrophysiological Data/F1901_Crumble/dynamictimewarping/'
-        file_name = 'alignedDataBlockweekjanuary312022ShiftModellickrelease'
-        if os.path.isdir(BASE_PATH) is False:
-            os.mkdir(BASE_PATH)
-        BASE_PATH2='D:/Electrophysiological Data/F1901_Crumble/dynamictimewarping/l22'+k0+'distF'+str(i0)+'/bb2bb3/'
+
+
+        fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
+        fig.suptitle(' Rasters after Linear Model (ordered by LR onset 31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
+
+        #make_space_above(axes, topmargin=10)
+
+        #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
+        # fig.tight_layout()
+        # fig.subplots_adjust(top=10)
+        plt.show();
+        BASE_PATH2 = 'D:/Electrophysiological Data/F1901_Crumble/dynamictimewarping/l22targetword/'+k00+'/'+k0+'/'
         if os.path.isdir(BASE_PATH2) is False:
             os.makedirs(BASE_PATH2)
-        np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
-        np.save(os.path.join(BASE_PATH, 'january3122neuronIDsPS'), shift_aligned_data["neurons"])
-        np.save(os.path.join(BASE_PATH, 'january3122trialIDsPS'), shift_aligned_data["trials"])
+        file_name='alignedDataBlockweekjanuary312022ShiftModellickrelease'
+
+        np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
+        np.save(os.path.join(BASE_PATH2, 'january312022neuronIDsPS'), shift_aligned_data["neurons"])
+        np.save(os.path.join(BASE_PATH2, 'january312022trialIDsPS'), shift_aligned_data["trials"])
+        file_name='alignedDataBlockweekjanuary312022LinearModellickrelease'
 
         file_name = 'alignedDataBlockweekjanuary312022LinearModellickrelease'
-        np.save(os.path.join(BASE_PATH, file_name), linear_aligned_data["spiketimes"])
-        np.save(os.path.join(BASE_PATH, 'january3122linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-        np.save(os.path.join(BASE_PATH, 'january3122linearModeltrialIDsPS'), linear_aligned_data["trials"])
+        np.save(os.path.join(BASE_PATH2, file_name), linear_aligned_data["spiketimes"])
+        np.save(os.path.join(BASE_PATH2, 'january312022linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+        np.save(os.path.join(BASE_PATH2, 'january312022linearModeltrialIDsPS'), linear_aligned_data["trials"])
+        file_name='alignedDataBlockweekjanuary312022OriginalModellickrelease'
 
         file_name = 'alignedDataBlockweekjanuary312022OriginalModellickrelease'
-        np.save(os.path.join(BASE_PATH, file_name), cropped_data2["spiketimes"])
-        np.save(os.path.join(BASE_PATH, 'january31OriginalModelneuronIDsPS'), cropped_data2["neurons"])
-        np.save(os.path.join(BASE_PATH, 'january31OriginalModeltrialIDsPS'), cropped_data2["trials"])
+        np.save(os.path.join(BASE_PATH2, file_name), cropped_data2["spiketimes"])
+        np.save(os.path.join(BASE_PATH2, 'january312022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
+        np.save(os.path.join(BASE_PATH2, 'january312022OriginalModeltrialIDsPS'), cropped_data2["trials"])
+

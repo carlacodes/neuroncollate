@@ -393,6 +393,7 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 07/02/2022 Eclair
 # fig.tight_layout()
 # fig.subplots_adjust(top=10)
 plt.show();
+
 #
 # BASE_PATH='D:/Electrophysiological Data/F1902_Eclair/dynamictimewarping/soundOnset/withLRmetadata'
 # file_name='alignedDataBlockweekjune07may17242021ShiftModellickrelease'
