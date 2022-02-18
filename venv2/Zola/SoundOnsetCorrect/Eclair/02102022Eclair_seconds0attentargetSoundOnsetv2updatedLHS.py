@@ -237,7 +237,7 @@ for i in range(0,len(neuronsbychan)):
             print('something good')
             goodChanlist=np.append(goodChanlist, int(key))
     else:
-        if (selectedmeans) >= abs(2*selectedmeansb):  # selectedmeans-counter: #-(0.1*(counter)):
+        if (selectedmeans) >= abs(1.5*selectedmeansb):  # selectedmeans-counter: #-(0.1*(counter)):
             print('something good')
             goodChanlist = np.append(goodChanlist, int(key))
 

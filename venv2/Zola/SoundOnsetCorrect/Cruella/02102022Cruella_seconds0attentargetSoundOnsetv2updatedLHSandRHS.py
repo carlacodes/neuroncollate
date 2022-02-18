@@ -10,11 +10,11 @@ import numpy as np
 f={}
 blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-blocksOfInterest=[1,2,8,9,10, 11,12,13,14, 15]
-left_hand_or_right=['BB2BB3'] ##'BB2BB3'
+blocksOfInterest=[19]
+left_hand_or_right=['BB2BB3', 'BB4B5'] ##'BB2BB3'
 for k0 in left_hand_or_right:
     for i in blocksOfInterest:
-        user_input = 'D:/Electrophysiological Data/F1901_Crumble/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/withmisses2s'+k0+'/'
+        user_input = 'D:/Electrophysiological Data/F1815_Cruella/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/withmisses2s/'+k0+'/'
         directory = os.listdir(user_input)
 
         searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -76,11 +76,20 @@ for k0 in left_hand_or_right:
         else:
             adjustedTrial[i2]=blockData[blocksOfInterest[i2+1]]["oneDtrialIDarray"]+max(adjustedTrial[i2-1])
 
-    combinedTrialsAdjusted=np.concatenate([v for k,v in sorted(adjustedTrial.items())], 0)
-    firsttrialarray=blockData[blocksOfInterest[0]]["oneDtrialIDarray"]
-    combinedTrials=np.append(firsttrialarray, combinedTrialsAdjusted)
-    for i in range(len(combinedTrials)):
-        combinedTrials[i] -= 1
+
+    if len(adjustedTrial)==0:
+        combinedTrialsAdjusted =blockData[blocksOfInterest[0]]["oneDtrialIDarray"]
+        for i in range(len(combinedTrialsAdjusted)):
+            combinedTrialsAdjusted[i] -= 1
+        combinedTrials=combinedTrialsAdjusted
+
+    else:
+        combinedTrialsAdjusted = np.concatenate([v for k, v in sorted(adjustedTrial.items())], 0)
+
+        firsttrialarray=blockData[blocksOfInterest[0]]["oneDtrialIDarray"]
+        combinedTrials=np.append(firsttrialarray, combinedTrialsAdjusted)
+        for i in range(len(combinedTrials)):
+            combinedTrials[i] -= 1
 
     combinedSpikeTimes=np.array([]); #declare empty numpy array
     combinedNeuron=np.array([])
@@ -395,7 +404,7 @@ for k0 in left_hand_or_right:
     # fig.tight_layout()
     # fig.subplots_adjust(top=10)
     plt.show();
-    # BASE_PATH2 = 'D:/Electrophysiological Data/F1901_Crumble/dynamictimewarping/l22targetword/'+k0+'/'
+    # BASE_PATH2 = 'D:/Electrophysiological Data/F1815_Cruella/dynamictimewarping/l22targetword/'+k0+'/'
     # if os.path.isdir(BASE_PATH2) is False:
     #     os.makedirs(BASE_PATH2)
     # np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
