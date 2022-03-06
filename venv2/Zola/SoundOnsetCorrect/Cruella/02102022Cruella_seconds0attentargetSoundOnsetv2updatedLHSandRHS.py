@@ -11,7 +11,7 @@ f={}
 blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
 blocksOfInterest=[23, 24, 25, 26, 27, 28] #change as needed
-left_hand_or_right=['BB2BB3', 'BB4B5'] ##'BB2BB3'
+left_hand_or_right=['BB2BB3'] ##'BB2BB3'
 for k0 in left_hand_or_right:
     for i in blocksOfInterest:
         user_input = 'D:/Electrophysiological Data/F1815_Cruella/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/withmisses2s/'+k0+'/'
@@ -248,7 +248,7 @@ for k0 in left_hand_or_right:
                 print('something good')
                 goodChanlist=np.append(goodChanlist, int(key))
         else:
-            if (selectedmeans) >= abs(1.5*selectedmeansb):  # selectedmeans-counter: #-(0.1*(counter)):
+            if (selectedmeans) >= abs(1.1*selectedmeansb):  # selectedmeans-counter: #-(0.1*(counter)):
                 print('something good')
                 goodChanlist = np.append(goodChanlist, int(key))
 
@@ -371,24 +371,24 @@ for k0 in left_hand_or_right:
 
     from visualization1006 import rasters
     fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
-    fig.suptitle('Original Data (all lick releases 31/01/2022 Crumble bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
+    fig.suptitle('Original Data (all lick releases 31/01/2022 Cruella bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
 
     plt.show() #original data
 
     fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-    fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Sound Onset 31/01/2022, Crumble BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
+    fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Sound Onset 31/01/2022, Cruella BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
 
     plt.show() #original data
 
     fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-    fig.suptitle(' Rasters after Shift Model (CORRECT releases  31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
-    #plt.title('Rasters after Shift Model (18/03/2021 Crumble) ')
+    fig.suptitle(' Rasters after Shift Model (CORRECT releases  31/01/2022 Cruella) ', fontsize=10, color='0', y='1')
+    #plt.title('Rasters after Shift Model (18/03/2021 Cruella) ')
     plt.show()
 
     fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-    fig.suptitle(' Rasters after Linear Model (CORRECT releases  31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
+    fig.suptitle(' Rasters after Linear Model (CORRECT releases  31/01/2022 Cruella) ', fontsize=10, color='0', y='1')
     #make_space_above(axes, topmargin=10)
-    #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
+    #plt.title('Rasters after Linear Model (18/03/2021 Cruella)')
     # fig.tight_layout()
     # fig.subplots_adjust(top=10)
     plt.show();
@@ -396,11 +396,11 @@ for k0 in left_hand_or_right:
 
 
     fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
-    fig.suptitle(' Rasters after Linear Model (ordered by LR onset 31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
+    fig.suptitle(' Rasters after Linear Model (ordered by LR onset 31/01/2022 Cruella) ', fontsize=10, color='0', y='1')
 
     #make_space_above(axes, topmargin=10)
 
-    #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
+    #plt.title('Rasters after Linear Model (18/03/2021 Cruella)')
     # fig.tight_layout()
     # fig.subplots_adjust(top=10)
     plt.show();
