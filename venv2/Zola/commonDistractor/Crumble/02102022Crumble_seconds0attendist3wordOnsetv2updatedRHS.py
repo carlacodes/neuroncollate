@@ -9,14 +9,14 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-pitch_shift_option=['pitchshift', 'nopitchshift']
+pitch_shift_option=['pitchshift','nopitchshift']
 list_of_distractors=[2,3,4,5,6,7,8]
 meaning_of_word=["craft", "incontrast to", "when a", "accurate", "rev instruments", "of science", "pink noise instruments"]
 #blocksOfInterest=[8,9, 10, 11, 12, 13,14,15]
-left_or_right_side=['BB2BB3'] #BB4BB5
+left_or_right_side=['BB2BB3', 'BB4BB5'] #BB4BB5
 for k00 in left_or_right_side:
     for k0 in pitch_shift_option:
-        blocksOfInterest = [8, 9, 10, 11, 12, 13, 14, 15]
+        blocksOfInterest = [18,19,20,21,22,23,24]
         blocksOfInterest2 = []
         f = {}
         blockData = {}
@@ -112,9 +112,20 @@ for k00 in left_or_right_side:
                 else:
                     adjustedTrial[i2]=blockData[blocksOfInterest2[i2+1]]["oneDtrialIDarray"]+max(adjustedTrial[i2-1])
 
-            combinedTrialsAdjusted=np.concatenate([v for k,v in sorted(adjustedTrial.items())], 0)
-            firsttrialarray=blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
-            combinedTrials=np.append(firsttrialarray, combinedTrialsAdjusted)
+
+            if bool(adjustedTrial):
+                combinedTrialsAdjusted = np.concatenate([v for k, v in sorted(adjustedTrial.items())], 0)
+                firsttrialarray = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
+                combinedTrials = np.append(firsttrialarray, combinedTrialsAdjusted)
+            else:
+                combinedTrialsAdjusted = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
+                #firsttrialarray = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
+                combinedTrials = combinedTrialsAdjusted
+
+
+
+
+
             for i in range(len(combinedTrials)):
                 combinedTrials[i] -= 1
 
@@ -444,23 +455,23 @@ for k00 in left_or_right_side:
             # np.save(os.path.join(BASE_PATH, 'june07may172421linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
             BASE_PATH = 'D:/Electrophysiological Data/F1901_Crumble/dynamictimewarping/'
-            file_name = 'alignedDataBlockweekjanuary312022ShiftModellickrelease'
+            file_name = 'alignedDataBlockweekfebruary212022ShiftModellickrelease'
             if os.path.isdir(BASE_PATH) is False:
                 os.mkdir(BASE_PATH)
             BASE_PATH2='D:/Electrophysiological Data/F1901_Crumble/dynamictimewarping/l22'+k0+'distF'+str(i0)+'/'+k00+'/'
             if os.path.isdir(BASE_PATH2) is False:
                 os.makedirs(BASE_PATH2)
             np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'january312022neuronIDsPS'), shift_aligned_data["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'january312022trialIDsPS'), shift_aligned_data["trials"])
+            np.save(os.path.join(BASE_PATH2, 'february212022neuronIDsPS'), shift_aligned_data["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'february212022trialIDsPS'), shift_aligned_data["trials"])
 
-            file_name = 'alignedDataBlockweekjanuary312022LinearModellickrelease'
+            file_name = 'alignedDataBlockweekfebruary212022LinearModellickrelease'
             np.save(os.path.join(BASE_PATH2, file_name), linear_aligned_data["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'january312022linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'january312022linearModeltrialIDsPS'), linear_aligned_data["trials"])
+            np.save(os.path.join(BASE_PATH2, 'february212022linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'february212022linearModeltrialIDsPS'), linear_aligned_data["trials"])
 
-            file_name = 'alignedDataBlockweekjanuary312022OriginalModellickrelease'
+            file_name = 'alignedDataBlockweekfebruary212022OriginalModellickrelease'
 
             np.save(os.path.join(BASE_PATH2, file_name), cropped_data2["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'january312022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'january312022OriginalModeltrialIDsPS'), cropped_data2["trials"])
+            np.save(os.path.join(BASE_PATH2, 'february212022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'february212022OriginalModeltrialIDsPS'), cropped_data2["trials"])
