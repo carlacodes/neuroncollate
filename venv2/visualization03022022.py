@@ -151,7 +151,7 @@ def binned_heatmap(binned, subplots=(5, 6), figsize=(9*1.5, 5*1.5), **kwargs):
 def psth_plots(data,sorted_array,NBINS, TMIN, TMAX, combinedTrials, plot_color, subplots=(5, 6), fig=None, axes=None, figsize=(9*1.5, 5*1.5),
             max_spikes=7000, style='black', **scatter_kw):
     """
-    Plots a series of spike raster plots.
+    Plots a series of spike PSTH plots to complement the original raster plot functionality.
 
     Parameters
     ----------
@@ -268,7 +268,7 @@ def psth_plots(data,sorted_array,NBINS, TMIN, TMAX, combinedTrials, plot_color, 
     return fig, axes
 def rasterSite(data,sorted_array, siteschosen, fig=None, max_spikes=7000, style='black', **scatter_kw):
     """
-    Plots a series of spike raster plots.
+    Plots a series of spike raster plots by SITE chosen.
 
     Parameters
     ----------

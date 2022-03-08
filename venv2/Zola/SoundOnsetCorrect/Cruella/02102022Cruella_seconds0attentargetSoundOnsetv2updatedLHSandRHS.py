@@ -10,8 +10,8 @@ import numpy as np
 f={}
 blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-blocksOfInterest=[23, 24, 25, 26, 27, 28] #change as needed
-left_hand_or_right=['BB2BB3'] ##'BB2BB3'
+blocksOfInterest=[ 24, 25, 26, 27, 28] #change as needed
+left_hand_or_right=['BB4BB5'] ##'BB2BB3'
 for k0 in left_hand_or_right:
     for i in blocksOfInterest:
         user_input = 'D:/Electrophysiological Data/F1815_Cruella/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/withmisses2s/'+k0+'/'
