@@ -16,8 +16,8 @@ meaning_of_word=["craft", "incontrast to", "when a", "accurate", "rev instrument
 left_or_right_side=['BB2BB3','BB4BB5'] #BB4BB5
 for k00 in left_or_right_side:
     for k0 in pitch_shift_option:
-        blocksOfInterest = [29, 31, 32, 33, 34, 36, 37, 39, 40]
-        blocksOfInterest = [41,42,44,45,46,47,48,49,50,51]
+        #blocksOfInterest = [29, 31, 32, 33, 34, 36, 37, 39, 40]
+        blocksOfInterest = [29, 31, 32, 33, 34, 36, 37, 39, 40,41,42,44,45,46,47,48,49,50,51]
 
         blocksOfInterest2 = []
         f = {}

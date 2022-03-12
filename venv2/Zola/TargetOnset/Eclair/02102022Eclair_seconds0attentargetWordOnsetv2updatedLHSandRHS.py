@@ -11,7 +11,7 @@ f={}
 blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
 blocksOfInterest=[29,31,32,33,34,36,37,39,40 ]
-blocksOfInterest=[41,42,45,46,47,48,49] #feb21
+blocksOfInterest=[29,31,32,33,34,36,37,39,40,41,42,45,46,47,48,49] #feb21
 
 left_hand_or_right=['BB4BB5', 'BB2BB3']
 pitch_shift_or_not=['nopitchshift', 'pitchshift']

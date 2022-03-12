@@ -13,39 +13,68 @@ blockData={}
 blocksOfInterest=[1,2,8,9,10, 11,12,13,14, 15]
 blocksOfInterest=[18,19,20,22,23,24]
 left_hand_or_right=['BB4BB5', 'BB2BB3']
+
+
 pitch_shift_or_not=['nopitchshift', 'pitchshift']
 for k00 in pitch_shift_or_not:
+    blocksOfInterest = [8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 23, 24]
+    blocksOfInterest2 = []
+    f = {}
+    blockData = {}
     for k0 in left_hand_or_right:
         for i in blocksOfInterest:
-            user_input = 'D:/Electrophysiological Data/F1901_Crumble/HP_BlockNellie-'+str(i)+'/targetword/targetword/orderingbyLRtime/'+k00+ '2s'+k0+'/'
-            directory = os.listdir(user_input)
+            user_input = 'D:/Electrophysiological Data/F1901_Crumble/HP_BlockNellie-' + str(
+                i) + '/targetword/targetword/orderingbyLRtime/' + k00 + '2s' + k0 + '/'
+            # directory = os.listdir(user_input)
 
-            searchstring = 'Arrays'#input('What word are you trying to find?')
+            searchstring = 'Arrays'  # input('What word are you trying to find?')
+            if os.path.isdir(user_input) is False:
+                print('does not exist')
+                blocksOfInterest.remove(i)
 
-            for fname in directory:
-                if searchstring in fname:
-                    # Full path
-                    f[i] = h5py.File(user_input + os.sep + fname)
-                    items = f[i].items()
-                    arrays = {}
-                    for k3, v3 in f[i].items():
-                        newarray3 = np.array(v3)
-                        newarrayremove3 = newarray3[0, :]
-                        arrays[k3] = newarrayremove3
-                    blockData[i]=arrays
+            if os.path.isdir(user_input) is True:
+                directory = os.listdir(user_input)
+                searchstring = 'Arrays'  # input('What word are you trying to find?')
+                for fname in directory:
+                    if searchstring in fname:
+                        # Full path
+                        f[i] = h5py.File(user_input + os.sep + fname)
+                        items = f[i].items()
+                        blocksOfInterest2.append(i)
 
+                        arrays = {}
+                        for k3, v3 in f[i].items():
+                            newarray3 = np.array(v3)
+                            newarrayremove3 = newarray3[0, :]
+                            arrays[k3] = newarrayremove3
+                        blockData[i] = arrays
 
+                        f[i].close()
 
-                    f[i].close()
+        blocksOfInterest2 = set(blocksOfInterest2)
+        blocksOfInterest2 = list(blocksOfInterest2)
 
+        # for fname in directory:
+        #     if searchstring in fname:
+        #         # Full path
+        #         f[i] = h5py.File(user_input + os.sep + fname)
+        #         items = f[i].items()
+        #         arrays = {}
+        #         for k3, v3 in f[i].items():
+        #             newarray3 = np.array(v3)
+        #             newarrayremove3 = newarray3[0, :]
+        #             arrays[k3] = newarrayremove3
+        #         blockData[i] = arrays
+        #
+        #         f[i].close()
 
-        TMIN = 0*1000  # s
-        #TMAX = 0.8*1000 # s
+        TMIN = 0 * 1000  # s
+        # TMAX = 0.8*1000 # s
         # BINSIZE = 0.01*1000  # 10 ms
         # NBINS = int((TMAX - TMIN) / BINSIZE)
 
-        TMIN2=0
-        TMAX2=1.2; #I made the maximum trial length 1.2 seconds
+        TMIN2 = 0
+        TMAX2 = 1.2;  # I made the maximum trial length 1.2 seconds
         # LFP parameters.
         LOW_CUTOFF = 10  # Hz
         HIGH_CUTOFF = 30  # Hz
@@ -62,7 +91,7 @@ for k00 in pitch_shift_or_not:
         from affinewarp import SpikeData
 
         # Spike times.
-        #S = dict(np.load("umi_spike_data.npz"))
+        # S = dict(np.load("umi_spike_data.npz"))
         # data = SpikeData(
         #     trials=S["trials"],
         #     spiketimes=S["spiketimes"],
@@ -72,16 +101,24 @@ for k00 in pitch_shift_or_not:
         # )
         # result = arrays["oneDtrialIDarray"];
         # result = x[0, :, 0]
-        adjustedTrial={}
-        for i2 in range(len(blocksOfInterest)-1):
-            if i2==0:
-                adjustedTrial[i2]=blockData[blocksOfInterest[i2+1]]["oneDtrialIDarray"]+max(blockData[blocksOfInterest[i2]]["oneDtrialIDarray"])
+        adjustedTrial = {}
+        for i2 in range(len(blocksOfInterest2) - 1):
+            if i2 == 0:
+                adjustedTrial[i2] = blockData[blocksOfInterest2[i2 + 1]]["oneDtrialIDarray"] + max(
+                    blockData[blocksOfInterest2[i2]]["oneDtrialIDarray"])
             else:
-                adjustedTrial[i2]=blockData[blocksOfInterest[i2+1]]["oneDtrialIDarray"]+max(adjustedTrial[i2-1])
+                adjustedTrial[i2] = blockData[blocksOfInterest2[i2 + 1]]["oneDtrialIDarray"] + max(
+                    adjustedTrial[i2 - 1])
 
-        combinedTrialsAdjusted=np.concatenate([v for k,v in sorted(adjustedTrial.items())], 0)
-        firsttrialarray=blockData[blocksOfInterest[0]]["oneDtrialIDarray"]
-        combinedTrials=np.append(firsttrialarray, combinedTrialsAdjusted)
+        if bool(adjustedTrial):
+            combinedTrialsAdjusted = np.concatenate([v for k, v in sorted(adjustedTrial.items())], 0)
+            firsttrialarray = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
+            combinedTrials = np.append(firsttrialarray, combinedTrialsAdjusted)
+        else:
+            combinedTrialsAdjusted = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
+            # firsttrialarray = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
+            combinedTrials = combinedTrialsAdjusted
+
         for i in range(len(combinedTrials)):
             combinedTrials[i] -= 1
 
@@ -90,12 +127,12 @@ for k00 in pitch_shift_or_not:
         combinedLickReleaseTimes=np.array([])
 
         for i3 in range(len(blockData)):
-            selectedSpikeTimes=blockData[blocksOfInterest[i3]]["oneDspiketimearray"]
-            selectedNeuronIDs=blockData[blocksOfInterest[i3]]["oneDspikeIDarray"]
-            selectedLickReleaseIDs=blockData[blocksOfInterest[i3]]["oneDlickReleaseArray"]
-            combinedSpikeTimes=np.append(combinedSpikeTimes,selectedSpikeTimes)
-            combinedNeuron=np.append(combinedNeuron, selectedNeuronIDs)
-            combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
+            selectedSpikeTimes = blockData[blocksOfInterest2[i3]]["oneDspiketimearray"]
+            selectedNeuronIDs = blockData[blocksOfInterest2[i3]]["oneDspikeIDarray"]
+            selectedLickReleaseIDs = blockData[blocksOfInterest2[i3]]["oneDlickReleaseArray"]
+            combinedSpikeTimes = np.append(combinedSpikeTimes, selectedSpikeTimes)
+            combinedNeuron = np.append(combinedNeuron, selectedNeuronIDs)
+            combinedLickReleaseTimes = np.append(combinedLickReleaseTimes, selectedLickReleaseIDs)
 
         #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
         TMAX =0.8*1000#max(combinedLickReleaseTimes) # s
