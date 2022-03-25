@@ -9,15 +9,17 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-pitch_shift_option=['pitchshift', 'nopitchshift']
+pitch_shift_option=['nopitchshift', 'pitchshift']
 list_of_distractors=[2,3,4,5,6,7,8]
 meaning_of_word=["craft", "incontrast to", "when a", "accurate", "rev instruments", "of science", "pink noise instruments"]
 #blocksOfInterest=[8,9, 10, 11, 12, 13,14,15]
-left_or_right_side=['BB2BB3','BB4BB5'] #BB4BB5
+left_or_right_side=['BB4BB5'] #'BB2BB3', BB4BB5
 for k00 in left_or_right_side:
     for k0 in pitch_shift_option:
         #blocksOfInterest = [29, 31, 32, 33, 34, 36, 37, 39, 40]
         blocksOfInterest = [29, 31, 32, 33, 34, 36, 37, 39, 40,41,42,44,45,46,47,48,49,50,51]
+        blocksOfInterest = [52, 53, 55, 56, 57, 58, 59, 60]
+
 
         blocksOfInterest2 = []
         f = {}
@@ -295,6 +297,8 @@ for k00 in left_or_right_side:
             # Define bandpass filtering function for LFP
             from scipy.signal import butter, filtfilt, freqz
 
+
+
             def bandpass(x, lowcut, highcut, fs, order=5, axis=-1, kind='butter'):
                 """
                 Bandpass filters analog time series.
@@ -325,6 +329,7 @@ for k00 in left_or_right_side:
                     raise ValueError("Filter kind not recognized.")
                 return filtfilt(b, a, x, axis=axis)
 
+
             # Load LFP.
             # L = dict(np.load("umi_lfp_data.npz"))
             #
@@ -339,7 +344,6 @@ for k00 in left_or_right_side:
             # # Z-score LFP.
             # lfp -= lfp.mean(axis=1, keepdims=True)
             # lfp /= lfp.std(axis=1, keepdims=True)
-
 
             # Specify model.
             shift_model = ShiftWarping(
@@ -368,12 +372,14 @@ for k00 in left_or_right_side:
 
             # Apply inverse warping functions to data.
             linear_aligned_data = lin_model.transform(data2).crop_spiketimes(TMIN, TMAX)
-            #trialrows=np.array([ i in (max((combinedTrials)))])
+            # trialrows=np.array([ i in (max((combinedTrials)))])
 
             lin_model.fit(binnedLR, iterations=50)
 
             # Apply inverse warping functions to data.
             linear_aligned_dataLR = lin_model.transform(data22).crop_spiketimes(TMIN, TMAX)
+
+
             #
             # plt.plot(shift_model.loss_hist, label="shift")
             # plt.plot(lin_model.loss_hist, label="linear")
@@ -390,24 +396,29 @@ for k00 in left_or_right_side:
                 s = fig.subplotpars
                 w, h = fig.get_size_inches()
 
-                figh = h - (1-s.top)*h  + topmargin
-                fig.subplots_adjust(bottom=s.bottom*h/figh, top=1-topmargin/figh)
+                figh = h - (1 - s.top) * h + topmargin
+                fig.subplots_adjust(bottom=s.bottom * h / figh, top=1 - topmargin / figh)
                 fig.set_figheight(figh)
+
+
             import numpy as np
             import matplotlib.pyplot as plt
 
             ##adding yticks with the actual lick release time in ms relative to the start trial lick
 
             from visualization1006 import rasters
-            fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
-            fig.suptitle('Original Data (all lick releases 07/02/2022 Aligned to Distractor Word Onset '+str(meaning_of_word[i0-2])+ ' Eclair bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
 
-            plt.show() #original data
+            fig, axes = rasters(cropped_data, sorted_array, (5, 8), style='white');
+            fig.suptitle('Original Data (all lick releases 07/02/2022 Aligned to Distractor Word Onset ' + str(
+                meaning_of_word[i0 - 2]) + ' Eclair bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
 
-            fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-            fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Distractor Word Onset ' +str(meaning_of_word[i0-2])+ '  07/02/2022, Eclair BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
+            plt.show()  # original data
 
-            plt.show() #original data
+            fig, axes = rasters(cropped_data2, sorted_array, subplots=(5, 8), style='white');
+            fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Distractor Word Onset ' + str(
+                meaning_of_word[i0 - 2]) + '  07/02/2022, Eclair BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
+
+            plt.show()  # original data
             #
             # fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
             # fig.suptitle(' Rasters after Shift Model 07/02/2022 Eclair) ', fontsize=10, color='0', y='1')
@@ -427,9 +438,9 @@ for k00 in left_or_right_side:
             # fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
             # fig.suptitle(' Rasters after Linear Model (ordered by LR onset 07/02/2022 Eclair) ', fontsize=10, color='0', y='1')
 
-            #make_space_above(axes, topmargin=10)
+            # make_space_above(axes, topmargin=10)
 
-            #plt.title('Rasters after Linear Model (18/03/2021 Eclair)')
+            # plt.title('Rasters after Linear Model (18/03/2021 Eclair)')
             # fig.tight_layout()
             # fig.subplots_adjust(top=10)
             plt.show();
@@ -446,23 +457,24 @@ for k00 in left_or_right_side:
             # np.save(os.path.join(BASE_PATH, 'june07may172421linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
             BASE_PATH = 'D:/Electrophysiological Data/F1902_Eclair/dynamictimewarping/'
-            file_name = 'alignedDataBlockweekfebruary212022ShiftModellickrelease'
+            file_name = 'alignedDataBlockweekmarch072022ShiftModellickrelease'
             if os.path.isdir(BASE_PATH) is False:
                 os.mkdir(BASE_PATH)
-            BASE_PATH2='D:/Electrophysiological Data/F1902_Eclair/dynamictimewarping/l22'+k0+'distF'+str(i0)+'/'+k00+'/'
+            BASE_PATH2 = 'D:/Electrophysiological Data/F1902_Eclair/dynamictimewarping/l22' + k0 + 'distF' + str(
+                i0) + '/' + k00 + '/'
             if os.path.isdir(BASE_PATH2) is False:
                 os.makedirs(BASE_PATH2)
             np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'february212022neuronIDsPS'), shift_aligned_data["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'february212022trialIDsPS'), shift_aligned_data["trials"])
+            np.save(os.path.join(BASE_PATH2, 'march072022neuronIDsPS'), shift_aligned_data["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'march072022trialIDsPS'), shift_aligned_data["trials"])
 
-            file_name = 'alignedDataBlockweekfebruary212022LinearModellickrelease'
+            file_name = 'alignedDataBlockweekmarch072022LinearModellickrelease'
             np.save(os.path.join(BASE_PATH2, file_name), linear_aligned_data["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'february212022linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'february212022linearModeltrialIDsPS'), linear_aligned_data["trials"])
+            np.save(os.path.join(BASE_PATH2, 'march072022linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'march072022linearModeltrialIDsPS'), linear_aligned_data["trials"])
 
-            file_name = 'alignedDataBlockweekfebruary212022OriginalModellickrelease'
+            file_name = 'alignedDataBlockweekmarch072022OriginalModellickrelease'
 
             np.save(os.path.join(BASE_PATH2, file_name), cropped_data2["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'february212022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'february212022OriginalModeltrialIDsPS'), cropped_data2["trials"])
+            np.save(os.path.join(BASE_PATH2, 'march072022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'march072022OriginalModeltrialIDsPS'), cropped_data2["trials"])

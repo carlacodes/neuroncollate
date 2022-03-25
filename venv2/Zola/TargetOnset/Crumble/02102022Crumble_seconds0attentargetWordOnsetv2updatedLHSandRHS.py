@@ -18,6 +18,8 @@ left_hand_or_right=['BB4BB5', 'BB2BB3']
 pitch_shift_or_not=['nopitchshift', 'pitchshift']
 for k00 in pitch_shift_or_not:
     blocksOfInterest = [8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 23, 24]
+    blocksOfInterest = [28, 29, 30, 31, 32, 33, 34, 35, 36, 37]
+
     blocksOfInterest2 = []
     f = {}
     blockData = {}
@@ -438,21 +440,21 @@ for k00 in pitch_shift_or_not:
         BASE_PATH2 = 'D:/Electrophysiological Data/F1901_Crumble/dynamictimewarping/l22targetword/'+k00+'/'+k0+'/'
         if os.path.isdir(BASE_PATH2) is False:
             os.makedirs(BASE_PATH2)
-        file_name='alignedDataBlockweekfebruary212022ShiftModellickrelease'
+        file_name='alignedDataBlockweekmarch072022ShiftModellickrelease'
 
         np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
-        np.save(os.path.join(BASE_PATH2, 'february212022neuronIDsPS'), shift_aligned_data["neurons"])
-        np.save(os.path.join(BASE_PATH2, 'february212022trialIDsPS'), shift_aligned_data["trials"])
-        file_name='alignedDataBlockweekfebruary212022LinearModellickrelease'
+        np.save(os.path.join(BASE_PATH2, 'march072022neuronIDsPS'), shift_aligned_data["neurons"])
+        np.save(os.path.join(BASE_PATH2, 'march072022trialIDsPS'), shift_aligned_data["trials"])
+        file_name='alignedDataBlockweekmarch072022LinearModellickrelease'
 
-        file_name = 'alignedDataBlockweekfebruary212022LinearModellickrelease'
+        file_name = 'alignedDataBlockweekmarch072022LinearModellickrelease'
         np.save(os.path.join(BASE_PATH2, file_name), linear_aligned_data["spiketimes"])
-        np.save(os.path.join(BASE_PATH2, 'february212022linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-        np.save(os.path.join(BASE_PATH2, 'february212022linearModeltrialIDsPS'), linear_aligned_data["trials"])
-        file_name='alignedDataBlockweekfebruary212022OriginalModellickrelease'
+        np.save(os.path.join(BASE_PATH2, 'march072022linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+        np.save(os.path.join(BASE_PATH2, 'march072022linearModeltrialIDsPS'), linear_aligned_data["trials"])
+        file_name='alignedDataBlockweekmarch072022OriginalModellickrelease'
 
-        file_name = 'alignedDataBlockweekfebruary212022OriginalModellickrelease'
+        file_name = 'alignedDataBlockweekmarch072022OriginalModellickrelease'
         np.save(os.path.join(BASE_PATH2, file_name), cropped_data2["spiketimes"])
-        np.save(os.path.join(BASE_PATH2, 'february212022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
-        np.save(os.path.join(BASE_PATH2, 'february212022OriginalModeltrialIDsPS'), cropped_data2["trials"])
+        np.save(os.path.join(BASE_PATH2, 'march072022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
+        np.save(os.path.join(BASE_PATH2, 'march072022OriginalModeltrialIDsPS'), cropped_data2["trials"])
 
