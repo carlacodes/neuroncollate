@@ -10,11 +10,13 @@ import numpy as np
 f={}
 blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-blocksOfInterest=[1,2,8,9,10, 11,12,13,14, 15]
-left_hand_or_right=['BB4BB5'] ##'BB2BB3'
+blocksOfInterest=[177,178,179,180,181,182,183,184,185]
+left_hand_or_right=['BB2BB3'] ##'BB2BB3'
 for k0 in left_hand_or_right:
     for i in blocksOfInterest:
-        user_input = 'D:/Electrophysiological Data/F1901_Crumble/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/withmisses2s'+k0+'/'
+        #        highpassfilterParentName=['D:\Electrophysiological Data\F1702_Zola_Nellie\HP_' num2str(currBlockName) '\\bothstim\orderingbyLRtime\300msepoch']; %BB2BB3\TARGETonset\rhstim
+
+        user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/bothstim/orderingbyLRtime/300msepoch/'
         directory = os.listdir(user_input)
 
         searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -85,17 +87,27 @@ for k0 in left_hand_or_right:
     combinedSpikeTimes=np.array([]); #declare empty numpy array
     combinedNeuron=np.array([])
     combinedLickReleaseTimes=np.array([])
+    combined_stim_times=np.array([])
+    combined_stim_durs=np.array([])
+    combined_stim_types=np.array([])
 
     for i3 in range(len(blockData)):
         selectedSpikeTimes=blockData[blocksOfInterest[i3]]["oneDspiketimearray"]
         selectedNeuronIDs=blockData[blocksOfInterest[i3]]["oneDspikeIDarray"]
         selectedLickReleaseIDs=blockData[blocksOfInterest[i3]]["oneDlickReleaseArray"]
+        selected_stim_times=blockData[blocksOfInterest[i3]]["oneDstimIDarray"]
+        selected_stim_durs=blockData[blocksOfInterest[i3]]["oneDstimDurArray"]
+        selected_stim_type=blockData[blocksOfInterest[i3]]["oneDstimTypeArray"]
+
         combinedSpikeTimes=np.append(combinedSpikeTimes,selectedSpikeTimes)
         combinedNeuron=np.append(combinedNeuron, selectedNeuronIDs)
         combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
+        combined_stim_times=np.append(combined_stim_times, selected_stim_times)
+        combined_stim_durs=np.append(combined_stim_durs, selected_stim_durs)
+        combined_stim_types=np.append(combined_stim_types, selected_stim_type)
 
     #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
-    TMAX =0.8*1000#max(combinedLickReleaseTimes) # s
+    TMAX =6.3*1000#max(combinedLickReleaseTimes) # s
     BINSIZE = 0.01*1000  # 10 ms
     NBINS = int((TMAX - TMIN) / BINSIZE)
     TMINz=0.2*1000;
@@ -360,44 +372,41 @@ for k0 in left_hand_or_right:
 
     ##adding yticks with the actual lick release time in ms relative to the start trial lick
 
-    from visualization1006 import rasters
-    fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
-    fig.suptitle('Original Data (all lick releases 31/01/2022 Crumble bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
+    from visualization03022022 import psth_plots, rasters
 
-    plt.show() #original data
+    epoch_offset = 300
+    fig, axes = rasters(cropped_data, sorted_array, epoch_offset, (5, 8), style='white');
+    fig.suptitle('Original Data (all lick releases 12/07/2021 Zola) ', fontsize=10, color='0', y='1')
 
-    fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-    fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Sound Onset 31/01/2022, Crumble BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
+    plt.show()  # original data
 
-    plt.show() #original data
+    fig, axes = rasters(cropped_data2, sorted_array, epoch_offset, subplots=(5, 8), style='white');
+    fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Sound Onset week 12/07/2021, Zola) ',
+                 fontsize=10, color='0', y='1')
 
-    fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-    fig.suptitle(' Rasters after Shift Model (CORRECT releases  31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
-    #plt.title('Rasters after Shift Model (18/03/2021 Crumble) ')
+    plt.show()  # original data
+
+
+
+    fig, axes = rasters(linear_aligned_dataLR, sorted_array, epoch_offset, subplots=(5, 8), style='white');
+    fig.suptitle(' Rasters after Linear Model (ordered by LR onset 12/07/2021 Zola) ', fontsize=10, color='0', y='1')
+
+    fig2, axes2 = psth_plots(cropped_data2, sorted_array, NBINS, TMIN, TMAX, combinedTrials, 'purple', epoch_offset,
+                             subplots=(5, 8), style='white');
+    fig2.suptitle(' PSTHs (week 12/07/2021 Zola) ', fontsize=10, color='0', y='1')
     plt.show()
 
-    fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-    fig.suptitle(' Rasters after Linear Model (CORRECT releases  31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
-    #make_space_above(axes, topmargin=10)
-    #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
-    # fig.tight_layout()
-    # fig.subplots_adjust(top=10)
-    plt.show();
 
-
-
-    fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
-    fig.suptitle(' Rasters after Linear Model (ordered by LR onset 31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
 
     #make_space_above(axes, topmargin=10)
 
-    #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
+    #plt.title('Rasters after Linear Model (18/03/2021 Zola)')
     # fig.tight_layout()
     # fig.subplots_adjust(top=10)
     plt.show();
-    # BASE_PATH2 = 'D:/Electrophysiological Data/F1901_Crumble/dynamictimewarping/l22targetword/'+k0+'/'
-    # if os.path.isdir(BASE_PATH2) is False:
-    #     os.makedirs(BASE_PATH2)
+    BASE_PATH2 = 'D:/Electrophysiological Data/F1702_Zola/dynamictimewarping/l27soundonset/'+k0+'/'
+    if os.path.isdir(BASE_PATH2) is False:
+        os.makedirs(BASE_PATH2)
     # np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
     # np.save(os.path.join(BASE_PATH2, 'january3122neuronIDsPS'), shift_aligned_data["neurons"])
     # np.save(os.path.join(BASE_PATH2, 'january3122trialIDsPS'), shift_aligned_data["trials"])
@@ -407,8 +416,13 @@ for k0 in left_hand_or_right:
     # np.save(os.path.join(BASE_PATH2, 'january3122linearModelneuronIDsPS'), linear_aligned_data["neurons"])
     # np.save(os.path.join(BASE_PATH2, 'january3122linearModeltrialIDsPS'), linear_aligned_data["trials"])
     #
-    # file_name = 'alignedDataBlockweekjanuary312022OriginalModellickrelease'
-    # np.save(os.path.join(BASE_PATH2, file_name), cropped_data2["spiketimes"])
-    # np.save(os.path.join(BASE_PATH2, 'january31OriginalModelneuronIDsPS'), cropped_data2["neurons"])
-    # np.save(os.path.join(BASE_PATH2, 'january31OriginalModeltrialIDsPS'), cropped_data2["trials"])
+    file_name = 'alignedDataBlockweekjuly122021OriginalModellickrelease'
+    np.save(os.path.join(BASE_PATH2, file_name), cropped_data2["spiketimes"])
+    np.save(os.path.join(BASE_PATH2, 'july122021OriginalModelneuronIDsPS'), cropped_data2["neurons"])
+    np.save(os.path.join(BASE_PATH2, 'july122021OriginalModeltrialIDsPS'), cropped_data2["trials"])
+    np.save(os.path.join(BASE_PATH2, 'july122021stim_times'), combined_stim_times)
+    np.save(os.path.join(BASE_PATH2, 'july122021stim_durs'), combined_stim_durs)
+    np.save(os.path.join(BASE_PATH2, 'july122021stim_types'), combined_stim_types)
+
+
 

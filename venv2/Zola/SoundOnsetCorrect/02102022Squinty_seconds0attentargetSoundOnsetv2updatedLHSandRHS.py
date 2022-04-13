@@ -10,11 +10,16 @@ import numpy as np
 f={}
 blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-blocksOfInterest=[1,2,8,9,10, 11,12,13,14, 15]
-left_hand_or_right=['BB4BB5'] ##'BB2BB3'
+blocksOfInterest=[ 403, 404, 405, 406, 412, 413, 414, 415]
+#blocksOfInterest=[ 403, 404, 405, 406]
+
+left_hand_or_right=['BB2BB3'] ##'BB2BB3'
+#            highpassfilterParentName=['D:\Electrophysiological Data\F1604_Squinty\HP_' num2str(currBlockName) '\soundonset\correctresp\orderingbyLRtime\' middleword '2sBB2BB3']; %bb4bb5\TARGETonset\rhstim
+#            highpassfilterParentName=['D:\Electrophysiological Data\F1604_Squinty\HP_' num2str(currBlockName) '\soundonset\correctresp\orderingbyLRtime\2sBB2BB3']; %bb4bb5\TARGETonset\rhstim
+
 for k0 in left_hand_or_right:
     for i in blocksOfInterest:
-        user_input = 'D:/Electrophysiological Data/F1901_Crumble/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/withmisses2s'+k0+'/'
+        user_input = 'D:/Electrophysiological Data/F1604_Squinty/HP_BlockNellie-'+str(i)+'//soundonset/correctresp//orderingbyLRtime/2s'+k0+'/'
         directory = os.listdir(user_input)
 
         searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -103,8 +108,8 @@ for k0 in left_hand_or_right:
     BINSIZEz = 0.001*1000 #0.001*1000  # 10 ms
     NBINSz = int((TMAXz - TMINz) / BINSIZEz)
 
-    TMINzb=0.0*1000;
-    TMAXzb =0.09*1000#max(combinedLickReleaseTimes) # s
+    TMINzb=0.10*1000;
+    TMAXzb =0.19*1000#max(combinedLickReleaseTimes) # s
     BINSIZEzb = 0.001*1000 #0.001*1000  # 10 ms
     NBINSzb = int((TMAXzb - TMINzb) / BINSIZEzb)
     #adjustedTrial=arrays2["oneDtrialIDarray"]+max(arrays["oneDtrialIDarray"])
@@ -239,7 +244,7 @@ for k0 in left_hand_or_right:
                 print('something good')
                 goodChanlist=np.append(goodChanlist, int(key))
         else:
-            if (selectedmeans) >= abs(1.5*selectedmeansb):  # selectedmeans-counter: #-(0.1*(counter)):
+            if (selectedmeans) > abs(1*selectedmeansb):  # selectedmeans-counter: #-(0.1*(counter)):
                 print('something good')
                 goodChanlist = np.append(goodChanlist, int(key))
 
@@ -362,24 +367,24 @@ for k0 in left_hand_or_right:
 
     from visualization1006 import rasters
     fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
-    fig.suptitle('Original Data (all lick releases 31/01/2022 Crumble bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
+    fig.suptitle(['Original Data (Squinty 14/12/2020) ' +k0], fontsize=10, color='0', y='1')
 
     plt.show() #original data
 
     fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-    fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Sound Onset 31/01/2022, Crumble BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
+    fig.suptitle(['Original Data Reorganised by Lick Release, Aligned to Sound Onset 14/12/2020, Squinty) '+k0], fontsize=10, color='0', y='1')
 
     plt.show() #original data
 
     fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-    fig.suptitle(' Rasters after Shift Model (CORRECT releases  31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
-    #plt.title('Rasters after Shift Model (18/03/2021 Crumble) ')
+    fig.suptitle(' Rasters after Shift Model (CORRECT releases  14/12/2020 Squinty) ', fontsize=10, color='0', y='1')
+    #plt.title('Rasters after Shift Model (18/03/2021 Squinty) ')
     plt.show()
 
     fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-    fig.suptitle(' Rasters after Linear Model (CORRECT releases  31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
+    fig.suptitle(' Rasters after Linear Model (CORRECT releases  14/12/2020 Squinty) ', fontsize=10, color='0', y='1')
     #make_space_above(axes, topmargin=10)
-    #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
+    #plt.title('Rasters after Linear Model (18/03/2021 Squinty)')
     # fig.tight_layout()
     # fig.subplots_adjust(top=10)
     plt.show();
@@ -387,11 +392,11 @@ for k0 in left_hand_or_right:
 
 
     fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
-    fig.suptitle(' Rasters after Linear Model (ordered by LR onset 31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
+    fig.suptitle(' Rasters after Linear Model (ordered by LR onset 14/12/2020 Squinty) ', fontsize=10, color='0', y='1')
 
     #make_space_above(axes, topmargin=10)
 
-    #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
+    #plt.title('Rasters after Linear Model (18/03/2021 Squinty)')
     # fig.tight_layout()
     # fig.subplots_adjust(top=10)
     plt.show();

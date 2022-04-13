@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import math
 
 
-def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*1.5, 5*1.5),
+def rasters(data,sorted_array,epoch_offset, subplots=(5, 6), fig=None, axes=None, figsize=(9*1.5, 5*1.5),
             max_spikes=7000, style='black', **scatter_kw):
     """
     Plots a series of spike raster plots.
@@ -14,6 +14,7 @@ def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*
         Multi-trial spike data.
     subplots : tuple
         2-element tuple specifying number of rows and columns of subplots.
+        epoch_offset=what number of ms did you epoch the before the trial or stim presentation of interest happened
     fig : Maplotlib Figure or None
         Figure used for plotting.
     axes : ndarray of Axes objects or None
@@ -89,8 +90,8 @@ def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*
         #ax.plot(sorted_array[:, 0], sorted_array[:, 1], c="red", marker='.', linestyle=':')
         ax.set_title('site {}'.format((n+1)), color=foreground)
         ax.set_facecolor(background)
-        ax.set_xticks(np.arange(math.floor(min(times)), math.ceil(max(times)+200), math.ceil(max(times))/4))
-        ax.set_xticklabels(np.arange(math.floor(min(times))-200, math.ceil(max(times)+200)-200, math.ceil(max(times))/4), fontsize=6)
+        ax.set_xticks(np.arange(math.floor(min(times)), math.ceil(max(times)+math.floor(epoch_offset)), math.ceil(max(times))/4))
+        ax.set_xticklabels(np.arange(math.floor(min(times))-math.floor(epoch_offset), math.ceil(max(times)+math.floor(epoch_offset))-math.floor(epoch_offset), math.ceil(max(times))/4), fontsize=6)
 
         #ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
         ax.set_yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
@@ -148,7 +149,7 @@ def binned_heatmap(binned, subplots=(5, 6), figsize=(9*1.5, 5*1.5), **kwargs):
     fig.patch.set_facecolor('k')
 
     return fig, axes
-def psth_plots(data,sorted_array,NBINS, TMIN, TMAX, combinedTrials, plot_color, subplots=(5, 6), fig=None, axes=None, figsize=(9*1.5, 5*1.5),
+def psth_plots(data,sorted_array,NBINS, TMIN, TMAX, combinedTrials, plot_color, epoch_offset, subplots=(5, 6), fig=None, axes=None, figsize=(9*1.5, 5*1.5),
             max_spikes=7000, style='black', **scatter_kw):
     """
     Plots a series of spike PSTH plots to complement the original raster plot functionality.
@@ -221,7 +222,9 @@ def psth_plots(data,sorted_array,NBINS, TMIN, TMAX, combinedTrials, plot_color, 
 
             tvec = np.linspace(TMIN, TMAX, NBINS)
 
-            ax.plot(tvec, ((hist / max(combinedTrials) + 1)), plot_color)
+            #ax.plot(tvec, ((hist / max(combinedTrials) + 1)), plot_color)
+            ax.plot(tvec, ((hist)), plot_color)
+
             #ax.yaxis.set_major_locator(MaxNLocator(5))
 
             #ax.set_xticks([0, 200, 400, 600, 800])
@@ -236,8 +239,8 @@ def psth_plots(data,sorted_array,NBINS, TMIN, TMAX, combinedTrials, plot_color, 
                 range=(0, 10 * NBINS),
                 density=False)
             tvec = np.linspace(TMIN, TMAX, NBINS)
-            ax.plot(tvec, ((hist / max(combinedTrials) + 1)), plot_color)
-
+            #ax.plot(tvec, ((hist / max(combinedTrials) + 1)), plot_color)
+            ax.plot(tvec, ((hist)), plot_color)
 
 
 
@@ -248,9 +251,9 @@ def psth_plots(data,sorted_array,NBINS, TMIN, TMAX, combinedTrials, plot_color, 
 
         ax.set_xlabel('milliseconds')
         ax.set_xticks(np.arange(math.floor(0), math.ceil(TMAX), math.ceil(TMAX / 3)))
-        ax.set_xticklabels(np.arange(math.floor(0) - 200, math.ceil(TMAX) - 200, math.ceil(TMAX / 3)) )
+        ax.set_xticklabels(np.arange(math.floor(0) - math.floor(epoch_offset), math.ceil(TMAX) - math.floor(epoch_offset), math.ceil(TMAX / 3)) )
 
-        ax.set_ylabel('Mean Spike Count')
+        ax.set_ylabel('Number of Spikes')
 
 
         #ax.set_xticklabels([i + 100 for i in times])
