@@ -372,21 +372,19 @@ for k0 in left_hand_or_right:
 
     ##adding yticks with the actual lick release time in ms relative to the start trial lick
 
-    from visualization03022022 import psth_plots, rasters
+    from visualization03022022 import psth_plots, rasters, rasterSite, psthind
 
     epoch_offset = 300
-    fig, axes = rasters(cropped_data, sorted_array, epoch_offset, (5, 8), style='white');
-    fig.suptitle('Original Data (all lick releases 12/07/2021 Zola) ', fontsize=10, color='0', y='1')
-
-    plt.show()  # original data
+    # fig, axes = rasters(cropped_data, sorted_array, epoch_offset, (5, 8), style='white');
+    # fig.suptitle('Original Data (all lick releases 12/07/2021 Zola) ', fontsize=10, color='0', y='1')
+    #
+    # plt.show()  # original data
 
     fig, axes = rasters(cropped_data2, sorted_array, epoch_offset, subplots=(5, 8), style='white');
     fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Sound Onset week 12/07/2021, Zola) ',
                  fontsize=10, color='0', y='1')
 
     plt.show()  # original data
-
-
 
     fig, axes = rasters(linear_aligned_dataLR, sorted_array, epoch_offset, subplots=(5, 8), style='white');
     fig.suptitle(' Rasters after Linear Model (ordered by LR onset 12/07/2021 Zola) ', fontsize=10, color='0', y='1')
@@ -395,6 +393,16 @@ for k0 in left_hand_or_right:
                              subplots=(5, 8), style='white');
     fig2.suptitle(' PSTHs (week 12/07/2021 Zola) ', fontsize=10, color='0', y='1')
     plt.show()
+    # (3,13,14,15, 17, 27)
+    fig= rasterSite(cropped_data2, sorted_array,[3,13,14,15, 17, 27], epoch_offset, style='black');
+
+    fig3=psthind(cropped_data2, sorted_array, NBINS, TMIN, TMAX, combinedTrials, 'purple', epoch_offset,[3,13,14,15, 17, 27])
+    #fig= rasterSite(cropped_data2, sorted_array,[13], epoch_offset, style='black');
+
+    #plt.show()
+
+#def rasterSite(data,sorted_array, siteschosen, fig=None, max_spikes=7000, style='black', **scatter_kw):
+
 
 
 

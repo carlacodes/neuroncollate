@@ -250,8 +250,9 @@ def psth_plots(data,sorted_array,NBINS, TMIN, TMAX, combinedTrials, plot_color, 
         ax.set_facecolor(background)
 
         ax.set_xlabel('milliseconds')
-        ax.set_xticks(np.arange(math.floor(0), math.ceil(TMAX), math.ceil(TMAX / 3)))
-        ax.set_xticklabels(np.arange(math.floor(0) - math.floor(epoch_offset), math.ceil(TMAX) - math.floor(epoch_offset), math.ceil(TMAX / 3)) )
+        ax.set_xticks(np.arange(math.floor(0), math.ceil(TMAX), math.ceil(TMAX / 8)))
+        ax.set_xticklabels(np.arange(math.floor(0) - math.floor(epoch_offset), math.ceil(TMAX) - math.floor(epoch_offset), math.ceil(TMAX / 8)), Fontsize= 8)
+        ax.tick_params(axis='x', labelrotation=90)
 
         ax.set_ylabel('Number of Spikes')
 
@@ -269,7 +270,7 @@ def psth_plots(data,sorted_array,NBINS, TMIN, TMAX, combinedTrials, plot_color, 
         fig.patch.set_facecolor(background)
 
     return fig, axes
-def rasterSite(data,sorted_array, siteschosen, fig=None, max_spikes=7000, style='black', **scatter_kw):
+def rasterSite(data,sorted_array, siteschosen,epoch_offset, fig=None, max_spikes=7000, style='black', **scatter_kw):
     """
     Plots a series of spike raster plots by SITE chosen.
 
@@ -303,9 +304,9 @@ def rasterSite(data,sorted_array, siteschosen, fig=None, max_spikes=7000, style=
 
     background = 'k' if style == 'black' else 'w'
     foreground = 'w' if style == 'black' else 'k'
-
-    scatter_kw.setdefault('s', 1)
-    scatter_kw.setdefault('lw', 0)
+    #
+    # scatter_kw.setdefault('s', 1)
+    # scatter_kw.setdefault('lw', 0)
 
     # handle coloring of rasters
     if 'c' not in scatter_kw:
@@ -333,8 +334,16 @@ def rasterSite(data,sorted_array, siteschosen, fig=None, max_spikes=7000, style=
 
         # make raster plot
         if c is not None:
-            plt.scatter(times[idx], trials[idx], c=c[idx], **scatter_kw)
-            #ax.yaxis.set_major_locator(MaxNLocator(5))
+            hist, edges = np.histogram(
+                times[idx],
+                bins=NBINS,
+                range=(0, 10 * NBINS),
+                density=False)
+
+            tvec = np.linspace(TMIN, TMAX, NBINS)
+
+            # ax.plot(tvec, ((hist / max(combinedTrials) + 1)), plot_color)
+            plt.plot(tvec, ((hist)), plot_color)            #ax.yaxis.set_major_locator(MaxNLocator(5))
 
             #ax.set_xticks([0, 200, 400, 600, 800])
             #ax.set_xticklabels([-400, -200, 0, 200, 400])
@@ -342,7 +351,7 @@ def rasterSite(data,sorted_array, siteschosen, fig=None, max_spikes=7000, style=
 
 
         else:
-            plt.scatter(times[idx], trials[idx], **scatter_kw)
+            plt.scatter(times[idx], trials[idx],s=1, c='k')
             #ax.set_xlabel('milliseconds')
 
             #ax.set_xticks([0, 200, 400, 600, 800])
@@ -352,28 +361,31 @@ def rasterSite(data,sorted_array, siteschosen, fig=None, max_spikes=7000, style=
 
         # format axes
         #ax.plot(sorted_array[:, 0], sorted_array[:, 1], c="red", marker='.', linestyle=':')
-        plt.title('neuron {}'.format(n), color=foreground)
+        plt.title('Raster of neuron {}'.format(n), color='b')
+        xlabelvec=(np.arange(math.floor(min(times))-epoch_offset, math.ceil(max(times))-epoch_offset, math.ceil(max(times))/3))
+
         #ax.set_facecolor('White')
-        plt.xticks(np.arange(math.floor(min(times)), math.ceil(max(times)), math.ceil(max(times))/2.5))
-        #ax.set_xticklabels(np.arange(math.floor(min(times))-200, math.ceil(max(times))-200, math.ceil(max(times))/4), fontsize=6)
-
-        #ax.set_xticks(np.arange(math.floor(min(times)), math.floor(max(times)), 200))
-        plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
-                               math.ceil(max(sorted_array[:, 1] / 5))))
-
-        #ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:, 0])), math.floor(max(sorted_array[:, 0])), 1000))
-        #ax.set_yticks(np.arange(math.floor(min(sorted_array[:,1])), math.floor(max(sorted_array[:,1])), math.ceil(max(sorted_array[:,1])/5)))
-
-
-        if min(sorted_array[:,0])<0:
-            plt.yticks(np.arange(math.floor(min(sorted_array[:,0])), math.floor(max(sorted_array[:,0])), math.ceil((max(sorted_array[:,0])-min(sorted_array[:,0]))/5)))
+        if min(sorted_array[:, 0]) < 0:
+           labelvec=(np.arange(math.floor(min(sorted_array[:, 0])), math.floor(max(sorted_array[:, 0])),
+                                         math.ceil((max(sorted_array[:, 0]) - min(sorted_array[:, 0])) / 5)))
         elif max(sorted_array[:, 0]) == 0.0:
-            plt.yticks(np.arange(math.floor(min(sorted_array[:,1])), math.ceil(max(sorted_array[:,1])), math.ceil(max(sorted_array[:,1])/5)))
+            labelvec=(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
+                                         math.ceil(max(sorted_array[:, 1]) / 5)))
 
         else:
-            plt.yticks(np.arange(math.floor(min(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])/5)))
+            labelvec=(np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
+                                         math.ceil(max(sorted_array[:, 0]) / 5)))
+        plt.xticks(np.arange(math.floor(min(times)), math.ceil(max(times)), math.ceil(max(times))/3), labels=xlabelvec)
+        plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
+                                math.ceil(max(sorted_array[:, 1] / 5))), labels=labelvec)
+
+        # ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:, 0])), math.floor(max(sorted_array[:, 0])), 1000))
+        # ax.set_yticks(np.arange(math.floor(min(sorted_array[:,1])), math.floor(max(sorted_array[:,1])), math.ceil(max(sorted_array[:,1])/5)))
+
+
         plt.xlabel('milliseconds')
-        plt.ylabel('Lick Release Time (ms)')
+        plt.ylabel('Lick release time relative to target presentation')
+        plt.show()
 
 
         #ax.set_xticklabels([i + 100 for i in times])
@@ -390,3 +402,127 @@ def rasterSite(data,sorted_array, siteschosen, fig=None, max_spikes=7000, style=
 
     return fig
 
+def psthind(data,sorted_array,NBINS, TMIN, TMAX, combinedTrials, plot_color, epoch_offset,  siteschosen, fig=None, max_spikes=7000, style='black', **scatter_kw):
+    """
+    Plots a series of spike raster plots by SITE chosen.
+
+    Parameters
+    ----------
+    data : SpikeData instance
+        Multi-trial spike data.
+    subplots : tuple
+        2-element tuple specifying number of rows and columns of subplots.
+    fig : Maplotlib Figure or None
+        Figure used for plotting.
+    axes : ndarray of Axes objects or None
+        Axes used for plotting.
+    figsize : tuple
+        Dimensions of figure size.
+    max_spikes : int
+        Maximum number of spikes to plot on a raster. Spikes are randomly
+        subsampled above this limit.
+    style : string
+        Either ('black' or 'white') specifying background color.
+    **scatter_kw
+        Additional keyword args are passed to matplotlib.pyplot.scatter
+
+    Returns
+    -------
+    fig : matplotlib.Figure instance
+    axes : ndarray of matplotlib.Axes objects
+    """
+
+    trials, times, neurons = data.trials, data.spiketimes, data.neurons
+
+    background = 'k' if style == 'black' else 'w'
+    foreground = 'w' if style == 'black' else 'k'
+    #
+    # scatter_kw.setdefault('s', 1)
+    # scatter_kw.setdefault('lw', 0)
+
+    # handle coloring of rasters
+    if 'c' not in scatter_kw:
+        scatter_kw.setdefault('color', foreground)
+        c = None
+    else:
+        c = scatter_kw.pop('c')
+
+    # if axes is None:
+    #     fig, axes = plt.subplots(*subplots, figsize=figsize)
+
+    for n in siteschosen:
+
+        # select spikes for neuron n
+        idx = np.where(neurons == n)[0]
+
+        # turn off axis if there are no spikes
+        if len(idx) == 0:
+            ax.axis('off')
+            continue
+
+        # subsample spikes
+        elif len(idx) > max_spikes:
+            idx = np.random.choice(idx, size=max_spikes, replace=False)
+
+        # make raster plot
+        if c is not None:
+            plt.scatter(times[idx], trials[idx], s=1, c='k')
+            #ax.yaxis.set_major_locator(MaxNLocator(5))
+
+            #ax.set_xticks([0, 200, 400, 600, 800])
+            #ax.set_xticklabels([-400, -200, 0, 200, 400])
+            #ax.set_xticks(np.arange(min(times), max(times) + 1, 200))
+
+
+        else:
+            hist, edges = np.histogram(
+                times[idx],
+                bins=NBINS,
+                range=(0, 10 * NBINS),
+                density=False)
+            tvec = np.linspace(TMIN, TMAX, NBINS)
+            # ax.plot(tvec, ((hist / max(combinedTrials) + 1)), plot_color)
+            plt.plot(tvec, ((hist)), plot_color)
+
+        # format axes
+        #ax.plot(sorted_array[:, 0], sorted_array[:, 1], c="red", marker='.', linestyle=':')
+        plt.title('PSTH of neuron {}'.format(n), color='b')
+        xlabelvec=(np.arange(math.floor(min(times))-(epoch_offset+1), math.ceil(max(times))-(epoch_offset+1), math.ceil(max(times))/21))
+
+        #ax.set_facecolor('White')
+        # if min(sorted_array[:, 0]) < 0:
+        #    labelvec=(np.arange(math.floor(min(sorted_array[:, 0])), math.floor(max(sorted_array[:, 0])),
+        #                                  math.ceil((max(sorted_array[:, 0]) - min(sorted_array[:, 0])) / 5)))
+        # elif max(sorted_array[:, 0]) == 0.0:
+        #     labelvec=(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
+        #                                  math.ceil(max(sorted_array[:, 1]) / 5)))
+        #
+        # else:
+        #     labelvec=(np.arange(math.floor(min(sorted_array[:, 0])), math.ceil(max(sorted_array[:, 0])),
+        #                                  math.ceil(max(sorted_array[:, 0]) / 5)))
+        plt.xticks(np.arange(math.floor(min(times)), math.ceil(max(times)), math.ceil(max(times))/21), fontsize=5, labels=xlabelvec)
+        # plt.yticks(np.arange(math.floor(min(sorted_array[:, 1])), math.ceil(max(sorted_array[:, 1])),
+        #                         math.ceil(max(sorted_array[:, 1] / 5))), labels=labelvec)
+
+        # ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:, 0])), math.floor(max(sorted_array[:, 0])), 1000))
+        # ax.set_yticks(np.arange(math.floor(min(sorted_array[:,1])), math.floor(max(sorted_array[:,1])), math.ceil(max(sorted_array[:,1])/5)))
+
+
+        plt.xlabel('milliseconds')
+        plt.ylabel('Spikes')
+        plt.show()
+
+
+        #ax.set_xticklabels([i + 100 for i in times])
+        #ax.set_xticks([np.arange(min(times), max(times)+1, 100)])
+        #ax.set_xticklabels([np.arange(min(times), max(times)+1, 100)])
+        #ax.set_yticks([trials])
+        plt.xlim([data.tmin, data.tmax])
+        # for spine in ax.spines.values():
+        #     spine.set_visible(False)
+
+    # if fig is not None:
+    #     fig.tight_layout()
+    #     #patches.set_facecolor(background)
+
+    return fig
