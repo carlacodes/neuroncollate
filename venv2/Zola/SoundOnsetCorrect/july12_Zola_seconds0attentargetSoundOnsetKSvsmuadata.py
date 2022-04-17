@@ -511,4 +511,22 @@ for i in range(0, len(spike_goodness['cluster_id'])):
         if searchstring in fname:
             # Full path
             trial_map = mat73.loadmat(bin_folder + os.sep + fname)
+cl_ids=spike_goodness['cluster_id']
+nclust = len(cl_ids);
 
+cl_chans = np.array([])
+cl_pos = np.array([])
+channel_key=pd.Series(spike_goodness['ch'])
+array_mua=pd.Series(array_mua)
+concatenated_dataframes = pd.concat([channel_key, array_mua], axis=1)
+
+#
+# for id in range(0,nclust):
+#     uid = cl_ids[id];
+#     clidx = find(spike_goodness['id'] == uid);
+#     b = index[new_val]
+#
+#     zchan = spike_goodness['ch'][clidx] + 1;
+#     #dpth = clu_info.depth(clidx);
+#     cl_chans = np.append(cl_chans, zchan);
+#     #cl_pos=np.append(cl_pos, dpth)
