@@ -4,13 +4,14 @@ from affinewarp import ShiftWarping
 import os
 import h5py
 import numpy as np
+import pickle
 
 
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-blocksOfInterest=[177,178,179,180,181,182,183,184,185]
+blocksOfInterest=[178,179,180,181,182,183,184,185]
 left_hand_or_right=['BB2BB3'] ##'BB2BB3'
 for k0 in left_hand_or_right:
     for i in blocksOfInterest:
@@ -431,6 +432,30 @@ for k0 in left_hand_or_right:
     np.save(os.path.join(BASE_PATH2, 'july122021stim_times'), combined_stim_times)
     np.save(os.path.join(BASE_PATH2, 'july122021stim_durs'), combined_stim_durs)
     np.save(os.path.join(BASE_PATH2, 'july122021stim_types'), combined_stim_types)
+
+    file_name = 'alignedDataBlockweekjuly122021OriginalModelrasterdata'
+    np.save(os.path.join(BASE_PATH2, file_name), cropped_data2, allow_pickle=True)
+
+    with open(os.path.join(BASE_PATH2, file_name), 'wb') as f:
+        pickle.dump(cropped_data2, f)
+    file_name = 'alignedDataBlockweekjuly122021OriginalModelrasterdataNbins'
+    np.save(os.path.join(BASE_PATH2, file_name), NBINS)
+    #TMIN, TMAX, sorted_array, combinedTrials, epoch_offset
+    file_name = 'alignedDataBlockweekjuly122021OriginalModelrasterdata_tmin'
+    np.save(os.path.join(BASE_PATH2, file_name), TMIN)
+
+    file_name = 'alignedDataBlockweekjuly122021OriginalModelrasterdata_tmax'
+    np.save(os.path.join(BASE_PATH2, file_name), TMAX)
+
+    file_name = 'alignedDataBlockweekjuly122021OriginalModelrasterdata_sortedarray'
+    np.save(os.path.join(BASE_PATH2, file_name), sorted_array)
+
+    file_name = 'alignedDataBlockweekjuly122021OriginalModelrasterdata_combinedtrials'
+    np.save(os.path.join(BASE_PATH2, file_name), combinedTrials)
+
+    file_name = 'alignedDataBlockweekjuly122021OriginalModelrasterdata_epochoffset'
+    np.save(os.path.join(BASE_PATH2, file_name), epoch_offset)
+
 
 
 

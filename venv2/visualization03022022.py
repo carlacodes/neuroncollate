@@ -109,6 +109,8 @@ def rasters(data,sorted_array,epoch_offset, subplots=(5, 6), fig=None, axes=None
         else:
             ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])/5)))
         ax.set_xlabel('milliseconds')
+        ax.tick_params(axis='x', labelrotation=90)
+
         ax.set_ylabel('LR Time (ms)')
 
 
