@@ -18,6 +18,7 @@ import pandas as pd
 import scipy.io
 import mat73
 import numpy_indexed as npi
+from collections import ChainMap
 
 
 eng = matlab.engine.start_matlab()
@@ -599,11 +600,26 @@ for i3 in (np.unique(spike_goodness['ch'])):
 #now what is left to do is reorganise cluster_ids into channel dicts (so e.g. channel 1 contiains cluster id 4, 5)_
 ##then plot the rasters
 #then compare with the MUA rasters using multiplot
-selected_ind=np.arange(0*24414, 6*24414.0625, 0.01*24414.0625, dtype=int)
-for i4 in range(0, len(bin_spks_by_chan)):
-    channel_dict=bin_spks_by_chan[unique_channels[i4]]
-    result_hist = np.histogram(channel_dict[2], bins=selected_ind)
-    #for i5 in range(0, len(channel_dict)):
+selected_ind=np.arange(0, 6*24414.0625, 0.01*24414.0625, dtype=int)
+#selected_ind=selected_ind.tolist()
+channel_dict_histresults={}
+for i4 in bin_spks_by_chan.keys():
+    channel_dict=bin_spks_by_chan[i4]
+    #result_hist = np.histogram(channel_dict[2], bins=selected_ind)
+    hist_for_cluster={}
+    for i5 in channel_dict.keys():
+        selected_cluster=channel_dict[i5]
+        fulltrial=[]
+        for i6 in selected_cluster.keys():
+            selected_trial=selected_cluster[i6]
+            fulltrial=np.append(fulltrial, selected_trial)
+
+        result_hist = np.histogram(fulltrial, bins=selected_ind)
+        hist_for_cluster[i5]=result_hist
+    channel_dict_histresults[i4]=hist_for_cluster
 
 
 
+
+##the cluster ids for this are still in ordered list format, not the actual id, to get the actual id I need
+# the cluster_id[cluster_id_index]
