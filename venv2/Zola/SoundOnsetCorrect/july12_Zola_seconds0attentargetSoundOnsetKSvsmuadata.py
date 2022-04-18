@@ -583,8 +583,27 @@ for i2 in range(0, len(concatenated_dataframes)):
             bin_spks[counter] = bin_spks_mat
 
     bin_spks_by_id[i2] = bin_spks
+bin_spks_by_chan={}
+unique_channels=np.unique(spike_goodness['ch'])
+for i3 in (np.unique(spike_goodness['ch'])):
+    #np.where(spike_cluster_IDs == cl_ids[i2]);
+    corresponding_channels=np.where(spike_goodness['ch']==i3)
+    corresponding_channels=corresponding_channels[0]
+    corresponding_channels=corresponding_channels.tolist()
+    corresponding_channels=tuple(corresponding_channels)
+    filtered_d = dict((k, bin_spks_by_id[k]) for k in corresponding_channels if k in bin_spks_by_id)
+    bin_spks_by_chan[i3]=filtered_d
+
 ##note that cluster_id values are missing 4 AND 8 as in terms of cluster ids for the Zola -300 ms to +300ms relative to trial
 # start and stop data, thus everything is -2 relative to the ID number
 #now what is left to do is reorganise cluster_ids into channel dicts (so e.g. channel 1 contiains cluster id 4, 5)_
 ##then plot the rasters
 #then compare with the MUA rasters using multiplot
+selected_ind=np.arange(0*24414, 6*24414.0625, 0.01*24414.0625, dtype=int)
+for i4 in range(0, len(bin_spks_by_chan)):
+    channel_dict=bin_spks_by_chan[unique_channels[i4]]
+    result_hist = np.histogram(channel_dict[2], bins=selected_ind)
+    #for i5 in range(0, len(channel_dict)):
+
+
+
