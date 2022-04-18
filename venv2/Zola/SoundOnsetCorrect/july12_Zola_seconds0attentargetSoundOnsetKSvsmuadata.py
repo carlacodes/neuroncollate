@@ -17,6 +17,8 @@ import csv
 import pandas as pd
 import scipy.io
 import mat73
+import numpy_indexed as npi
+
 
 eng = matlab.engine.start_matlab()
 #
@@ -530,7 +532,7 @@ concatenated_dataframes = pd.concat([channel_key, array_mua], axis=1)
 #     #dpth = clu_info.depth(clidx);
 #     cl_chans = np.append(cl_chans, zchan);
 #     #cl_pos=np.append(cl_pos, dpth)
-trial_map_across_directory=trial_map['trial_map_across_directory']
+trial_map_across_directory=(trial_map['trial_map_across_directory'])
 epoch_map_acrossdirectory=trial_map['epoch_map_acrossdirectory']
 time_to_targlist_acrossdirec=trial_map['time_to_targlist_acrossdirec']
 def intersect2D(a, b):
@@ -540,39 +542,46 @@ def intersect2D(a, b):
   """
   return np.array([x for x in set(tuple(x) for x in a) & set(tuple(x) for x in b)])
 
+
+bin_spks_by_id = {}
+
 for i2 in range(0, len(concatenated_dataframes)):
     bin_spks = {}
+
     bin_spks_mat = []
     [index_forspiketimes_row] = np.where(spike_cluster_IDs == cl_ids[i2]);
-    #index_forspiketimes_row=np.asarray(index_forspiketimes_row).T
+    # index_forspiketimes_row=np.asarray(index_forspiketimes_row).T
 
     corresponding_spike_times = spike_times[index_forspiketimes_row];
-    np.in1d(epoch_map_acrossdirectory.view('i,i').reshape(-1), corresponding_spike_times.view('i,i').reshape(-1))
-    np.nonzero(np.in1d(epoch_map_acrossdirectory.view('i,i').reshape(-1), corresponding_spike_times.view('i,i').reshape(-1)))
-    index_trial=np.nonzero(np.in1d(epoch_map_acrossdirectory.view('i,i').reshape(-1), corresponding_spike_times.view('i,i').reshape(-1)))[0]
+    # [C,ia,ib] = intersect(corresponding_spike_times, epoch_map_acrossdirectory, 'rows');
 
-    #[C, ia, ib] = intersect2D(corresponding_spike_times, epoch_map_acrossdirectory, 'rows');
-    correspondingtrials = trial_map_across_directory[index_trial]
-    correspondingtrials[:, 3]=np.round(correspondingtrials[:,3])
+    common_elements, ar1_i, ar2_i = np.intersect1d(corresponding_spike_times, epoch_map_acrossdirectory,
+                                                   return_indices=True)
+    # result *= (A[:, 0] == B[:, 0]) * 2 - 1
+    # [C, ia, ib] = intersect2D(corresponding_spike_times, epoch_map_acrossdirectory, 'rows');
+    correspondingtrials = trial_map_across_directory[ar2_i]
+    correspondingtrials[:, 3] = np.round(correspondingtrials[:, 3])
 
     corresponding_spike_times = spike_times[index_forspiketimes_row];
-    spike_time_start = np.concatenate(correspondingtrials[:, 3], correspondingtrials[:, 4]);
-    counter = 1;
-    epoch_start = np.unique(spike_time_start[:,0])
-    epoch_end = np.unique(spike_time_start[:, 1])
-    for i3 in range(0, len(spike_time_start)):
-        epoch_1 = double(epoch_start[counter]);
-        epoch_2 = double(epoch_end[counter]);
-        # if epoch_1 <= double(spike_time_start(i3, 1)) & double(spike_time_start(i3, 1)) <= epoch_2:
-        #     time_diff = double(double(spike_time_start(i3, 1)) - (epoch_1));
-        #     bin_spks_mat = [bin_spks_mat, time_diff];
-        #     bin_spks{counter} = [bin_spks_mat];
-        # else:
-        #     bin_spks_mat = [];
-        #     counter = counter + 1;
-        #     time_diff = double(double(spike_time_start(i3, 1)) - (epoch_1));
-        #
-        #     bin_spks_mat = [bin_spks_mat, time_diff];
-        #     bin_spks{counter} = [bin_spks_mat]
-        #
+    # spike_time_start = np.concatenate((correspondingtrials[:, 3], correspondingtrials[:, 4]));
+    counter = 0;
+    epoch_start = np.unique(correspondingtrials[:, 3])
+    epoch_end = np.unique(correspondingtrials[:, 4])
+    for i3 in range(0, len(correspondingtrials[:, 3])):
+        epoch_1 = (epoch_start[counter]);
+        epoch_2 = (epoch_end[counter]);
+        if epoch_1 <= (correspondingtrials[i3, 3]) and correspondingtrials[i3, 3] <= epoch_2:
+            time_diff = ((correspondingtrials[i3, 3]) - (epoch_1));
+            bin_spks_mat = np.append(bin_spks_mat, time_diff)
+            bin_spks[counter] = bin_spks_mat
+        else:
+            bin_spks_mat = [];
+            counter = counter + 1;
+            time_diff = (correspondingtrials[i3, 3]) - (epoch_1)
 
+            bin_spks_mat = np.append(bin_spks_mat, time_diff)
+            bin_spks[counter] = bin_spks_mat
+
+    bin_spks_by_id[i2] = bin_spks
+##note that cluster_id values are missing 4 AND 8 as in terms of cluster ids for the Zola -300 ms to +300ms relative to trial
+# start and stop data, thus everything is -2 relative to the ID number
