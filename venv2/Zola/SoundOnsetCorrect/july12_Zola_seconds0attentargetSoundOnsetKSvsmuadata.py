@@ -585,3 +585,6 @@ for i2 in range(0, len(concatenated_dataframes)):
     bin_spks_by_id[i2] = bin_spks
 ##note that cluster_id values are missing 4 AND 8 as in terms of cluster ids for the Zola -300 ms to +300ms relative to trial
 # start and stop data, thus everything is -2 relative to the ID number
+#now what is left to do is reorganise cluster_ids into channel dicts (so e.g. channel 1 contiains cluster id 4, 5)_
+##then plot the rasters
+#then compare with the MUA rasters using multiplot
