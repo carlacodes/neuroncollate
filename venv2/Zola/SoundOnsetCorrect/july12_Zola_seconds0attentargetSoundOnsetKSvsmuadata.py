@@ -561,7 +561,7 @@ for i2 in range(0, len(concatenated_dataframes)):
     # result *= (A[:, 0] == B[:, 0]) * 2 - 1
     # [C, ia, ib] = intersect2D(corresponding_spike_times, epoch_map_acrossdirectory, 'rows');
     correspondingtrials = trial_map_across_directory[ar2_i]
-    correspondingtrials[:, 3] = np.round(correspondingtrials[:, 3])
+    #correspondingtrials[:, 3] = np.round(correspondingtrials[:, 3])
 
     corresponding_spike_times = spike_times[index_forspiketimes_row];
     # spike_time_start = np.concatenate((correspondingtrials[:, 3], correspondingtrials[:, 4]));
@@ -571,14 +571,24 @@ for i2 in range(0, len(concatenated_dataframes)):
     for i3 in range(0, len(correspondingtrials[:, 3])):
         epoch_1 = (epoch_start[counter]);
         epoch_2 = (epoch_end[counter]);
-        if epoch_1 <= (correspondingtrials[i3, 3]) and correspondingtrials[i3, 3] <= epoch_2:
+        if epoch_1 <= (correspondingtrials[i3, 3]) and correspondingtrials[i3, 3] < epoch_2:
             time_diff = ((correspondingtrials[i3, 3]) - (epoch_1));
             bin_spks_mat = np.append(bin_spks_mat, time_diff)
             bin_spks[counter] = bin_spks_mat
+            if time_diff == 0:
+                print('time difference of 0:')
+                print(correspondingtrials[i3, 3])
+                print(epoch_1)
+                print(time_diff)
         else:
             bin_spks_mat = [];
             counter = counter + 1;
             time_diff = (correspondingtrials[i3, 3]) - (epoch_1)
+            if time_diff==0:
+                print('time difference of 0:')
+                print(correspondingtrials[i3, 3])
+                print(epoch_1)
+                print(time_diff)
 
             bin_spks_mat = np.append(bin_spks_mat, time_diff)
             bin_spks[counter] = bin_spks_mat
@@ -601,6 +611,14 @@ for i3 in (np.unique(spike_goodness['ch'])):
 ##then plot the rasters
 #then compare with the MUA rasters using multiplot
 selected_ind=np.arange(0, 6*24414.0625, 0.01*24414.0625, dtype=int)
+#     TMIN = 0*1000  # s
+#     #TMAX = 0.8*1000 # s
+#     # BINSIZE = 0.01*1000  # 10 ms
+#     # NBINS = int((TMAX - TMIN) / BINSIZE
+tmax_ks=6*24414.0625;
+tmin_ks=0*24414.0625
+BINSIZE_ks=0.001*24414.0625
+NBINS_ks=int((tmax_ks-tmin_ks)/(BINSIZE_ks))
 #selected_ind=selected_ind.tolist()
 channel_dict_histresults={}
 for i4 in bin_spks_by_chan.keys():
@@ -614,10 +632,24 @@ for i4 in bin_spks_by_chan.keys():
             selected_trial=selected_cluster[i6]
             fulltrial=np.append(fulltrial, selected_trial)
 
-        result_hist = np.histogram(fulltrial, bins=selected_ind)
+        #result_hist = np.histogram(fulltrial, bins=selected_ind)
+        result_hist, result_hist_edges = np.histogram(
+            fulltrial,
+            bins=NBINS_ks,
+            range=(0*24414.0625, 6*24414.0625),
+            density=False)
         hist_for_cluster[i5]=result_hist
     channel_dict_histresults[i4]=hist_for_cluster
 
+for i7 in channel_dict_histresults.keys():
+    tvec = np.linspace(tmin_ks, tmax_ks, NBINS_ks)
+    selected_site_plot = channel_dict_histresults[i7]
+    for i8 in selected_site_plot.keys():
+        hist=selected_site_plot[i8];
+        plot_color='blue'
+        # ax.plot(tvec, ((hist / max(combinedTrials) + 1)), plot_color)
+        plt.plot(tvec, ((hist)), plot_color)
+    plt.show()
 
 
 
