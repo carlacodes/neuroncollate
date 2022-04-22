@@ -5,6 +5,7 @@ import os
 import h5py
 import numpy as np
 import pickle
+import viziphant as viz
 
 
 #user_input = input('What is the name of your directory')
@@ -564,31 +565,35 @@ for i2 in range(0, len(concatenated_dataframes)):
     #correspondingtrials[:, 3] = np.round(correspondingtrials[:, 3])
 
     corresponding_spike_times = spike_times[index_forspiketimes_row];
+    #spike_time_start=[C,correspondingtrials(:,4),correspondingtrials(:,5)];
+
     # spike_time_start = np.concatenate((correspondingtrials[:, 3], correspondingtrials[:, 4]));
     counter = 0;
     epoch_start = np.unique(correspondingtrials[:, 3])
     epoch_end = np.unique(correspondingtrials[:, 4])
+    fs=24414.0625
     for i3 in range(0, len(correspondingtrials[:, 3])):
         epoch_1 = (epoch_start[counter]);
         epoch_2 = (epoch_end[counter]);
-        if epoch_1 <= (correspondingtrials[i3, 3]) and correspondingtrials[i3, 3] < epoch_2:
-            time_diff = ((correspondingtrials[i3, 3]) - (epoch_1));
+        if epoch_1 <= (common_elements[i3]) and common_elements[i3] < epoch_2:
+            time_diff =  (((common_elements[i3]) - (epoch_1))/fs)*1000
             bin_spks_mat = np.append(bin_spks_mat, time_diff)
             bin_spks[counter] = bin_spks_mat
             if time_diff == 0:
                 print('time difference of 0:')
-                print(correspondingtrials[i3, 3])
+                print(common_elements[i3])
                 print(epoch_1)
                 print(time_diff)
         else:
             bin_spks_mat = [];
             counter = counter + 1;
-            time_diff = (correspondingtrials[i3, 3]) - (epoch_1)
-            if time_diff==0:
-                print('time difference of 0:')
-                print(correspondingtrials[i3, 3])
-                print(epoch_1)
-                print(time_diff)
+            fs=24414.0625
+            time_diff = (((common_elements[i3]) - (epoch_1))/fs)*1000 #in ms
+            # if time_diff==0:
+            #     print('time difference of 0:')
+            #     print(correspondingtrials[i3, 3])
+            #     print(epoch_1)
+            #     print(time_diff)
 
             bin_spks_mat = np.append(bin_spks_mat, time_diff)
             bin_spks[counter] = bin_spks_mat
@@ -615,16 +620,26 @@ selected_ind=np.arange(0, 6*24414.0625, 0.01*24414.0625, dtype=int)
 #     #TMAX = 0.8*1000 # s
 #     # BINSIZE = 0.01*1000  # 10 ms
 #     # NBINS = int((TMAX - TMIN) / BINSIZE
-tmax_ks=6*24414.0625;
-tmin_ks=0*24414.0625
+tmax_ks=6.3*1000;
+tmin_ks=0*1000
 BINSIZE_ks=0.001*24414.0625
 NBINS_ks=int((tmax_ks-tmin_ks)/(BINSIZE_ks))
 #selected_ind=selected_ind.tolist()
+tvec = np.linspace(tmin_ks, tmax_ks, NBINS_ks)
+
 channel_dict_histresults={}
+channel_dict_rasterresults={}
+from raster_minimal_function import plot_rasterplot
+
+fig, axs = plt.subplots(nrows=1 + int(len(bin_spks_by_chan.keys())), ncols=1, figsize=(5, 5))
+
 for i4 in bin_spks_by_chan.keys():
     channel_dict=bin_spks_by_chan[i4]
     #result_hist = np.histogram(channel_dict[2], bins=selected_ind)
     hist_for_cluster={}
+    raster_data_for_cluster={}
+
+
     for i5 in channel_dict.keys():
         selected_cluster=channel_dict[i5]
         fulltrial=[]
@@ -632,23 +647,54 @@ for i4 in bin_spks_by_chan.keys():
             selected_trial=selected_cluster[i6]
             fulltrial=np.append(fulltrial, selected_trial)
 
+
         #result_hist = np.histogram(fulltrial, bins=selected_ind)
         result_hist, result_hist_edges = np.histogram(
             fulltrial,
             bins=NBINS_ks,
-            range=(0*24414.0625, 6*24414.0625),
+            range=(0, 6.3*1000),
             density=False)
+
+
         hist_for_cluster[i5]=result_hist
+        raster_data_for_cluster[i5]=fulltrial
     channel_dict_histresults[i4]=hist_for_cluster
+    channel_dict_rasterresults[i4]=raster_data_for_cluster
+
+plot_count=0;
+for i7 in channel_dict_histresults.keys():
+    tvec = np.linspace(tmin_ks, tmax_ks, NBINS_ks)
+    selected_site_plot = channel_dict_histresults[i7]
+    selected_site_raster=channel_dict_rasterresults[i7]
+    for i8 in selected_site_plot.keys():
+        hist=selected_site_plot[i8];
+        raster=selected_site_raster[i8]
+        plot_color='blue'
+        # ax.plot(tvec, ((hist / max(combinedTrials) + 1)), plot_color)
+        #plotting clusters of same site together
+        plt.plot(tvec, ((hist)), plot_color)
+        #plot_rasterplot(axs[plot_count], raster, tvec, window=[tmin_ks, tmax_ks], histogram_bins=0)
+        #plot_count=plot_count+1
+    plt.title('Channel number' +str(i7))
+    plt.show()
+
+fig, axs = plt.subplots(nrows=int(len(channel_dict_histresults.keys())+1), ncols=1)
 
 for i7 in channel_dict_histresults.keys():
     tvec = np.linspace(tmin_ks, tmax_ks, NBINS_ks)
     selected_site_plot = channel_dict_histresults[i7]
+    selected_site_raster=channel_dict_rasterresults[i7]
     for i8 in selected_site_plot.keys():
         hist=selected_site_plot[i8];
+        raster=selected_site_raster[i8]
         plot_color='blue'
         # ax.plot(tvec, ((hist / max(combinedTrials) + 1)), plot_color)
-        plt.plot(tvec, ((hist)), plot_color)
+        #plotting clusters of same site together
+        #plt.plot(tvec, ((hist)), plot_color)
+        plot_rasterplot(axs[plot_count], raster, tvec, window=[tmin_ks, tmax_ks], histogram_bins=0)
+        plot_count=plot_count+1
+        #plt.show()
+    plt.title('Channel number' +str(i7))
     plt.show()
 
 
