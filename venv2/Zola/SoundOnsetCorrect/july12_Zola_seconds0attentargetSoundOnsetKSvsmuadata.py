@@ -681,6 +681,7 @@ fig = plt.figure()
 #
 # fig, axs = plt.subplots(nrows=int(len(channel_dict_histresults.keys())+1), ncols=1)
 # fig, axs = plt.subplots(nrows=2, ncols=1)
+epoch_offset=300
 
 for i7 in channel_dict_histresults.keys():
     tvec = np.linspace(tmin_ks, tmax_ks, NBINS_ks)
@@ -696,11 +697,20 @@ for i7 in channel_dict_histresults.keys():
         #plotting clusters of same site together
         #plt.plot(tvec, ((hist)), plot_color)
 
+        clus_index=np.where((spike_goodness['cluster_id'])==i8)
+        label=spike_goodness['KSLabel'][clus_index[0]]
+        label=label.values
+        label_text =label+' cluster: '+str(i8)
+        if label=='good':
+            color_selection='purple'
+        else:
+            color_selection='yellow'
 
-        fig_rast=plot_rasterplot(fig.get_axes(), raster, tvec, window=[tmin_ks, tmax_ks], histogram_bins=0)
+        fig_rast=plot_rasterplot(fig.get_axes(), raster, tvec, tmin_ks, tmax_ks, epoch_offset,window=[tmin_ks, tmax_ks], histogram_bins=0, label_custom=label_text, colour_custom=color_selection)
 
         plot_count=plot_count+1
     plt.title('Channel number: ' +str(i7+1))
+    plt.legend()
     plt.show()
 
 
