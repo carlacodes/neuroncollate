@@ -4,6 +4,7 @@ from neo import SpikeTrain, Event
 import quantities as pq
 from viziphant.rasterplot import rasterplot
 from viziphant.events import add_event
+import math
 ##from jules
 def plot_rasterplot(ax, times, events, TMIN, TMAX, epoch_offset, events_toplot=[0],
             window=[0, 6000], histogram_bins=0, label_custom='', colour_custom='black', remove_empty_trials=False, **kwargs):
@@ -32,7 +33,9 @@ def plot_rasterplot(ax, times, events, TMIN, TMAX, epoch_offset, events_toplot=[
     add_event(ax, event=Event([0]*pq.s, labels=['']))
     for axx in ax:
         simple_xy_axes(axx, TMIN, TMAX, epoch_offset)
-
+        # axx.set_xticks(np.arange(math.floor(0), math.ceil(TMAX), math.ceil(TMAX / 8)))
+        # axx.set_xticklabels(np.arange(math.floor(0) - math.floor(epoch_offset), math.ceil(TMAX) - math.floor(epoch_offset),
+        #                              math.ceil(TMAX / 8)), Fontsize=8)
     return ax
 
 
@@ -66,6 +69,8 @@ def align_times(times, events, b=2, window=[-1000,1000], remove_empty_trials=Fal
 
     if not np.any(aligned_tb): aligned_tb = np.zeros((len(events), len(tbins)))
 
+
+
     return aligned_t, aligned_tb
 
 
@@ -79,9 +84,9 @@ def simple_xy_axes(ax, TMIN, TMAX, epoch_offset):
     # Only show ticks on the left and bottom spines
     ax.yaxis.set_ticks_position('left')
     ax.xaxis.set_ticks_position('bottom')
-    ax.set_xticks(np.arange(math.floor(0), math.ceil(TMAX), math.ceil(TMAX / 8)))
-    ax.set_xticklabels(np.arange(math.floor(0) - math.floor(epoch_offset), math.ceil(TMAX) - math.floor(epoch_offset),
-                                 math.ceil(TMAX / 8)), Fontsize=8)
+    ax.set_xticks(np.arange(math.floor(TMIN),(TMAX), (TMAX / 18)))
+    ax.set_xticklabels(np.round(np.arange((TMIN) - (epoch_offset), (TMAX) - (epoch_offset),
+                                 (TMAX / 18)), decimals=2), Fontsize=8)
 
 def set_font_axes(ax, add_size=0, size_ticks=6, size_labels=8,
                   size_text=8, size_title=8, family='Arial'):

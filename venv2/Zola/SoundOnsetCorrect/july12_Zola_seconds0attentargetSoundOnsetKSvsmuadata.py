@@ -19,6 +19,7 @@ import pandas as pd
 import scipy.io
 import mat73
 import numpy_indexed as npi
+import math
 from collections import ChainMap
 
 
@@ -681,7 +682,9 @@ fig = plt.figure()
 #
 # fig, axs = plt.subplots(nrows=int(len(channel_dict_histresults.keys())+1), ncols=1)
 # fig, axs = plt.subplots(nrows=2, ncols=1)
-epoch_offset=300
+epoch_offset_plot=0.3
+tmin_ks_plot=tmin_ks/1000
+tmax_ks_plot=tmax_ks/1000
 
 for i7 in channel_dict_histresults.keys():
     tvec = np.linspace(tmin_ks, tmax_ks, NBINS_ks)
@@ -701,13 +704,16 @@ for i7 in channel_dict_histresults.keys():
         label=spike_goodness['KSLabel'][clus_index[0]]
         label=label.values
         label_text =label+' cluster: '+str(i8)
-        if label=='good':
-            color_selection='purple'
+        if label == 'good':
+            color_selection = 'purple'
         else:
-            color_selection='yellow'
+            color_selection = 'yellow'
 
-        fig_rast=plot_rasterplot(fig.get_axes(), raster, tvec, tmin_ks, tmax_ks, epoch_offset,window=[tmin_ks, tmax_ks], histogram_bins=0, label_custom=label_text, colour_custom=color_selection)
-
+        fig_rast=plot_rasterplot(fig.get_axes(), raster, tvec, tmin_ks_plot, tmax_ks_plot, epoch_offset_plot, window=[tmin_ks, tmax_ks], histogram_bins=0, label_custom=label_text, colour_custom=color_selection)
+        # ax.set_xticks(np.arange(math.floor(0), math.ceil(tmax_ks_plot), math.ceil(tmax_ks_plot / 8)))
+        # ax.set_xticklabels(
+        #     np.arange(math.floor(tmin_ks_plot) - math.floor(epoch_offset_plot), math.ceil(tmax_ks_plot) - math.floor(epoch_offset_plot),
+        #               math.ceil(tmax_ks_plot / 8)), Fontsize=8)
         plot_count=plot_count+1
     plt.title('Channel number: ' +str(i7+1))
     plt.legend()
