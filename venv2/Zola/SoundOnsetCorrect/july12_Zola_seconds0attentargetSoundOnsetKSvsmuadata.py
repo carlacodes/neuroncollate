@@ -631,8 +631,8 @@ channel_dict_histresults={}
 channel_dict_rasterresults={}
 from raster_minimal_function import plot_rasterplot
 
-fig, axs = plt.subplots(nrows=1 + int(len(bin_spks_by_chan.keys())), ncols=1, figsize=(5, 5))
-
+fig, axs = plt.subplots(nrows=(1 + int(len(bin_spks_by_chan.keys())/2)), ncols=2, figsize=(6, 10))
+plt.show()
 for i4 in bin_spks_by_chan.keys():
     channel_dict=bin_spks_by_chan[i4]
     #result_hist = np.histogram(channel_dict[2], bins=selected_ind)
@@ -677,13 +677,17 @@ for i7 in channel_dict_histresults.keys():
         #plot_count=plot_count+1
     plt.title('Channel number' +str(i7))
     plt.show()
-
-fig, axs = plt.subplots(nrows=int(len(channel_dict_histresults.keys())+1), ncols=1)
+fig = plt.figure()
+#
+# fig, axs = plt.subplots(nrows=int(len(channel_dict_histresults.keys())+1), ncols=1)
+# fig, axs = plt.subplots(nrows=2, ncols=1)
 
 for i7 in channel_dict_histresults.keys():
     tvec = np.linspace(tmin_ks, tmax_ks, NBINS_ks)
     selected_site_plot = channel_dict_histresults[i7]
     selected_site_raster=channel_dict_rasterresults[i7]
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
     for i8 in selected_site_plot.keys():
         hist=selected_site_plot[i8];
         raster=selected_site_raster[i8]
@@ -691,10 +695,12 @@ for i7 in channel_dict_histresults.keys():
         # ax.plot(tvec, ((hist / max(combinedTrials) + 1)), plot_color)
         #plotting clusters of same site together
         #plt.plot(tvec, ((hist)), plot_color)
-        plot_rasterplot(axs[plot_count], raster, tvec, window=[tmin_ks, tmax_ks], histogram_bins=0)
+
+
+        fig_rast=plot_rasterplot(fig.get_axes(), raster, tvec, window=[tmin_ks, tmax_ks], histogram_bins=0)
+
         plot_count=plot_count+1
-        #plt.show()
-    plt.title('Channel number' +str(i7))
+    plt.title('Channel number: ' +str(i7+1))
     plt.show()
 
 
