@@ -345,7 +345,7 @@ def rasterSite(data,sorted_array, siteschosen,epoch_offset, fig=None, max_spikes
             tvec = np.linspace(TMIN, TMAX, NBINS)
 
             # ax.plot(tvec, ((hist / max(combinedTrials) + 1)), plot_color)
-            plt.plot(tvec, ((hist)), plot_color)            #ax.yaxis.set_major_locator(MaxNLocator(5))
+            plt.scatter(times[idx], trials[idx],s=1, c='k')
 
             #ax.set_xticks([0, 200, 400, 600, 800])
             #ax.set_xticklabels([-400, -200, 0, 200, 400])
@@ -363,7 +363,7 @@ def rasterSite(data,sorted_array, siteschosen,epoch_offset, fig=None, max_spikes
 
         # format axes
         #ax.plot(sorted_array[:, 0], sorted_array[:, 1], c="red", marker='.', linestyle=':')
-        plt.title('Raster of neuron {}'.format(n), color='b')
+        plt.title('Raster of site {}'.format(n), color='b')
         xlabelvec=(np.arange(math.floor(min(times))-epoch_offset, math.ceil(max(times))-epoch_offset, math.ceil(max(times))/3))
 
         #ax.set_facecolor('White')

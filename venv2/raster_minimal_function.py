@@ -87,6 +87,8 @@ def simple_xy_axes(ax, TMIN, TMAX, epoch_offset):
     ax.set_xticks(np.arange(math.floor(TMIN),(TMAX), (TMAX / 18)))
     ax.set_xticklabels(np.round(np.arange((TMIN) - (epoch_offset), (TMAX) - (epoch_offset),
                                  (TMAX / 18)), decimals=2), Fontsize=8)
+    ax.tick_params(axis='x', labelrotation=90)
+
 
 def set_font_axes(ax, add_size=0, size_ticks=6, size_labels=8,
                   size_text=8, size_title=8, family='Arial'):
