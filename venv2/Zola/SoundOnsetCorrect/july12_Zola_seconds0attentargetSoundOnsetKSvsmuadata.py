@@ -685,6 +685,7 @@ fig = plt.figure()
 epoch_offset_plot=0.3
 tmin_ks_plot=tmin_ks/1000
 tmax_ks_plot=tmax_ks/1000
+save_folder_img='D:\Data\Results\kilosortplots\python'
 
 for i7 in channel_dict_histresults.keys():
     tvec = np.linspace(tmin_ks, tmax_ks, NBINS_ks)
@@ -721,8 +722,10 @@ for i7 in channel_dict_histresults.keys():
     ax=fig.add_subplot(122)
     epoch_offset_mua=300
     fig_MUA= rasterSite(cropped_data2, sorted_array, [i7+1], epoch_offset_mua, style='black');
+    plt.savefig(save_folder_img + '/rasterplot_ks_vs_mua_tdtchannel'+str(i7+1)+'.png', dpi=500, bbox_inches='tight')
+
     #plt.title('Multiunit, TDT Channel Number'+str(i7+1))
-    #plt.show()
+    plt.show()
 
 
 

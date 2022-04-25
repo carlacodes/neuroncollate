@@ -386,8 +386,8 @@ def rasterSite(data,sorted_array, siteschosen,epoch_offset, fig=None, max_spikes
 
 
         plt.xlabel('milliseconds')
-        plt.ylabel('Lick release time relative to target presentation')
-        plt.show()
+        plt.ylabel('Lick release time relative to epoch onset')
+        #plt.show()
 
 
         #ax.set_xticklabels([i + 100 for i in times])
@@ -468,12 +468,20 @@ def psthind(data,sorted_array,NBINS, TMIN, TMAX, combinedTrials, plot_color, epo
 
         # make raster plot
         if c is not None:
-            plt.scatter(times[idx], trials[idx], s=1, c='k')
+            #plt.scatter(times[idx], trials[idx], s=1, c='k')
             #ax.yaxis.set_major_locator(MaxNLocator(5))
 
             #ax.set_xticks([0, 200, 400, 600, 800])
             #ax.set_xticklabels([-400, -200, 0, 200, 400])
             #ax.set_xticks(np.arange(min(times), max(times) + 1, 200))
+            hist, edges = np.histogram(
+                times[idx],
+                bins=NBINS,
+                range=(0, 10 * NBINS),
+                density=False)
+            tvec = np.linspace(TMIN, TMAX, NBINS)
+            # ax.plot(tvec, ((hist / max(combinedTrials) + 1)), plot_color)
+            plt.plot(tvec, ((hist)), plot_color)
 
 
         else:
@@ -488,7 +496,7 @@ def psthind(data,sorted_array,NBINS, TMIN, TMAX, combinedTrials, plot_color, epo
 
         # format axes
         #ax.plot(sorted_array[:, 0], sorted_array[:, 1], c="red", marker='.', linestyle=':')
-        plt.title('PSTH of neuron {}'.format(n), color='b')
+        plt.title('PSTH of site {}'.format(n), color='b')
         xlabelvec=(np.arange(math.floor(min(times))-(epoch_offset+1), math.ceil(max(times))-(epoch_offset+1), math.ceil(max(times))/21))
 
         #ax.set_facecolor('White')
