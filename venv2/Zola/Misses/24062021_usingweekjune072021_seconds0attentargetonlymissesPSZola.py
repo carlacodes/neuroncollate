@@ -33,7 +33,7 @@ for i in blocksOfInterest:
             f[i].close()
 
 
-TMIN = 0*1000  # s
+TMIN = 0.2*1000  # s
 #TMAX = 0.8*1000 # s
 # BINSIZE = 0.01*1000  # 10 ms
 # NBINS = int((TMAX - TMIN) / BINSIZE)

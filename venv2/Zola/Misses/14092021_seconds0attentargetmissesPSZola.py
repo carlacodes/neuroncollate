@@ -14,7 +14,7 @@ blocksOfInterest=list(range(100, 186))
 
 for i in range(100, 186):
 
-    user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/pitchshiftTarget/orderingbyLRtime/Infmiss2s'
+    user_input = 'D:/Electrophysiological_Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/targetword/pitchshiftTarget/orderingbyLRtime/Infmiss2s'
     if os.path.isdir(user_input) is False:
         print('does not exist')
         blocksOfInterest.remove(i)
@@ -292,7 +292,7 @@ fig.suptitle(' Rasters after Linear Model (ordered by LR onset 24-28/05/2021 Zol
 # fig.subplots_adjust(top=10)
 plt.show();
 
-BASE_PATH='D:/Electrophysiological Data/F1702_Zola_Nellie/dynamictimewarping/PSInfmiss'
+BASE_PATH='D:/Electrophysiological_Data/F1702_Zola_Nellie/dynamictimewarping/PSInfmiss'
 if os.path.isdir(BASE_PATH) is False:
       os.mkdir(BASE_PATH)
 file_name='alignedDataBlockweekmayjuly212021ShiftModellickrelease'
