@@ -350,7 +350,7 @@ for k00 in pitch_shift_or_not:
         stoptime = 1.8
         lfp_time = np.linspace(start, stoptime, num=int(24414 * (stoptime - start)))
 
-        tidx = (lfp_time>= TMIN) & (lfp_time < TMAX)
+        tidx = (lfp_time>= start*24414) & (lfp_time < stoptime*24414)
         total_lfp_np = total_lfp_np[:, tidx]
         lfp_time_crop = lfp_time[tidx]
 
