@@ -20,7 +20,12 @@ pitch_shift_or_not=['nopitchshift', 'pitchshift']
 
 pitch_shift_or_not=['correctresp']
 def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInterest):
-
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from affinewarp import ShiftWarping
+    import os
+    import h5py
+    import numpy as np
     for k00 in pitch_shift_or_not:
         # blocksOfInterest = [8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 23, 24]
         # blocksOfInterest = [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 676, 67, 68, 69, 70]
@@ -32,6 +37,7 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
             for i in blocksOfInterest:
                 user_input = 'D:/Electrophysiological_Data/F1815_Cruella/HP_BlockNellie-' + str(
                     i) + '/targetword//orderingbyLRtime/' + k00 + '/' + k0 + '/'
+                print(user_input)
                 # directory = os.listdir(user_input)
 
                 searchstring = 'Arrays'  # input('What word are you trying to find?')
@@ -122,6 +128,7 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
                 firsttrialarray = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
                 combinedTrials = np.append(firsttrialarray, combinedTrialsAdjusted)
             else:
+                print(blocksOfInterest2)
                 combinedTrialsAdjusted = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
                 # firsttrialarray = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
                 combinedTrials = combinedTrialsAdjusted

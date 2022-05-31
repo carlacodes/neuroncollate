@@ -6,7 +6,7 @@ import h5py
 import numpy as np
 import scipy.io as rd
 import mat73
-from func_Cruella_seconds0attentargetWordOnsetv2updatedLHSandRHS import disgustingly_long_func
+from func_Cruella_seconds0attentargetWordOnsetv2updatedLHSandRHS import *
 
 #user_input = input('What is the name of your directory')
 f={}
@@ -335,46 +335,19 @@ for k00 in pitch_shift_or_not:
 
 
         # Specify model.
-        shift_model = ShiftWarping(
-            smoothness_reg_scale=SHIFT_SMOOTHNESS_REG,
-            warp_reg_scale=SHIFT_WARP_REG,
-            maxlag=MAXLAG,
-        )
+        # shift_model = ShiftWarping(
+        #     smoothness_reg_scale=SHIFT_SMOOTHNESS_REG,
+        #     warp_reg_scale=SHIFT_WARP_REG,
+        #     maxlag=MAXLAG,
+        # )
 
         # Fit to binned spike times.
-        shift_model.fit(total_lfp, iterations=50)
+        [shift_model, lin_model]=disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, [ 61, 62, 63, 64, 65, 676, 67, 68, 69, 70])
+        total_lfp_np=(np.array(total_lfp))
+        total_lfp_np=np.mean(total_lfp_np, axis=2)
+        shift_model_lfp=shift_model.transform(total_lfp_np)[:, :, 0]
+        lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
 
-        # Apply inverse warping functions to data.
-        shift_aligned_data = shift_model.transform(total_lfp).crop_spiketimes(TMIN, TMAX)
-
-        from affinewarp import PiecewiseWarping
-
-        # Specify model.
-        lin_model = PiecewiseWarping(
-            n_knots=0,
-            smoothness_reg_scale=LINEAR_SMOOTHNESS_REG,
-            warp_reg_scale=LINEAR_WARP_REG
-        )
-        #
-        # # Fit to binned spike times.
-        # lin_model.fit(binned, iterations=50)
-        #
-        # # Apply inverse warping functions to data.
-        # linear_aligned_data = lin_model.transform(data2).crop_spiketimes(TMIN, TMAX)
-        # #trialrows=np.array([ i in (max((combinedTrials)))])
-        #
-        # lin_model.fit(binnedLR, iterations=50)
-        #
-        # # Apply inverse warping functions to data.
-        # linear_aligned_dataLR = lin_model.transform(data22).crop_spiketimes(TMIN, TMAX)
-
-        plt.plot(shift_model.loss_hist, label="shift")
-        plt.plot(lin_model.loss_hist, label="linear")
-        plt.xlabel("Iteration")
-        plt.ylabel("Normalized Loss")
-        plt.legend()
-        plt.tight_layout()
-        plt.show()
 
         def make_space_above(axes, topmargin=1):
             """ increase figure size to make topmargin (in inches) space for
@@ -389,52 +362,32 @@ for k00 in pitch_shift_or_not:
         import numpy as np
         import matplotlib.pyplot as plt
 
-        ##adding yticks with the actual lick release time in ms relative to the start trial lick
+        imkw = dict(clim=(-2, 2), cmap='bwr', interpolation="none", aspect="auto")
 
-        from visualization03022022 import rasters, psth_plots
-        epoch_offset=200;
-        fig, axes=rasters(cropped_data, sorted_array,epoch_offset,(5, 8), style='white');
-        fig.suptitle('Original Data (all lick releases 04-11/04/2022 Cruella LEFT)'+k0, fontsize=10, color='0', y='1')
+        fig, axes = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
 
-        plt.show() #original data
+        axes[0].imshow(total_lfp_np, **imkw)
+        axes[1].imshow(shift_model_lfp, **imkw)
+        axes[2].imshow(lin_model_lfp, **imkw)
 
-        fig, axes=rasters(cropped_data2,sorted_array,epoch_offset, subplots=(5, 8), style='white');
-        fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Target Word Onset 04-11/04/2022, Cruella) '+k0, fontsize=10, color='0', y='1')
+        axes[0].set_title("raw lfp (bandpass-filtered)")
+        axes[1].set_title("shift aligned")
+        axes[2].set_title("linear aligned")
 
-        plt.show() #original data
+        axes[0].set_ylabel("trials")
 
-        fig, axes=rasters(shift_aligned_data, sorted_array,epoch_offset, subplots=(5, 8),style='white');
-        fig.suptitle(' Rasters after Shift Model (CORRECT releases  04-11/04/2022 Cruella)'+k0, fontsize=10, color='0', y='1')
-        #plt.title('Rasters after Shift Model (18/03/2021 Cruella) ')
+        # for ax in axes:
+        #     i = np.linspace(0, lfp_time.size - 1, 3).astype(int)
+        #     ax.set_xticks(i)
+        #     ax.set_xticklabels(lfp_time[i])
+        #     ax.set_xlabel("time (ms)")
+
+        fig.tight_layout()
         plt.show()
 
-        fig, axes= rasters(linear_aligned_data, sorted_array, epoch_offset,subplots=(5, 8),style='white');
-        fig.suptitle(' Rasters after Linear Model (CORRECT releases  04-11/04/2022 Cruella) '+k0, fontsize=10, color='0', y='1')
-        #make_space_above(axes, topmargin=10)
-        #plt.title('Rasters after Linear Model (18/03/2021 Cruella)')
-        # fig.tight_layout()
-        # fig.subplots_adjust(top=10)
-        plt.show();
+        ##adding yticks with the actual lick release time in ms relative to the start trial lick
 
 
-
-        fig, axes= rasters(linear_aligned_dataLR, sorted_array, epoch_offset,subplots=(5, 8),style='white');
-        fig.suptitle(' Rasters after Linear Model (ordered by LR onset 04-11/04/2022 Cruella)'+k0, fontsize=10, color='0', y='1')
-
-
-        fig, axes= psth_plots(cropped_data2, sorted_array, NBINS, TMIN, TMAX, combinedTrials, 'blue', epoch_offset,subplots=(5, 8), style='white');
-        fig.suptitle(' PSTHS relative to target word onset'+k0, fontsize=10, color='0', y='1')
-
-        #make_space_above(axes, topmargin=10)
-
-        #plt.title('Rasters after Linear Model (18/03/2021 Cruella)')
-        # fig.tight_layout()
-        # fig.subplots_adjust(top=10)
-        plt.show();
-        BASE_PATH2 = 'D:/Electrophysiological Data/F1815_Cruella/dynamictimewarping/lfp/l27targetword/'+k00+'/'+k0+'/'
-        if os.path.isdir(BASE_PATH2) is False:
-            os.makedirs(BASE_PATH2)
-        file_name='alignedDataBlockweekapril042022ShiftModellickrelease'
 
         # np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
         # np.save(os.path.join(BASE_PATH2, 'april042022neuronIDsPS'), shift_aligned_data["neurons"])
