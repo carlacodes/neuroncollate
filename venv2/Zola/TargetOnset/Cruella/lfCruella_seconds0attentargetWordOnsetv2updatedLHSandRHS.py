@@ -387,9 +387,20 @@ for k00 in pitch_shift_or_not:
 
         fig.tight_layout()
         plt.show()
-
+        import seaborn as sns
         ##adding yticks with the actual lick release time in ms relative to the start trial lick
+        fig, axes = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
 
+        axes[0].sns.lineplot(total_lfp_np)
+        axes[1].sns.lineplot(shift_model_lfp)
+        axes[2].sns.lineplot(lin_model_lfp, **imkw)
+
+        axes[0].set_title("raw lfp (bandpass-filtered)")
+        axes[1].set_title("shift aligned")
+        axes[2].set_title("linear aligned")
+
+        axes[0].set_ylabel("trials")
+        plt.show()
 
 
         # np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
