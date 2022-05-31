@@ -11,25 +11,22 @@ f={}
 blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
 blocksOfInterest=[1,2,8,9,10, 11,12,13,14, 15]
-blocksOfInterest=[50,51,52,53,54,55,56,57,58,59,60, 61, 62, 63, 64, 65, 676, 67, 68, 69, 70]
-left_hand_or_right=['BB4BB5', 'BB2BB3']
+blocksOfInterest=[18,19,20,22,23,24]
+left_hand_or_right=['BB2BB3']
 
 
 pitch_shift_or_not=['nopitchshift', 'pitchshift']
-#            highpassfilterParentName=['D:\Electrophysiological Data\F1815_Cruella\HP_' num2str(currBlockName) '\targetword\\orderingbyLRtime\correctresp\' left_hand_or_right{k0}]; %bb4bb5\TARGETonset\rhstim
-
-pitch_shift_or_not=['correctresp']
 for k00 in pitch_shift_or_not:
     blocksOfInterest = [8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 23, 24]
-    blocksOfInterest = [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 676, 67, 68, 69, 70]
+    blocksOfInterest = [394,403,404, 405, 406, 407, 408, 409, 410, 412, 413, 414, 415]
 
     blocksOfInterest2 = []
     f = {}
     blockData = {}
     for k0 in left_hand_or_right:
         for i in blocksOfInterest:
-            user_input = 'D:/Electrophysiological_Data/F1815_Cruella/HP_BlockNellie-' + str(
-                i) + '/targetword//orderingbyLRtime/' + k00 + '/' + k0 + '/'
+            user_input = 'D:/Electrophysiological Data/F1604_Squinty/HP_BlockNellie-' + str(
+                i) + '/targetword/targetword/orderingbyLRtime/' + k00 + '2s' + k0 + '/'
             # directory = os.listdir(user_input)
 
             searchstring = 'Arrays'  # input('What word are you trying to find?')
@@ -405,64 +402,59 @@ for k00 in pitch_shift_or_not:
 
         ##adding yticks with the actual lick release time in ms relative to the start trial lick
 
-        from visualization03022022 import rasters, psth_plots
-        epoch_offset=200;
-        fig, axes=rasters(cropped_data, sorted_array,epoch_offset,(5, 8), style='white');
-        fig.suptitle('Original Data (all lick releases 04-11/04/2022 Cruella LEFT)'+k0, fontsize=10, color='0', y='1')
+        from visualization1006 import rasters
+        fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
+        fig.suptitle('Original Data (all lick releases 14/12/20 Squinty ' +k0+k00, fontsize=10, color='0', y='1')
 
         plt.show() #original data
 
-        fig, axes=rasters(cropped_data2,sorted_array,epoch_offset, subplots=(5, 8), style='white');
-        fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Target Word Onset 04-11/04/2022, Cruella) '+k0, fontsize=10, color='0', y='1')
+        fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
+        fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Sound Onset 14/12/20, Squinty '+k0+k00, fontsize=10, color='0', y='1')
 
         plt.show() #original data
 
-        fig, axes=rasters(shift_aligned_data, sorted_array,epoch_offset, subplots=(5, 8),style='white');
-        fig.suptitle(' Rasters after Shift Model (CORRECT releases  04-11/04/2022 Cruella)'+k0, fontsize=10, color='0', y='1')
-        #plt.title('Rasters after Shift Model (18/03/2021 Cruella) ')
+        fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
+        fig.suptitle(' Rasters after Shift Model (CORRECT releases  14/12/20 Squinty) '+k0+k00, fontsize=10, color='0', y='1')
+        #plt.title('Rasters after Shift Model (18/03/2021 Squinty) ')
         plt.show()
 
-        fig, axes= rasters(linear_aligned_data, sorted_array, epoch_offset,subplots=(5, 8),style='white');
-        fig.suptitle(' Rasters after Linear Model (CORRECT releases  04-11/04/2022 Cruella) '+k0, fontsize=10, color='0', y='1')
+        fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
+        fig.suptitle(' Rasters after Linear Model (CORRECT releases  14/12/20 Squinty) ' +k0+k00, fontsize=10, color='0', y='1')
         #make_space_above(axes, topmargin=10)
-        #plt.title('Rasters after Linear Model (18/03/2021 Cruella)')
+        #plt.title('Rasters after Linear Model (18/03/2021 Squinty)')
         # fig.tight_layout()
         # fig.subplots_adjust(top=10)
         plt.show();
 
 
 
-        fig, axes= rasters(linear_aligned_dataLR, sorted_array, epoch_offset,subplots=(5, 8),style='white');
-        fig.suptitle(' Rasters after Linear Model (ordered by LR onset 04-11/04/2022 Cruella)'+k0, fontsize=10, color='0', y='1')
-
-
-        fig, axes= psth_plots(cropped_data2, sorted_array, NBINS, TMIN, TMAX, combinedTrials, 'blue', epoch_offset,subplots=(5, 8), style='white');
-        fig.suptitle(' PSTHS relative to target word onset'+k0, fontsize=10, color='0', y='1')
+        fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
+        fig.suptitle(' Rasters after Linear Model (ordered by LR onset 14/12/2020 Squinty) '+k0+k00, fontsize=10, color='0', y='1')
 
         #make_space_above(axes, topmargin=10)
 
-        #plt.title('Rasters after Linear Model (18/03/2021 Cruella)')
+        #plt.title('Rasters after Linear Model (18/03/2021 Squinty)')
         # fig.tight_layout()
         # fig.subplots_adjust(top=10)
         plt.show();
-        BASE_PATH2 = 'D:/Electrophysiological Data/F1815_Cruella/dynamictimewarping/l27targetword/'+k00+'/'+k0+'/'
+        BASE_PATH2 = 'D:/Electrophysiological Data/F1604_Squinty/dynamictimewarping/l22targetword/'+k00+'/'+k0+'/'
         if os.path.isdir(BASE_PATH2) is False:
             os.makedirs(BASE_PATH2)
-        file_name='alignedDataBlockweekapril042022ShiftModellickrelease'
+        file_name='alignedDataBlockweekmarch072022ShiftModellickrelease'
 
         np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
-        np.save(os.path.join(BASE_PATH2, 'april042022neuronIDsPS'), shift_aligned_data["neurons"])
-        np.save(os.path.join(BASE_PATH2, 'april042022trialIDsPS'), shift_aligned_data["trials"])
-        file_name='alignedDataBlockweekapril042022LinearModellickrelease'
+        np.save(os.path.join(BASE_PATH2, 'march072022neuronIDsPS'), shift_aligned_data["neurons"])
+        np.save(os.path.join(BASE_PATH2, 'march072022trialIDsPS'), shift_aligned_data["trials"])
+        file_name='alignedDataBlockweekmarch072022LinearModellickrelease'
 
-        file_name = 'alignedDataBlockweekapril042022LinearModellickrelease'
+        file_name = 'alignedDataBlockweekmarch072022LinearModellickrelease'
         np.save(os.path.join(BASE_PATH2, file_name), linear_aligned_data["spiketimes"])
-        np.save(os.path.join(BASE_PATH2, 'april042022linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-        np.save(os.path.join(BASE_PATH2, 'april042022linearModeltrialIDsPS'), linear_aligned_data["trials"])
-        file_name='alignedDataBlockweekapril042022OriginalModellickrelease'
+        np.save(os.path.join(BASE_PATH2, 'march072022linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+        np.save(os.path.join(BASE_PATH2, 'march072022linearModeltrialIDsPS'), linear_aligned_data["trials"])
+        file_name='alignedDataBlockweekmarch072022OriginalModellickrelease'
 
-        file_name = 'alignedDataBlockweekapril042022OriginalModellickrelease'
+        file_name = 'alignedDataBlockweekmarch072022OriginalModellickrelease'
         np.save(os.path.join(BASE_PATH2, file_name), cropped_data2["spiketimes"])
-        np.save(os.path.join(BASE_PATH2, 'april042022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
-        np.save(os.path.join(BASE_PATH2, 'april042022OriginalModeltrialIDsPS'), cropped_data2["trials"])
+        np.save(os.path.join(BASE_PATH2, 'march072022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
+        np.save(os.path.join(BASE_PATH2, 'march072022OriginalModeltrialIDsPS'), cropped_data2["trials"])
 
