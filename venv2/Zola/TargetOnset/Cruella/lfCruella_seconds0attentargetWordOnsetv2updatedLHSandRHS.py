@@ -345,6 +345,8 @@ for k00 in pitch_shift_or_not:
         [shift_model, lin_model]=disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, [ 61, 62, 63, 64, 65, 676, 67, 68, 69, 70])
         total_lfp_np=(np.array(total_lfp))
         total_lfp_np=np.mean(total_lfp_np, axis=2)
+
+        total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
         shift_model_lfp=shift_model.transform(total_lfp_np)[:, :, 0]
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
 
