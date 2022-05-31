@@ -6,6 +6,7 @@ import h5py
 import numpy as np
 import scipy.io as rd
 import mat73
+import seaborn as sns
 from func_Cruella_seconds0attentargetWordOnsetv2updatedLHSandRHS import *
 
 #user_input = input('What is the name of your directory')
