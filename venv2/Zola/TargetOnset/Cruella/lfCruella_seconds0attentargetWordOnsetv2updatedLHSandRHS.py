@@ -346,6 +346,13 @@ for k00 in pitch_shift_or_not:
         [shift_model, lin_model]=disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, [ 61, 62, 63, 64, 65, 676, 67, 68, 69, 70])
         total_lfp_np=(np.array(total_lfp))
         total_lfp_np=np.mean(total_lfp_np, axis=2)
+        start = -0.2
+        stoptime = 1.8
+        lfp_time = np.linspace(start, stoptime, num=int(24414 * (stoptime - start)))
+
+        tidx = (lfp_time>= TMIN) & (lfp_time < TMAX)
+        total_lfp_np = total_lfp_np[:, tidx]
+        lfp_time_crop = lfp_time[tidx]
 
         total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
         shift_model_lfp=shift_model.transform(total_lfp_np)[:, :, 0]
@@ -379,11 +386,11 @@ for k00 in pitch_shift_or_not:
 
         axes[0].set_ylabel("trials")
 
-        # for ax in axes:
-        #     i = np.linspace(0, lfp_time.size - 1, 3).astype(int)
-        #     ax.set_xticks(i)
-        #     ax.set_xticklabels(lfp_time[i])
-        #     ax.set_xlabel("time (ms)")
+        for ax in axes:
+            i = np.linspace(0, lfp_time_crop.size - 1, 3).astype(int)
+            ax.set_xticks(i)
+            ax.set_xticklabels(lfp_time_crop[i])
+            ax.set_xlabel("time (ms)")
 
         fig.tight_layout()
         plt.show()
@@ -391,9 +398,11 @@ for k00 in pitch_shift_or_not:
         ##adding yticks with the actual lick release time in ms relative to the start trial lick
         fig, axes = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
 
-        axes[0].sns.lineplot(total_lfp_np)
-        axes[1].sns.lineplot(shift_model_lfp)
-        axes[2].sns.lineplot(lin_model_lfp, **imkw)
+        sns.lineplot(axes=axes[0],data=total_lfp_np)
+        sns.lineplot(axes=axes[1],data=shift_model_lfp)
+        sns.lineplot(axes=axes[2],data=lin_model_lfp)
+
+
 
         axes[0].set_title("raw lfp (bandpass-filtered)")
         axes[1].set_title("shift aligned")
