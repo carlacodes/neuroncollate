@@ -296,22 +296,7 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
                 return filtfilt(b, a, x, axis=axis)
 
 
-            # Load LFP.
-            # L = dict(np.load("umi_lfp_data.npz"))
-            #
-            # # Apply bandpass filter.
-            # lfp = bandpass(L["lfp"], LOW_CUTOFF, HIGH_CUTOFF, L["sample_rate"])
-            #
-            # # Crop LFP time base to match spike times.
-            # tidx = (L["lfp_time"] >= TMIN) & (L["lfp_time"] < TMAX)
-            # lfp = lfp[:, tidx]
-            # lfp_time = L["lfp_time"][tidx]
-            #
-            # # Z-score LFP.
-            # lfp -= lfp.mean(axis=1, keepdims=True)
-            # lfp /= lfp.std(axis=1, keepdims=True)
-
-            # Specify model.
+           
             shift_model = ShiftWarping(
                 smoothness_reg_scale=SHIFT_SMOOTHNESS_REG,
                 warp_reg_scale=SHIFT_WARP_REG,
