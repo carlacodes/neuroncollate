@@ -24,7 +24,7 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
     import h5py
     import numpy as np
     for k00 in pitch_shift_or_not:
-        
+
 
         blocksOfInterest2 = []
         f = {}
@@ -114,7 +114,6 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
             else:
                 print(blocksOfInterest2)
                 combinedTrialsAdjusted = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
-                # firsttrialarray = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
                 combinedTrials = combinedTrialsAdjusted
 
             for i in range(len(combinedTrials)):
@@ -132,7 +131,6 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
                 combinedNeuron = np.append(combinedNeuron, selectedNeuronIDs)
                 combinedLickReleaseTimes = np.append(combinedLickReleaseTimes, selectedLickReleaseIDs)
 
-            # combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
             TMAX = 0.8 * 1000  # max(combinedLickReleaseTimes) # s
             BINSIZE = 0.01 * 1000  # 10 ms
             NBINS = int((TMAX - TMIN) / BINSIZE)
@@ -145,12 +143,7 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
             TMAXzb = 0.09 * 1000  # max(combinedLickReleaseTimes) # s
             BINSIZEzb = 0.001 * 1000  # 0.001*1000  # 10 ms
             NBINSzb = int((TMAXzb - TMINzb) / BINSIZEzb)
-            # adjustedTrial=arrays2["oneDtrialIDarray"]+max(arrays["oneDtrialIDarray"])
-            # adjustedTrial2=arrays3["oneDtrialIDarray"]+max(adjustedTrial)
-            # combinedTrials=np.concatenate((arrays["oneDtrialIDarray"], adjustedTrial, adjustedTrial2), axis=0)
-            # combinedSpikeTimes=np.concatenate((arrays["oneDspiketimearray"], arrays2["oneDspiketimearray"], arrays3["oneDspiketimearray"]),axis=0)
-            # combinedNeuron=np.concatenate((arrays["oneDspikeIDarray"], arrays2["oneDspikeIDarray"], arrays3["oneDspikeIDarray"]),axis=0)
-
+   
             data2 = SpikeData(
                 trials=combinedTrials,  # arrays["oneDtrialIDarray"],
                 spiketimes=combinedSpikeTimes,  # ["oneDspiketimearray"],
