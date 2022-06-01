@@ -345,7 +345,9 @@ for k00 in pitch_shift_or_not:
         # Fit to binned spike times.
         [shift_model, lin_model]=disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, [ 61, 62, 63, 64, 65, 676, 67, 68, 69, 70])
         total_lfp_np=(np.array(total_lfp))
+        ##making copy, z-scoring, then getting model fit
         total_lfp_modelfit=(np.array(total_lfp))
+        total_lfp_modelfit/= total_lfp_modelfit.std(axis=2, keepdims=True)
 
         total_lfp_np=np.mean(total_lfp_np, axis=2)
         start = -0.2
@@ -361,10 +363,10 @@ for k00 in pitch_shift_or_not:
         shift_model_lfp=shift_model.transform(total_lfp_np)[:, :, 0]
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
 
-        SHIFT_SMOOTHNESS_REG = 1
-        SHIFT_WARP_REG = 1e-3
-        MAXLAG = 0.15
-
+        SHIFT_SMOOTHNESS_REG = 0.5
+        SHIFT_WARP_REG = 1e-2
+        MAXLAG = 0.015
+        ##for some reason model is not optimising under these parameters, could be
         shift_model_on_lfp = ShiftWarping(
             smoothness_reg_scale=SHIFT_SMOOTHNESS_REG,
             warp_reg_scale=SHIFT_WARP_REG,
