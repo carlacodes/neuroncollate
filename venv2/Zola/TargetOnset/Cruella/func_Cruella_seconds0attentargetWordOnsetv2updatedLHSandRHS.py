@@ -24,8 +24,7 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
     import h5py
     import numpy as np
     for k00 in pitch_shift_or_not:
-        # blocksOfInterest = [8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 23, 24]
-        # blocksOfInterest = [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 676, 67, 68, 69, 70]
+        
 
         blocksOfInterest2 = []
         f = {}
