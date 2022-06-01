@@ -345,6 +345,8 @@ for k00 in pitch_shift_or_not:
         # Fit to binned spike times.
         [shift_model, lin_model]=disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, [ 61, 62, 63, 64, 65, 676, 67, 68, 69, 70])
         total_lfp_np=(np.array(total_lfp))
+        total_lfp_modelfit=(np.array(total_lfp))
+
         total_lfp_np=np.mean(total_lfp_np, axis=2)
         start = -0.2
         stoptime = 1.8
@@ -359,8 +361,8 @@ for k00 in pitch_shift_or_not:
         shift_model_lfp=shift_model.transform(total_lfp_np)[:, :, 0]
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
 
-        SHIFT_SMOOTHNESS_REG = 0.5
-        SHIFT_WARP_REG = 1e-2
+        SHIFT_SMOOTHNESS_REG = 1
+        SHIFT_WARP_REG = 1e-3
         MAXLAG = 0.15
 
         shift_model_on_lfp = ShiftWarping(
@@ -370,7 +372,7 @@ for k00 in pitch_shift_or_not:
         )
 
         # Fit my silly model to the LFP and ideally then compare the spike times to the LFP
-        shift_model_on_lfp.fit(total_lfp_np, iterations=50)
+        shift_model_on_lfp.fit(total_lfp_modelfit, iterations=50)
 
 
         import numpy as np
@@ -422,20 +424,4 @@ for k00 in pitch_shift_or_not:
         plt.show()
 
 
-
-        # np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
-        # np.save(os.path.join(BASE_PATH2, 'april042022neuronIDsPS'), shift_aligned_data["neurons"])
-        # np.save(os.path.join(BASE_PATH2, 'april042022trialIDsPS'), shift_aligned_data["trials"])
-        # file_name='alignedDataBlockweekapril042022LinearModellickrelease'
-        #
-        # file_name = 'alignedDataBlockweekapril042022LinearModellickrelease'
-        # np.save(os.path.join(BASE_PATH2, file_name), linear_aligned_data["spiketimes"])
-        # np.save(os.path.join(BASE_PATH2, 'april042022linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-        # np.save(os.path.join(BASE_PATH2, 'april042022linearModeltrialIDsPS'), linear_aligned_data["trials"])
-        # file_name='alignedDataBlockweekapril042022OriginalModellickrelease'
-        #
-        # file_name = 'alignedDataBlockweekapril042022OriginalModellickrelease'
-        # np.save(os.path.join(BASE_PATH2, file_name), cropped_data2["spiketimes"])
-        # np.save(os.path.join(BASE_PATH2, 'april042022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
-        # np.save(os.path.join(BASE_PATH2, 'april042022OriginalModeltrialIDsPS'), cropped_data2["trials"])
 
