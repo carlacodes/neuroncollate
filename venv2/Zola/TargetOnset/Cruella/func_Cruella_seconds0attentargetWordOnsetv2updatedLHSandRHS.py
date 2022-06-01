@@ -87,7 +87,7 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
 
             from affinewarp import SpikeData
 
-            
+
             adjustedTrial = {}
             for i2 in range(len(blocksOfInterest2) - 1):
                 if i2 == 0:
@@ -410,11 +410,7 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
                                    subplots=(5, 8), style='white');
             fig.suptitle(' PSTHS relative to target word onset' + k0, fontsize=10, color='0', y='1')
 
-            # make_space_above(axes, topmargin=10)
 
-            # plt.title('Rasters after Linear Model (18/03/2021 Cruella)')
-            # fig.tight_layout()
-            # fig.subplots_adjust(top=10)
             plt.show();
             BASE_PATH2 = 'D:/Electrophysiological Data/F1815_Cruella/dynamictimewarping/l27targetword/' + k00 + '/' + k0 + '/'
             if os.path.isdir(BASE_PATH2) is False:
