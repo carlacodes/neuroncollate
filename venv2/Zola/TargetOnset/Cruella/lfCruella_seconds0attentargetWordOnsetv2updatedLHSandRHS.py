@@ -394,13 +394,12 @@ for k00 in pitch_shift_or_not:
 
         fig.tight_layout()
         plt.show()
-        import seaborn as sns
-        ##adding yticks with the actual lick release time in ms relative to the start trial lick
-        fig, axes = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
 
-        sns.lineplot(axes=axes[0],data=total_lfp_np)
-        sns.lineplot(axes=axes[1],data=shift_model_lfp)
-        sns.lineplot(axes=axes[2],data=lin_model_lfp)
+        fig, axes2 = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
+
+        sns.lineplot(axes=axes[0],data=np.mean(total_lfp_np), dashes=False)
+        sns.lineplot(axes=axes[1],data=shift_model_lfp, dashes=False)
+        sns.lineplot(axes=axes[2],data=lin_model_lfp, dashes=False)
 
 
 
