@@ -143,7 +143,7 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
             TMAXzb = 0.09 * 1000  # max(combinedLickReleaseTimes) # s
             BINSIZEzb = 0.001 * 1000  # 0.001*1000  # 10 ms
             NBINSzb = int((TMAXzb - TMINzb) / BINSIZEzb)
-   
+
             data2 = SpikeData(
                 trials=combinedTrials,  # arrays["oneDtrialIDarray"],
                 spiketimes=combinedSpikeTimes,  # ["oneDspiketimearray"],
@@ -256,8 +256,7 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
 
                 bigMean = np.mean(binnedmeans[1:33])
                 counter = np.squeeze(countermean)[()]
-                # counter=float(counter[1])
-                # print(counter)
+
                 if selectedmeans < 0:
                     if (selectedmeans) <= (bigMean):  # selectedmeans-counter: #-(0.1*(counter)):
                         print('something good')
