@@ -87,17 +87,7 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
 
             from affinewarp import SpikeData
 
-            # Spike times.
-            # S = dict(np.load("umi_spike_data.npz"))
-            # data = SpikeData(
-            #     trials=S["trials"],
-            #     spiketimes=S["spiketimes"],
-            #     neurons=S["unit_ids"],
-            #     tmin=TMIN,
-            #     tmax=TMAX,
-            # )
-            # result = arrays["oneDtrialIDarray"];
-            # result = x[0, :, 0]
+            
             adjustedTrial = {}
             for i2 in range(len(blocksOfInterest2) - 1):
                 if i2 == 0:
@@ -231,12 +221,10 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
                 for i2 in range(1, 33):
                     selectedchantoadd = neuronselect[:, i2]
                     selectedchantoaddb = neuronselectb[:, i2];
-                    # neuronselect2=neuronselectmat[i2]
                     neuronselectmat = np.append(neuronselectmat, selectedchantoadd, axis=0)
                     neuronselectmatb = np.append(neuronselectmatb, selectedchantoaddb, axis=0)
                     neuronsbychan[i2] = np.mean(neuronselectmat)
                     neuronsbychanb[i2] = np.mean(neuronselectmatb)
-                    # meanneuronselect[i]=mean(neuronselect[i])
 
             goodChanlist = np.array([])
             binnedmeans = binnedmeans[0]
