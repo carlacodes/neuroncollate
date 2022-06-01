@@ -359,8 +359,20 @@ for k00 in pitch_shift_or_not:
         shift_model_lfp=shift_model.transform(total_lfp_np)[:, :, 0]
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
 
+        SHIFT_SMOOTHNESS_REG = 0.5
+        SHIFT_WARP_REG = 1e-2
+        MAXLAG = 0.15
 
-       
+        shift_model_on_lfp = ShiftWarping(
+            smoothness_reg_scale=SHIFT_SMOOTHNESS_REG,
+            warp_reg_scale=SHIFT_WARP_REG,
+            maxlag=MAXLAG,
+        )
+
+        # Fit my silly model to the LFP and ideally then compare the spike times to the LFP
+        shift_model_on_lfp.fit(total_lfp_np, iterations=50)
+
+
         import numpy as np
         import matplotlib.pyplot as plt
 
