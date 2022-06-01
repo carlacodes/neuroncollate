@@ -355,6 +355,7 @@ for k00 in pitch_shift_or_not:
         lfp_time_crop = lfp_time[tidx]
 
         total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
+
         shift_model_lfp=shift_model.transform(total_lfp_np)[:, :, 0]
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
 
@@ -395,11 +396,10 @@ for k00 in pitch_shift_or_not:
         fig.tight_layout()
         plt.show()
 
-        fig, axes2 = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
-
-        sns.lineplot(axes=axes[0],data=np.mean(total_lfp_np), dashes=False)
-        sns.lineplot(axes=axes[1],data=shift_model_lfp, dashes=False)
-        sns.lineplot(axes=axes[2],data=lin_model_lfp, dashes=False)
+        fig2, axes2 = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
+        lfp_np_plt=np.mean(total_lfp_np, axis=0)
+        shift_model_lfp_plt=np.mean(shift_model_lfp, axis=0)
+        lin_model_lfp_plt=np.mean(lin_model_lfp, axis=0)
 
 
 
@@ -409,6 +409,15 @@ for k00 in pitch_shift_or_not:
 
         axes[0].set_ylabel("trials")
         plt.show()
+        fig, axes = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
+        fig.suptitle('Initial Pokemon - 1st Generation')
+
+        # Bulbasaur
+        sns.lineplot(ax=axes[0], x=lfp_time_crop, y=lfp_np_plt)
+        sns.lineplot(ax=axes[1], x=lfp_time_crop, y=shift_model_lfp_plt)
+        sns.lineplot(ax=axes[2], x=lfp_time_crop, y=lin_model_lfp_plt)
+        plt.show()
+
 
 
         # np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
