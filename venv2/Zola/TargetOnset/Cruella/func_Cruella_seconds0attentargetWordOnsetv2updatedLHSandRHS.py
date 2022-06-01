@@ -369,7 +369,6 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
             import numpy as np
             import matplotlib.pyplot as plt
 
-            ##adding yticks with the actual lick release time in ms relative to the start trial lick
 
             from visualization03022022 import rasters, psth_plots
 
