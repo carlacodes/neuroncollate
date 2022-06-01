@@ -6,17 +6,14 @@ import h5py
 import numpy as np
 
 
-#user_input = input('What is the name of your directory')
 f={}
 blockData={}
-#blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
 blocksOfInterest=[1,2,8,9,10, 11,12,13,14, 15]
 blocksOfInterest=[50,51,52,53,54,55,56,57,58,59,60, 61, 62, 63, 64, 65, 676, 67, 68, 69, 70]
 left_hand_or_right=['BB4BB5', 'BB2BB3']
 
 
 pitch_shift_or_not=['nopitchshift', 'pitchshift']
-#            highpassfilterParentName=['D:\Electrophysiological Data\F1815_Cruella\HP_' num2str(currBlockName) '\targetword\\orderingbyLRtime\correctresp\' left_hand_or_right{k0}]; %bb4bb5\TARGETonset\rhstim
 
 pitch_shift_or_not=['correctresp']
 def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInterest):
@@ -67,19 +64,7 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
             blocksOfInterest2 = set(blocksOfInterest2)
             blocksOfInterest2 = list(blocksOfInterest2)
 
-            # for fname in directory:
-            #     if searchstring in fname:
-            #         # Full path
-            #         f[i] = h5py.File(user_input + os.sep + fname)
-            #         items = f[i].items()
-            #         arrays = {}
-            #         for k3, v3 in f[i].items():
-            #             newarray3 = np.array(v3)
-            #             newarrayremove3 = newarray3[0, :]
-            #             arrays[k3] = newarrayremove3
-            #         blockData[i] = arrays
-            #
-            #         f[i].close()
+
 
             TMIN = 0 * 1000  # s
             # TMAX = 0.8*1000 # s
@@ -216,17 +201,13 @@ def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInter
             sorted_array = trialalignment[np.argsort(trialalignment[:, 0])]
             sorted_array_trial = sorted_array[:, 1]
             sorted_array_trial = (sorted_array_trial).astype(np.int)
-            # t3 = np.concatenate((t1.reshape(-1,1),t2.reshape(-1,1),axis=1)
 
-            # data3=data2.select_trials([1,2,3,4,5])
-            # data4=data3.reorder_trials([0,1,3,2,4])
 
             data22 = data2.reorder_trials(sorted_array_trial)
             # Bin and normalize (soft z-score) spike times.
             binnedLR = data2.bin_spikes(NBINS)
             binnedLR = binnedLR - binnedLR.mean(axis=(0, 1), keepdims=True)
             binnedLR = binnedLR / (1e-2 + binnedLR.std(axis=(0, 1), keepdims=True))
-            # binnedLRStdDev=binnedLR.std(axis=(0, 1), keepdims=True)
 
             binnedLRz = data2z.bin_spikes(NBINSz)
             binnedmeans = binnedLRz.mean(axis=(0, 1), keepdims=True)
