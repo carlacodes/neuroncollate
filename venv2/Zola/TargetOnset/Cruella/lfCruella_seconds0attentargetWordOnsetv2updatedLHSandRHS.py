@@ -352,12 +352,12 @@ for k00 in pitch_shift_or_not:
         total_lfp_np=np.mean(total_lfp_np, axis=2)
         start = -0.2
         stoptime = 1.8
-        fs=24414
-        lfp_time = np.linspace(start*fs, stoptime*fs, num=int(24414 * (stoptime - start)))
+        fs=np.round(24414.0625*(1000/24414))
+        lfp_time = np.linspace(start*fs, stoptime*fs, num=int(fs * (stoptime - start))+1)
         start_crop = 0
-        stoptime_crop = 0.1
+        stoptime_crop = 0.8
 
-        tidx = (lfp_time>= start_crop*24414) & (lfp_time < stoptime_crop*24414)
+        tidx = (lfp_time>= start_crop*fs) & (lfp_time <= stoptime_crop*fs)
         total_lfp_np = total_lfp_np[:, tidx]
         total_lfp_modelfit = total_lfp_modelfit[:,tidx, :]
         lfp_time_crop = lfp_time[tidx]
@@ -373,9 +373,9 @@ for k00 in pitch_shift_or_not:
         ##for some reason model is not optimising under these parameters, could be
         ##need to reduce the number of samples to approx 2000 then check
         shift_model_on_lfp = ShiftWarping(
-            # smoothness_reg_scale=SHIFT_SMOOTHNESS_REG,
-            # warp_reg_scale=SHIFT_WARP_REG,
-            # maxlag=MAXLAG,
+            smoothness_reg_scale=SHIFT_SMOOTHNESS_REG,
+            warp_reg_scale=SHIFT_WARP_REG,
+            maxlag=MAXLAG,
 
         )
 
