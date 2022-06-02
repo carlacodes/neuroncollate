@@ -366,8 +366,8 @@ for k00 in pitch_shift_or_not:
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
 
         SHIFT_SMOOTHNESS_REG = 0.5
-        SHIFT_WARP_REG = 0.15
-        MAXLAG = 1
+        SHIFT_WARP_REG = 1e-2
+        MAXLAG = 0.15
 
         LINEAR_SMOOTHNESS_REG = 1.0
         LINEAR_WARP_REG = 0.065
@@ -446,10 +446,10 @@ for k00 in pitch_shift_or_not:
 
         axes[0].set_ylabel("mV")
         plt.show()
-        fractional_shifts_spk_warp=lin_model.shifts
-        fractional_shifts_lfp_warp=lin_model_on_lfp.shifts
+        fractional_shifts_spk_warp=shift_model.shifts
+        fractional_shifts_lfp_warp=shift_model_on_lfp.shifts
         fig, axes = plt.subplots(1, 1, figsize=(15, 5), sharey=True)
-        scipy.stats.pearsonr(fractional_shifts_spk_warp, fractional_shifts_lfp_warp)
+        corrcoeff=scipy.stats.pearsonr(fractional_shifts_spk_warp, fractional_shifts_lfp_warp)
         sns.scatterplot(x=fractional_shifts_spk_warp, y=fractional_shifts_lfp_warp)
         plt.show()
 
