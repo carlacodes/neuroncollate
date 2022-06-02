@@ -352,10 +352,14 @@ for k00 in pitch_shift_or_not:
         total_lfp_np=np.mean(total_lfp_np, axis=2)
         start = -0.2
         stoptime = 1.8
-        lfp_time = np.linspace(start, stoptime, num=int(24414 * (stoptime - start)))
+        fs=24414
+        lfp_time = np.linspace(start*fs, stoptime*fs, num=int(24414 * (stoptime - start)))
+        start_crop = 0
+        stoptime_crop = 0.1
 
-        tidx = (lfp_time>= start*24414) & (lfp_time < stoptime*24414)
+        tidx = (lfp_time>= start_crop*24414) & (lfp_time < stoptime_crop*24414)
         total_lfp_np = total_lfp_np[:, tidx]
+        total_lfp_modelfit = total_lfp_modelfit[:,tidx, :]
         lfp_time_crop = lfp_time[tidx]
 
         total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
@@ -365,15 +369,18 @@ for k00 in pitch_shift_or_not:
 
         SHIFT_SMOOTHNESS_REG = 0.5
         SHIFT_WARP_REG = 1e-2
-        MAXLAG = 0.015
+        MAXLAG = 0.15
         ##for some reason model is not optimising under these parameters, could be
         ##need to reduce the number of samples to approx 2000 then check
         shift_model_on_lfp = ShiftWarping(
+            # smoothness_reg_scale=SHIFT_SMOOTHNESS_REG,
+            # warp_reg_scale=SHIFT_WARP_REG,
+            # maxlag=MAXLAG,
 
         )
 
         # Fit my silly model to the LFP and ideally then compare the spike times to the LFP
-        #shift_model_on_lfp.fit(total_lfp_modelfit, iterations=50)
+        shift_model_on_lfp.fit(total_lfp_modelfit, iterations=50)
 
 
         import numpy as np
