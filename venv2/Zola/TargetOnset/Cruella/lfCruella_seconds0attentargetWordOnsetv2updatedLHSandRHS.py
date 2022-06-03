@@ -339,12 +339,12 @@ for k00 in pitch_shift_or_not:
             total_lfp_modelfit[:,:, k]=corresp_bp
         total_lfp_modelfit/= total_lfp_modelfit.std(axis=2, keepdims=True)
 
-        start = -0.2
-        stoptime = 1.8
+        start = -0.2*1000
+        stoptime = 1.8*1000
         fs=np.round(24414.0625*(1000/24414))
         lfp_time = np.linspace(start*fs, stoptime*fs, num=int(fs * (stoptime - start))+1)
-        start_crop = -0.19
-        stoptime_crop = 0.6
+        start_crop = -0.19*1000
+        stoptime_crop = 0.6*1000
 
         tidx = (lfp_time>= start_crop*fs) & (lfp_time <= stoptime_crop*fs)
         total_lfp_np = total_lfp_np[:, tidx]
@@ -439,7 +439,7 @@ for k00 in pitch_shift_or_not:
         axes[1].set_title("shift aligned")
         axes[2].set_title("linear aligned")
 
-        axes[0].set_ylabel("mV")
+        axes[0].set_ylabel("a.u.")
         plt.show()
         fractional_shifts_spk_warp=shift_model.shifts
         fractional_shifts_lfp_warp=shift_model_on_lfp.shifts
