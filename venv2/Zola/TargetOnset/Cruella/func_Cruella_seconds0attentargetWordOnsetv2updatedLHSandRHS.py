@@ -5,17 +5,17 @@ import os
 import h5py
 import numpy as np
 
-
-f={}
-blockData={}
-blocksOfInterest=[1,2,8,9,10, 11,12,13,14, 15]
-blocksOfInterest=[50,51,52,53,54,55,56,57,58,59,60, 61, 62, 63, 64, 65, 676, 67, 68, 69, 70]
-left_hand_or_right=['BB4BB5', 'BB2BB3']
-
-
-pitch_shift_or_not=['nopitchshift', 'pitchshift']
-
-pitch_shift_or_not=['correctresp']
+#
+# f={}
+# blockData={}
+# blocksOfInterest=[1,2,8,9,10, 11,12,13,14, 15]
+# blocksOfInterest=[50,51,52,53,54,55,56,57,58,59,60, 61, 62, 63, 64, 65, 676, 67, 68, 69, 70]
+# left_hand_or_right=['BB4BB5', 'BB2BB3']
+#
+#
+# pitch_shift_or_not=['nopitchshift', 'pitchshift']
+#
+# pitch_shift_or_not=['correctresp']
 def disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInterest):
     import numpy as np
     import matplotlib.pyplot as plt

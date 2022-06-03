@@ -13,18 +13,12 @@ from func_Cruella_seconds0attentargetWordOnsetv2updatedLHSandRHS import *
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
-#blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-blocksOfInterest=[1,2,8,9,10, 11,12,13,14, 15]
-blocksOfInterest=[50,51,52,53,54,55,56,57,58,59,60, 61, 62, 63, 64, 65, 676, 67, 68, 69, 70]
+
 left_hand_or_right=['BB2BB3']
-
-
-pitch_shift_or_not=['nopitchshift', 'pitchshift']
-#            highpassfilterParentName=['D:\Electrophysiological Data\F1815_Cruella\HP_' num2str(currBlockName) '\targetword\\orderingbyLRtime\correctresp\' left_hand_or_right{k0}]; %bb4bb5\TARGETonset\rhstim
 
 pitch_shift_or_not=['correctresp']
 for k00 in pitch_shift_or_not:
-    blocksOfInterest = [ 61, 62, 63, 64, 65, 676, 67, 68, 69, 70]
+    blocksOfInterest = [92,93,94,95,96,97,98,99,100,101,102]
 
     blocksOfInterest2 = []
     f = {}
@@ -323,7 +317,7 @@ for k00 in pitch_shift_or_not:
 
 
         # Fit to binned spike times.
-        [shift_model, lin_model]=disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, [ 61, 62, 63, 64, 65, 676, 67, 68, 69, 70])
+        [shift_model, lin_model]=disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInterest2)
         total_lfp_np=(np.array(total_lfp))
         fs=np.round(24414.0625*(1000/24414))
 
@@ -341,7 +335,7 @@ for k00 in pitch_shift_or_not:
         for k in range(0, 32):
             print(k)
             chosensite=total_lfp_modelfit[:,:, k]
-            corresp_bp=bandpass(chosensite, 10, 30, fs)
+            corresp_bp=bandpass(chosensite,  1, 100, fs)
             total_lfp_modelfit[:,:, k]=corresp_bp
         total_lfp_modelfit/= total_lfp_modelfit.std(axis=2, keepdims=True)
 
@@ -349,12 +343,12 @@ for k00 in pitch_shift_or_not:
         stoptime = 1.8
         fs=np.round(24414.0625*(1000/24414))
         lfp_time = np.linspace(start*fs, stoptime*fs, num=int(fs * (stoptime - start))+1)
-        start_crop = -0.2
+        start_crop = -0.19
         stoptime_crop = 0.6
 
         tidx = (lfp_time>= start_crop*fs) & (lfp_time <= stoptime_crop*fs)
         total_lfp_np = total_lfp_np[:, tidx]
-        total_lfp_np=bandpass(total_lfp_np, 10, 30, fs)
+        total_lfp_np=bandpass(total_lfp_np, 1, 100, fs)
         
         
         total_lfp_modelfit = total_lfp_modelfit[:,tidx, :]
@@ -364,6 +358,7 @@ for k00 in pitch_shift_or_not:
 
         shift_model_lfp=shift_model.transform(total_lfp_np)[:, :, 0]
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
+
 
         SHIFT_SMOOTHNESS_REG = 0.5
         SHIFT_WARP_REG = 1e-2
@@ -389,7 +384,7 @@ for k00 in pitch_shift_or_not:
 
         # Fit my silly model to the LFP and ideally then compare the spike times to the LFP
         shift_model_on_lfp.fit(total_lfp_modelfit, iterations=50)
-        shift_model_on_lfp.transform(total_lfp_modelfit)
+        lfp_sm_transf=shift_model_on_lfp.transform(total_lfp_modelfit)[:, :, 0]
 
         lin_model_on_lfp.fit(total_lfp_modelfit, iterations=50)
 
@@ -451,6 +446,29 @@ for k00 in pitch_shift_or_not:
         fig, axes = plt.subplots(1, 1, figsize=(15, 5), sharey=True)
         corrcoeff=scipy.stats.pearsonr(fractional_shifts_spk_warp, fractional_shifts_lfp_warp)
         sns.scatterplot(x=fractional_shifts_spk_warp, y=fractional_shifts_lfp_warp)
+        plt.show()
+
+
+        fig2, axes2 = plt.subplots(1, 2, sharey=True, figsize=(10, 3.5))
+        axes2[0].imshow(total_lfp_np, **imkw)
+        axes2[1].imshow(lfp_sm_transf, **imkw)
+
+        axes2[0].set_title("raw lfp (bandpass-filtered)")
+        axes2[1].set_title("shift aligned, fit on lfp")
+
+        axes2[0].set_ylabel("trials")
+        plt.show()
+
+        fig, axes = plt.subplots(1, 2, figsize=(15, 5), sharey=True)
+        fig.suptitle('LFP for f1815 cruella')
+
+        sns.lineplot(ax=axes[0], x=lfp_time_crop, y=lfp_np_plt)
+        sns.lineplot(ax=axes[1], x=lfp_time_crop, y=np.mean(lfp_sm_transf, axis=0))
+        axes[0].set_title("raw lfp (bandpass-filtered)")
+        axes[1].set_title("shift aligned-- fit on lfp")
+
+
+        axes[0].set_ylabel("a.u.")
         plt.show()
 
 
