@@ -203,7 +203,7 @@ for k00 in pitch_shift_or_not:
         #5,20
         #in future need to make function to loop this over different bands, e.g. 5-20, 5-30
         #need to check 15,20 again
-        total_lfp_np=bandpass(total_lfp_np, 5, 50, fs)
+        total_lfp_np=bandpass(total_lfp_np, 3, 10, fs)
         
         
         total_lfp_modelfit = total_lfp_modelfit[:,tidx, :]
@@ -328,6 +328,12 @@ for k00 in pitch_shift_or_not:
 
         axes[0].set_ylabel("a.u.")
         plt.show()
+
+        fig, axes = plt.subplots(1, 2, figsize=(15, 5), sharey=True)
+        sns.lineplot(ax=axes[0], x=lfp_time_crop, y=np.mean(total_lfp_for_mod[:, :, 0], axis=0))
+        sns.lineplot(ax=axes[1], x=lfp_time_crop, y=lfp_np_plt)
+        plt.show()
+
 
 
 
