@@ -319,25 +319,33 @@ for k00 in pitch_shift_or_not:
         # Fit to binned spike times.
         [shift_model, lin_model]=disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInterest2)
         total_lfp_np=(np.array(total_lfp))
+        #total_lfp_modelfit=np.mean(total_lfp_modelfit, axis=0)
+        total_lfp_np=np.mean(total_lfp_np, axis=2)
+
         fs=np.round(24414.0625*(1000/24414))
 
 
 
         ##making copy, z-scoring, then getting model fit
         total_lfp_modelfit=(np.array(total_lfp))
-        
+        #total_lfp_modelfit=np.mean(total_lfp_modelfit, axis=2)
+        #repeating S6 word for word, so I need to take the mean across channels and then add an extra dimension to make one "unit" for the spikedata object.
+
         
 
 
-        #total_lfp_modelfit=np.mean(total_lfp_modelfit, axis=0)
-        total_lfp_np=np.mean(total_lfp_np, axis=2)
+
 
         for k in range(0, 32):
             print(k)
             chosensite=total_lfp_modelfit[:,:, k]
-            corresp_bp=bandpass(chosensite,  1,40, fs)
+            corresp_bp=bandpass(chosensite,  1,9, fs)
             total_lfp_modelfit[:,:, k]=corresp_bp
+        #total_lfp_modelfit=bandpass(total_lfp_modelfit, 5,9, fs)
+
         total_lfp_modelfit/= total_lfp_modelfit.std(axis=2, keepdims=True)
+        #total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
+
 
         start = 0
         stoptime = 2
@@ -348,7 +356,7 @@ for k00 in pitch_shift_or_not:
 
         tidx = (lfp_time>= start_crop*fs) & (lfp_time <= stoptime_crop*fs)
         total_lfp_np = total_lfp_np[:, tidx]
-        total_lfp_np=bandpass(total_lfp_np, 1, 30, fs)
+        total_lfp_np=bandpass(total_lfp_np, 5, 9, fs)
         
         
         total_lfp_modelfit = total_lfp_modelfit[:,tidx, :]
@@ -400,7 +408,7 @@ for k00 in pitch_shift_or_not:
         axes[1].imshow(shift_model_lfp, **imkw)
         axes[2].imshow(lin_model_lfp, **imkw)
 
-        axes[0].set_title("raw lfp (bandpass-filtered)")
+        axes[0].set_title("raw lfp (bandpass-filtered and then z-scored)")
         axes[1].set_title("shift aligned")
         axes[2].set_title("linear aligned")
 
