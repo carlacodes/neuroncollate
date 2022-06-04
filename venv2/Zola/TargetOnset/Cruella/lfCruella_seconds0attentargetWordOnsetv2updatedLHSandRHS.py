@@ -336,11 +336,11 @@ for k00 in pitch_shift_or_not:
 
 
 
-        for k in range(0, 32):
-            print(k)
-            chosensite=total_lfp_modelfit[:,:, k]
-            corresp_bp=bandpass(chosensite,  1,9, fs)
-            total_lfp_modelfit[:,:, k]=corresp_bp
+        # for k in range(0, 32):
+        #     print(k)
+        #     chosensite=total_lfp_modelfit[:,:, k]
+        #     corresp_bp=bandpass(chosensite,  1,9, fs)
+        #     total_lfp_modelfit[:,:, k]=corresp_bp
         #total_lfp_modelfit=bandpass(total_lfp_modelfit, 5,9, fs)
 
         total_lfp_modelfit/= total_lfp_modelfit.std(axis=2, keepdims=True)
