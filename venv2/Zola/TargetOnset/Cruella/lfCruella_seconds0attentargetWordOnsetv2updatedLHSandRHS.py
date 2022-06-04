@@ -181,11 +181,13 @@ for k00 in pitch_shift_or_not:
         total_lfp_modelfit=np.mean(total_lfp_modelfit, axis=2)
 
         total_lfp_modelfit /= total_lfp_modelfit.std(axis=(1), keepdims=True)
+
+
         plt.plot( total_lfp_modelfit)
+        plt.title('Bandpassed and z-scored LFP')
         plt.show()
         total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
-        plt.plot(total_lfp_modelfit[:,:, 0])
-        plt.show()
+
 
 
         start = 0
@@ -197,7 +199,8 @@ for k00 in pitch_shift_or_not:
 
         tidx = (lfp_time>= start_crop*fs) & (lfp_time <= stoptime_crop*fs)
         total_lfp_np = total_lfp_np[:, tidx]
-        total_lfp_np=bandpass(total_lfp_np, 5, 9, fs)
+        #NOTE TO FUTURE SELF, CHANGE LOW PASS AND HIGH PASS HERE:
+        total_lfp_np=bandpass(total_lfp_np, 80, 100, fs)
         
         
         total_lfp_modelfit = total_lfp_modelfit[:,tidx, :]
@@ -207,6 +210,8 @@ for k00 in pitch_shift_or_not:
 
         shift_model_lfp=shift_model.transform(total_lfp_np)[:, :, 0]
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
+
+        total_lfp_for_mod=total_lfp_np[:,:, np.newaxis]
 
 
         SHIFT_SMOOTHNESS_REG = 0.5
@@ -232,10 +237,10 @@ for k00 in pitch_shift_or_not:
         )
 
         # Fit my silly model to the LFP and ideally then compare the spike times to the LFP
-        shift_model_on_lfp.fit(total_lfp_modelfit, iterations=50)
-        lfp_sm_transf=shift_model_on_lfp.transform(total_lfp_modelfit)[:, :, 0]
+        shift_model_on_lfp.fit(total_lfp_for_mod, iterations=50)
+        lfp_sm_transf=shift_model_on_lfp.transform(total_lfp_for_mod)[:, :, 0]
 
-        lin_model_on_lfp.fit(total_lfp_modelfit, iterations=50)
+        lin_model_on_lfp.fit(total_lfp_for_mod, iterations=50)
 
 
         import numpy as np
@@ -270,17 +275,16 @@ for k00 in pitch_shift_or_not:
         lin_model_lfp_plt=np.mean(lin_model_lfp, axis=0)
 
 
-
-        axes[0].set_title("raw lfp (bandpass-filtered)")
-        axes[1].set_title("shift aligned")
-        axes[2].set_title("linear aligned")
-
-        axes[0].set_ylabel("trials")
+        axes2[0].set_title("raw lfp (bandpass-filtered)")
+        axes2[1].set_title("shift aligned")
+        axes2[2].set_title("linear aligned")
+        axes2[0].set_ylabel("trials")
         plt.show()
+
+
         fig, axes = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
         fig.suptitle('LFP for f1815 cruella')
 
-        # Bulbasaur
         sns.lineplot(ax=axes[0], x=lfp_time_crop, y=lfp_np_plt)
         sns.lineplot(ax=axes[1], x=lfp_time_crop, y=shift_model_lfp_plt)
         sns.lineplot(ax=axes[2], x=lfp_time_crop, y=lin_model_lfp_plt)
@@ -290,30 +294,18 @@ for k00 in pitch_shift_or_not:
 
         axes[0].set_ylabel("a.u.")
         plt.show()
+
+
         fractional_shifts_spk_warp=shift_model.fractional_shifts
         fractional_shifts_lfp_warp=shift_model_on_lfp.fractional_shifts
         fig, axes = plt.subplots(1, 1, figsize=(15, 5), sharey=True)
         corrcoeff=scipy.stats.pearsonr(fractional_shifts_spk_warp, fractional_shifts_lfp_warp)
         sns.scatterplot(x=fractional_shifts_spk_warp, y=fractional_shifts_lfp_warp)
         plt.show()
-        #
-        # L = dict(np.load("umi_lfp_data.npz"))
-        #
-        # # Apply bandpass filter.
-        # lfp = bandpass(L["lfp"], LOW_CUTOFF, HIGH_CUTOFF, L["sample_rate"])
-        #
-        # # Crop LFP time base to match spike times.
-        # tidx = (L["lfp_time"] >= TMIN) & (L["lfp_time"] < TMAX)
-        # lfp = lfp[:, tidx]
-        # lfp_time = L["lfp_time"][tidx]
-        #
-        # # Z-score LFP.
-        # lfp -= lfp.mean(axis=1, keepdims=True)
-        # lfp /= lfp.std(axis=1, keepdims=True)
-        #
+
         
         fig2, axes2 = plt.subplots(1, 2, sharey=True, figsize=(10, 3.5))
-        axes2[0].imshow((total_lfp_modelfit), **imkw)
+        axes2[0].imshow((total_lfp_for_mod), **imkw)
         axes2[1].imshow(lfp_sm_transf, **imkw)
 
         axes2[0].set_title("raw lfp (bandpass-filtered)")
@@ -324,8 +316,8 @@ for k00 in pitch_shift_or_not:
 
         fig, axes = plt.subplots(1, 2, figsize=(15, 5), sharey=True)
         fig.suptitle('LFP for f1815 cruella')
-
-        sns.lineplot(ax=axes[0], x=lfp_time_crop, y=np.mean(total_lfp_modelfit[:,:,0], axis=0))
+        plttest=total_lfp_for_mod[:,:,0]
+        sns.lineplot(ax=axes[0], x=lfp_time_crop, y=np.mean(total_lfp_for_mod[:,:,0], axis=0))
         sns.lineplot(ax=axes[1], x=lfp_time_crop, y=np.mean(lfp_sm_transf, axis=0))
         axes[0].set_title("raw lfp (bandpass-filtered)")
         axes[1].set_title("shift aligned-- fit on lfp")
