@@ -200,7 +200,9 @@ for k00 in pitch_shift_or_not:
         tidx = (lfp_time>= start_crop*fs) & (lfp_time <= stoptime_crop*fs)
         total_lfp_np = total_lfp_np[:, tidx]
         #NOTE TO FUTURE SELF, CHANGE LOW PASS AND HIGH PASS HERE:
-        total_lfp_np=bandpass(total_lfp_np, 80, 100, fs)
+        #5,20
+        #in future need to make function to loop this over different bands, e.g. 5-20, 5-30
+        total_lfp_np=bandpass(total_lfp_np, 10, 20, fs)
         
         
         total_lfp_modelfit = total_lfp_modelfit[:,tidx, :]
