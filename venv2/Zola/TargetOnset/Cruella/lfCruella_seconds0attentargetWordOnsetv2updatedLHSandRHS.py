@@ -202,7 +202,8 @@ for k00 in pitch_shift_or_not:
         #NOTE TO FUTURE SELF, CHANGE LOW PASS AND HIGH PASS HERE:
         #5,20
         #in future need to make function to loop this over different bands, e.g. 5-20, 5-30
-        total_lfp_np=bandpass(total_lfp_np, 10, 20, fs)
+        #need to check 15,20 again
+        total_lfp_np=bandpass(total_lfp_np, 5, 50, fs)
         
         
         total_lfp_modelfit = total_lfp_modelfit[:,tidx, :]
