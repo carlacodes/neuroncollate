@@ -335,20 +335,20 @@ for k00 in pitch_shift_or_not:
         for k in range(0, 32):
             print(k)
             chosensite=total_lfp_modelfit[:,:, k]
-            corresp_bp=bandpass(chosensite,  1, 100, fs)
+            corresp_bp=bandpass(chosensite,  1,40, fs)
             total_lfp_modelfit[:,:, k]=corresp_bp
         total_lfp_modelfit/= total_lfp_modelfit.std(axis=2, keepdims=True)
 
-        start = -0.2*1000
-        stoptime = 1.8*1000
-        fs=np.round(24414.0625*(1000/24414))
-        lfp_time = np.linspace(start*fs, stoptime*fs, num=int(fs * (stoptime - start))+1)
-        start_crop = -0.19*1000
-        stoptime_crop = 0.6*1000
+        start = 0
+        stoptime = 2
+        #fs=np.round(24414.0625*(1000/24414))
+        lfp_time = np.linspace(start*fs*1000, stoptime*fs*1000, num=int(fs * (stoptime - start)+1))
+        start_crop = 0*1000
+        stoptime_crop = 0.8*1000
 
         tidx = (lfp_time>= start_crop*fs) & (lfp_time <= stoptime_crop*fs)
         total_lfp_np = total_lfp_np[:, tidx]
-        total_lfp_np=bandpass(total_lfp_np, 1, 100, fs)
+        total_lfp_np=bandpass(total_lfp_np, 1, 30, fs)
         
         
         total_lfp_modelfit = total_lfp_modelfit[:,tidx, :]
@@ -441,8 +441,8 @@ for k00 in pitch_shift_or_not:
 
         axes[0].set_ylabel("a.u.")
         plt.show()
-        fractional_shifts_spk_warp=shift_model.shifts
-        fractional_shifts_lfp_warp=shift_model_on_lfp.shifts
+        fractional_shifts_spk_warp=shift_model.fractional_shifts
+        fractional_shifts_lfp_warp=shift_model_on_lfp.fractional_shifts
         fig, axes = plt.subplots(1, 1, figsize=(15, 5), sharey=True)
         corrcoeff=scipy.stats.pearsonr(fractional_shifts_spk_warp, fractional_shifts_lfp_warp)
         sns.scatterplot(x=fractional_shifts_spk_warp, y=fractional_shifts_lfp_warp)
