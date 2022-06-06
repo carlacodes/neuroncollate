@@ -149,16 +149,6 @@ for k00 in pitch_shift_or_not:
             return filtfilt(b, a, x, axis=axis)
 
 
-        # def butter_bandpass(lowcut, highcut, fs, order=5):
-        #     return butter(order, [lowcut, highcut], fs=fs, btype='band')
-        #
-        #
-        # def butter_bandpass_filter(data, lowcut, highcut, fs, order=5, axis=-1):
-        #     b, a = butter_bandpass(lowcut, highcut, fs, order=order)
-        #     y = lfilter(b, a, data, axis=axis)
-        #     return y
-        #
-
 
         # Fit to binned spike times.
         [shift_model, lin_model]=disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInterest2)
@@ -168,25 +158,23 @@ for k00 in pitch_shift_or_not:
         fs=np.round(24414.0625*(1000/24414))
 
         ##making copy, z-scoring, then getting model fit
-        total_lfp_modelfit=(np.array(total_lfp))
-        #repeating S6 word for word, so I need to take the mean across channels and then add an extra dimension to make one "unit" for the spikedata object.
+        # total_lfp_modelfit=(np.array(total_lfp))
+        # #repeating S6 word for word, so I need to take the mean across channels and then add an extra dimension to make one "unit" for the spikedata object.
+        #
+        #
+        # # for k in range(0, 32):
+        # #     print(k)
+        # #     chosensite=total_lfp_modelfit[:,:, k]
+        # #     corresp_bp=bandpass(chosensite,  1,10, fs)
+        # #     total_lfp_modelfit[:,:, k]=corresp_bp
+        #
+        # total_lfp_modelfit=np.mean(total_lfp_modelfit, axis=2)
+        #
+        # total_lfp_modelfit /= total_lfp_modelfit.std(axis=(1), keepdims=True)
 
 
-        for k in range(0, 32):
-            print(k)
-            chosensite=total_lfp_modelfit[:,:, k]
-            corresp_bp=bandpass(chosensite,  1,10, fs)
-            total_lfp_modelfit[:,:, k]=corresp_bp
 
-        total_lfp_modelfit=np.mean(total_lfp_modelfit, axis=2)
-
-        total_lfp_modelfit /= total_lfp_modelfit.std(axis=(1), keepdims=True)
-
-
-        plt.plot( total_lfp_modelfit)
-        plt.title('Bandpassed and z-scored LFP')
-        plt.show()
-        total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
+        # total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
 
 
 
@@ -203,10 +191,10 @@ for k00 in pitch_shift_or_not:
         #5,20
         #in future need to make function to loop this over different bands, e.g. 5-20, 5-30
         #need to check 15,20 again
-        total_lfp_np=bandpass(total_lfp_np, 2, 10, fs)
+        #total_lfp_np=bandpass(total_lfp_np, 2, 10, fs)
         
         
-        total_lfp_modelfit = total_lfp_modelfit[:,tidx, :]
+
         lfp_time_crop = lfp_time[tidx]
 
         total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
