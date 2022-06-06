@@ -153,7 +153,6 @@ for k00 in pitch_shift_or_not:
         # Fit to binned spike times.
         [shift_model, lin_model]=disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInterest2)
         total_lfp_np=(np.array(total_lfp))
-        total_lfp_np=np.mean(total_lfp_np, axis=2)
 
         fs=np.round(24414.0625*(1000/24414))
 
@@ -162,15 +161,19 @@ for k00 in pitch_shift_or_not:
         # #repeating S6 word for word, so I need to take the mean across channels and then add an extra dimension to make one "unit" for the spikedata object.
         #
         #
-        # # for k in range(0, 32):
-        # #     print(k)
-        # #     chosensite=total_lfp_modelfit[:,:, k]
-        # #     corresp_bp=bandpass(chosensite,  1,10, fs)
-        # #     total_lfp_modelfit[:,:, k]=corresp_bp
-        #
-        # total_lfp_modelfit=np.mean(total_lfp_modelfit, axis=2)
-        #
-        # total_lfp_modelfit /= total_lfp_modelfit.std(axis=(1), keepdims=True)
+        def bandpass_by_site(data, lowcut, highcut):
+            for k in range(0, 32):
+                print(k)
+                chosensite=data[:,:, k]
+                corresp_bp=bandpass(chosensite,  lowcut,highcut, fs)
+                data[:,:, k]=corresp_bp
+            return data
+
+
+        total_lfp_np=bandpass_by_site(total_lfp_np, 1, 7)
+
+        total_lfp_np=np.mean(total_lfp_np, axis=2)
+
 
 
 
@@ -191,7 +194,7 @@ for k00 in pitch_shift_or_not:
         #5,20
         #in future need to make function to loop this over different bands, e.g. 5-20, 5-30
         #need to check 15,20 again
-        #total_lfp_np=bandpass(total_lfp_np, 2, 10, fs)
+        total_lfp_np=bandpass(total_lfp_np, 1, 20, fs)
         
         
 
@@ -287,8 +290,14 @@ for k00 in pitch_shift_or_not:
         plt.show()
 
 
+
         fractional_shifts_spk_warp=shift_model.fractional_shifts
+
+        # fractional_shifts_lfp_warp_idx=shift_model_on_lfp.fractional_shifts>=0
+        # fractional_shifts_lfp_warp=shift_model_on_lfp.fractional_shifts[fractional_shifts_spk_warp_idx]
         fractional_shifts_lfp_warp=shift_model_on_lfp.fractional_shifts
+
+
         fig, axes = plt.subplots(1, 1, figsize=(15, 5), sharey=True)
         corrcoeff=scipy.stats.pearsonr(fractional_shifts_spk_warp, fractional_shifts_lfp_warp)
         sns.scatterplot(x=fractional_shifts_spk_warp, y=fractional_shifts_lfp_warp)
