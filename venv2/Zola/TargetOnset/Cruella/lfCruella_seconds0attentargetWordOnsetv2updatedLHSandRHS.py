@@ -170,12 +170,14 @@ for k00 in pitch_shift_or_not:
             return data
 
 
-        total_lfp_np=bandpass_by_site(total_lfp_np, 1, 7)
+        # NOTE TO FUTURE SELF, CHANGE LOW PASS AND HIGH PASS HERE:
+        # 5,20
+        # in future need to make function to loop this over different bands, e.g. 5-20, 5-30
+        # need to check 15,20 again
 
-        total_lfp_np=np.mean(total_lfp_np, axis=2)
+        total_lfp_np=bandpass_by_site(total_lfp_np, 2, 12)
 
-
-
+        #total_lfp_np=np.mean(total_lfp_np, axis=2)
 
         # total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
 
@@ -189,23 +191,19 @@ for k00 in pitch_shift_or_not:
         stoptime_crop = 0.8*1000
 
         tidx = (lfp_time>= start_crop*fs) & (lfp_time <= stoptime_crop*fs)
-        total_lfp_np = total_lfp_np[:, tidx]
-        #NOTE TO FUTURE SELF, CHANGE LOW PASS AND HIGH PASS HERE:
-        #5,20
-        #in future need to make function to loop this over different bands, e.g. 5-20, 5-30
-        #need to check 15,20 again
-        total_lfp_np=bandpass(total_lfp_np, 1, 20, fs)
-        
+        total_lfp_np = total_lfp_np[:, tidx, :]
+
         
 
         lfp_time_crop = lfp_time[tidx]
 
-        total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
+        total_lfp_np /= total_lfp_np.std(axis=(1,2), keepdims=True)
 
         shift_model_lfp=shift_model.transform(total_lfp_np)[:, :, 0]
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
 
-        total_lfp_for_mod=total_lfp_np[:,:, np.newaxis]
+        #total_lfp_for_mod=total_lfp_np[:,:, np.newaxis]
+        total_lfp_for_mod=total_lfp_np
 
 
         SHIFT_SMOOTHNESS_REG = 0.5
@@ -244,7 +242,7 @@ for k00 in pitch_shift_or_not:
 
         fig, axes = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
 
-        axes[0].imshow(total_lfp_np, **imkw)
+        axes[0].imshow(np.mean(total_lfp_for_mod, axis=2), **imkw)
         axes[1].imshow(shift_model_lfp, **imkw)
         axes[2].imshow(lin_model_lfp, **imkw)
 
