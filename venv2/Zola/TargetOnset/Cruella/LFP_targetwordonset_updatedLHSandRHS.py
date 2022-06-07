@@ -8,6 +8,7 @@ import scipy.io as rd
 import mat73
 import seaborn as sns
 import scipy
+import pandas as pd
 from scipy.signal import butter, lfilter
 from func_spikes_targetonset import *
 
@@ -15,6 +16,7 @@ f={}
 blockData={}
 
 left_hand_or_right=['BB2BB3']
+#ferret ID:
 fid='F1702_Zola_Nellie'
 fid='F1815_Cruella'
 pitch_shift_or_not=['correctresp']
@@ -151,7 +153,7 @@ for k00 in pitch_shift_or_not:
 
 
         # Fit to binned spike times.
-        [shift_model, lin_model]=disgustingly_long_func2(pitch_shift_or_not, left_hand_or_right, blocksOfInterest2, fid)
+        [shift_model, lin_model, data2, cropped_data2]=disgustingly_long_func2(pitch_shift_or_not, left_hand_or_right, blocksOfInterest2, fid)
         total_lfp_np=(np.array(total_lfp))
 
         fs=np.round(24414.0625*(1000/24414))
@@ -337,6 +339,43 @@ for k00 in pitch_shift_or_not:
         sns.lineplot(ax=axes[0], x=lfp_time_crop, y=np.mean(total_lfp_for_mod[:, :, 3], axis=0))
         sns.lineplot(ax=axes[1], x=lfp_time_crop, y=lfp_np_plt)
         plt.show()
+
+
+        def crosscorr(datax, datay, lag=0, wrap=False):
+            """ Lag-N cross correlation.
+            Shifted data filled with NaNs
+
+            Parameters
+            ----------
+            lag : int, default 0
+            datax, datay : pandas.Series objects of equal length
+            Returns
+            ----------
+            crosscorr : float
+            """
+            if wrap:
+                shiftedy = datay.shift(lag)
+                shiftedy.iloc[:lag] = datay.iloc[-lag:].values
+                return datax.corr(shiftedy)
+            else:
+                return datax.corr(datay.shift(lag))
+
+
+        d1 = pd.DataFrame(cropped_data2.fractional_spiketimes)
+        d2 = pd.DataFrame(np.mean(total_lfp_np, axis=2))
+        seconds = 0.8
+        fps = 1000
+        rs = [crosscorr(d1, d2, lag) for lag in range(-int(seconds * fps), int(seconds * fps + 1))]
+        offset = np.floor(len(rs) / 2) - np.argmax(rs)
+        f, ax = plt.subplots(figsize=(14, 3))
+        ax.plot(rs)
+        ax.axvline(np.ceil(len(rs) / 2), color='k', linestyle='--', label='Center')
+        ax.axvline(np.argmax(rs), color='r', linestyle='--', label='Peak synchrony')
+        ax.set(title=f'Offset = {offset} frames\nS1 leads <> S2 leads', ylim=[.1, .31], xlim=[0, 301], xlabel='Offset',
+               ylabel='Pearson r')
+        # ax.set_xticks([0, 50, 100, 151, 201, 251, 301])
+        # ax.set_xticklabels([-150, -100, -50, 0, 50, 100, 150]);
+        plt.legend()
 
 
 

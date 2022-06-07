@@ -417,4 +417,4 @@ def disgustingly_long_func2(pitch_shift_or_not, left_hand_or_right, blocksOfInte
             # np.save(os.path.join(BASE_PATH2, 'april042022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
             # np.save(os.path.join(BASE_PATH2, 'april042022OriginalModeltrialIDsPS'), cropped_data2["trials"])
 
-            return shift_model, lin_model
+            return shift_model, lin_model, data2, cropped_data2
