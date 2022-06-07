@@ -62,24 +62,10 @@ for k00 in pitch_shift_or_not:
         blocksOfInterest2 = list(blocksOfInterest2)
 
         searchstring = 'Arrays'  # input('What word are you trying to find?')
-        # for fname in directory:
-        #     if searchstring in fname:
-        #         # Full path
-        #         f[i] = h5py.File(user_input + os.sep + fname)
-        #         items = f[i].items()
-        #         arrays = {}
-        #         for k3, v3 in f[i].items():
-        #             newarray3 = np.array(v3)
-        #             newarrayremove3 = newarray3[0, :]
-        #             arrays[k3] = newarrayremove3
-        #         blockData[i] = arrays
-        #
-        #         f[i].close()
+
 
         TMIN = 0 * 1000  # s
-        # TMAX = 0.8*1000 # s
-        # BINSIZE = 0.01*1000  # 10 ms
-        # NBINS = int((TMAX - TMIN) / BINSIZE)
+
 
         TMIN2 = 0
         TMAX2 = 1.2;  # I made the maximum trial length 1.2 seconds
@@ -215,14 +201,8 @@ for k00 in pitch_shift_or_not:
 
         #total_lfp_np=lowpass_by_site(total_lfp_np, 7)
         total_lfp_np=bandpass_by_site(total_lfp_np, 5, 9, 1000)
-
-
         #total_lfp_np=np.mean(total_lfp_np, axis=2)
-
         # total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
-
-
-
         start = 0
         stoptime = 2
         #fs=np.round(24414.0625*(1000/24414))
@@ -321,9 +301,9 @@ for k00 in pitch_shift_or_not:
         sns.lineplot(ax=axes[0], x=lfp_time_crop, y=lfp_np_plt)
         sns.lineplot(ax=axes[1], x=lfp_time_crop, y=shift_model_lfp_plt)
         sns.lineplot(ax=axes[2], x=lfp_time_crop, y=lin_model_lfp_plt)
-        axes[0].set_title("raw lfp (bandpass-filtered)")
-        axes[1].set_title("shift aligned")
-        axes[2].set_title("linear aligned")
+        axes[0].set_title("raw, normalised lfp (bandpass-filtered, then z-scored) "+ fid)
+        axes[1].set_title("shift aligned on normalised LFP")
+        axes[2].set_title("linear aligned on normalised LFP")
 
         axes[0].set_ylabel("a.u.")
         axes[0].set_xlabel("raw time values")
@@ -342,7 +322,7 @@ for k00 in pitch_shift_or_not:
         fig, axes = plt.subplots(1, 1, figsize=(15, 5), sharey=True)
         corrcoeff=scipy.stats.pearsonr(fractional_shifts_spk_warp, fractional_shifts_lfp_warp)
         sns.scatterplot(x=fractional_shifts_spk_warp, y=fractional_shifts_lfp_warp)
-        plt.title('fractional shifts of spike model vs. lfp model')
+        plt.title('fractional shifts of spike model vs. lfp model, '+fid)
         plt.xlabel('Spike model fractional shifts')
         plt.ylabel('LFP model fractional shifts')
         plt.show()
@@ -352,7 +332,7 @@ for k00 in pitch_shift_or_not:
         axes2[0].imshow(np.mean(total_lfp_for_mod, axis=2), **imkw)
         axes2[1].imshow(lfp_sm_transf, **imkw)
 
-        axes2[0].set_title("raw lfp (bandpass-filtered)")
+        axes2[0].set_title("raw lfp (bandpass-filtered and then z-scored) "+fid)
         axes2[1].set_title("shift aligned, fit on lfp")
 
         axes2[0].set_ylabel("trials")
@@ -363,8 +343,8 @@ for k00 in pitch_shift_or_not:
         plttest=total_lfp_for_mod[:,:,0]
         sns.lineplot(ax=axes[0], x=lfp_time_crop, y=lfp_np_plt)
         sns.lineplot(ax=axes[1], x=lfp_time_crop, y=np.mean(lfp_sm_transf, axis=0))
-        axes[0].set_title("raw lfp (bandpass-filtered)")
-        axes[1].set_title("shift aligned-- fit on lfp")
+        axes[0].set_title("raw lfp (bandpass-filtered) "+fid)
+        axes[1].set_title("shift aligned-- fit on lfp " + fid)
 
 
         axes[0].set_ylabel("a.u.")
