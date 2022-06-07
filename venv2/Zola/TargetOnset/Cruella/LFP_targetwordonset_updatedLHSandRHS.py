@@ -70,12 +70,6 @@ for k00 in pitch_shift_or_not:
         TMIN = 0 * 1000  # s
 
 
-        TMIN2 = 0
-        TMAX2 = 1.2;  # I made the maximum trial length 1.2 seconds
-        # LFP parameters.
-        LOW_CUTOFF = 10  # Hz
-        HIGH_CUTOFF = 30  # Hz
-
         # Hyperparameters for shift-only warping model.
         SHIFT_SMOOTHNESS_REG = 0.5
         SHIFT_WARP_REG = 1e-2
@@ -90,19 +84,8 @@ for k00 in pitch_shift_or_not:
 
         #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
         TMAX =0.8*1000#max(combinedLickReleaseTimes) # s
-        BINSIZE = 0.01*1000  # 10 ms
-        NBINS = int((TMAX - TMIN) / BINSIZE)
-        TMINz=0.2*1000;
-        TMAXz =0.29*1000#max(combinedLickReleaseTimes) # s
-        BINSIZEz = 0.001*1000 #0.001*1000  # 10 ms
-        NBINSz = int((TMAXz - TMINz) / BINSIZEz)
 
-        TMINzb=0.0*1000;
-        TMAXzb =0.09*1000#max(combinedLickReleaseTimes) # s
-        BINSIZEzb = 0.001*1000 #0.001*1000  # 10 ms
-        NBINSzb = int((TMAXzb - TMINzb) / BINSIZEzb)
-
-        L = dict(np.load("umi_lfp_data.npz"))
+        L = dict(np.load("umi_lfp_data.npz")) #for checking example data structure
         #
         # # Define bandpass filtering function for LFP
         import scipy.signal as signal
