@@ -11,7 +11,6 @@ import scipy
 from scipy.signal import butter, lfilter
 from func_spikes_targetonset import *
 
-#user_input = input('What is the name of your directory')
 f={}
 blockData={}
 
@@ -31,7 +30,6 @@ for k00 in pitch_shift_or_not:
         for i in blocksOfInterest:
             user_input = 'D:/Electrophysiological_Data/'+fid+'/LFP_BlockNellie-' + str(
                 i) + '/targetword//orderingbyLRtime/' + k00 + '/' + k0 + '/'
-            # directory = os.listdir(user_input)
 
             searchstring = 'Arrays'  # input('What word are you trying to find?')
             if os.path.isdir(user_input) is False:
