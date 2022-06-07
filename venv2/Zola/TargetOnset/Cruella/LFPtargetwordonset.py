@@ -360,12 +360,12 @@ for k00 in pitch_shift_or_not:
                 print(shiftedy)
                 return datax.corr(shiftedy)
             else:
-                print('lag:')
-                print(lag)
+
                 print('data y shift:')
                 # datax['newy']=datay.shift(lag)
                 # print(datax.corr())
                 # datax.corrwith(datay.shift(lag), axis=0)
+                print(datay.shift(lag))
 
                 return datax.corrwith(datay.shift(lag), axis=0)
 
@@ -385,7 +385,7 @@ for k00 in pitch_shift_or_not:
 
         window = 10
         # lags = np.arange(-(fs), (fs), 1)  # uncontrained
-        lags = np.arange(-(200), (200), 1)  # contrained
+        lags = np.arange(-(400), (400), 1)  # contrained
         rs = np.nan_to_num([crosscorr(d1, d2, lag) for lag in lags])
 
         print(
@@ -398,7 +398,7 @@ for k00 in pitch_shift_or_not:
         ax.plot(rs)
         ax.axvline(np.ceil(len(rs) / 2), color='k', linestyle='--', label='Center')
         ax.axvline(np.argmax(rs), color='r', linestyle='--', label='Peak synchrony')
-        ax.set(title=f'Offset = {offset} frames\nS1 leads <> S2 leads', xlabel='Offset',
+        ax.set(title=f'Offset = {offset} frames\n Spike activity leads <> LFP activity leads', xlabel='Offset',
                ylabel='Pearson r')
         # ax.set_xticks([0, 50, 100, 151, 201, 251, 301])
         # ax.set_xticklabels([-150, -100, -50, 0, 50, 100, 150]);
