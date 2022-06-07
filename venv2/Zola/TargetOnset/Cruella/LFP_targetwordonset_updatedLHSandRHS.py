@@ -17,9 +17,12 @@ blockData={}
 
 left_hand_or_right=['BB2BB3']
 fid='F1702_Zola_Nellie'
+fid='F1815_Cruella'
 pitch_shift_or_not=['correctresp']
 for k00 in pitch_shift_or_not:
-    blocksOfInterest = list(range(155,165))
+   # blocksOfInterest = list(range(155,165))
+    blocksOfInterest = [92,93,94,95,96,97,98,99,100,101,102]
+
 
     blocksOfInterest2 = []
     f = {}
@@ -200,7 +203,7 @@ for k00 in pitch_shift_or_not:
         # need to check 15,20 again
 
         #total_lfp_np=lowpass_by_site(total_lfp_np, 7)
-        total_lfp_np=bandpass_by_site(total_lfp_np, 5, 9, 1000)
+        total_lfp_np=bandpass_by_site(total_lfp_np, 1, 9, 1000)
         #total_lfp_np=np.mean(total_lfp_np, axis=2)
         # total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
         start = 0
