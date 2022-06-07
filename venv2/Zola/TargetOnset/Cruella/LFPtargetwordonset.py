@@ -385,6 +385,8 @@ for k00 in pitch_shift_or_not:
 
         window = 10
         # lags = np.arange(-(fs), (fs), 1)  # uncontrained
+        #make half or less of the timeseries shifted array have resulting NAN values or else this will return NONSENSICAL results
+
         lags = np.arange(-(400), (400), 1)  # contrained
         rs = np.nan_to_num([crosscorr(d1, d2, lag) for lag in lags])
 
