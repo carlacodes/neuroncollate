@@ -202,7 +202,6 @@ for k00 in pitch_shift_or_not:
         # in future need to make function to loop this over different bands, e.g. 5-20, 5-30
         # need to check 15,20 again
 
-        #total_lfp_np=lowpass_by_site(total_lfp_np, 7)
         total_lfp_np=bandpass_by_site(total_lfp_np, 1, 9, 1000)
         #total_lfp_np=np.mean(total_lfp_np, axis=2)
         # total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
