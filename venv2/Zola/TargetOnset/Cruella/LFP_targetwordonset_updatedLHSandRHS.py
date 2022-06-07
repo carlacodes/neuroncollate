@@ -9,24 +9,24 @@ import mat73
 import seaborn as sns
 import scipy
 from scipy.signal import butter, lfilter
-from func_Cruella_seconds0attentargetWordOnsetv2updatedLHSandRHS import *
+from func_spikes_targetonset import *
 
 #user_input = input('What is the name of your directory')
 f={}
 blockData={}
 
-left_hand_or_right=['BB4BB5']
-
+left_hand_or_right=['BB2BB3']
+fid='F1702_Zola_Nellie'
 pitch_shift_or_not=['correctresp']
 for k00 in pitch_shift_or_not:
-    blocksOfInterest = [92,93,94,95,96,97,98,99,100,101,102]
+    blocksOfInterest = list(range(155,165))
 
     blocksOfInterest2 = []
     f = {}
     blockData = {}
     for k0 in left_hand_or_right:
         for i in blocksOfInterest:
-            user_input = 'D:/Electrophysiological_Data/F1815_Cruella/LFP_BlockNellie-' + str(
+            user_input = 'D:/Electrophysiological_Data/'+fid+'/LFP_BlockNellie-' + str(
                 i) + '/targetword//orderingbyLRtime/' + k00 + '/' + k0 + '/'
             # directory = os.listdir(user_input)
 
@@ -181,7 +181,7 @@ for k00 in pitch_shift_or_not:
 
 
         # Fit to binned spike times.
-        [shift_model, lin_model]=disgustingly_long_func(pitch_shift_or_not, left_hand_or_right, blocksOfInterest2)
+        [shift_model, lin_model]=disgustingly_long_func2(pitch_shift_or_not, left_hand_or_right, blocksOfInterest2, fid)
         total_lfp_np=(np.array(total_lfp))
 
         fs=np.round(24414.0625*(1000/24414))
@@ -316,7 +316,7 @@ for k00 in pitch_shift_or_not:
 
 
         fig, axes = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
-        fig.suptitle('LFP for f1815 cruella')
+        fig.suptitle('LFP for'+fid)
 
         sns.lineplot(ax=axes[0], x=lfp_time_crop, y=lfp_np_plt)
         sns.lineplot(ax=axes[1], x=lfp_time_crop, y=shift_model_lfp_plt)
