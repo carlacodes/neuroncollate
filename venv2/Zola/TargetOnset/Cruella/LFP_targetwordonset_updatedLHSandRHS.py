@@ -185,7 +185,7 @@ for k00 in pitch_shift_or_not:
         # in future need to make function to loop this over different bands, e.g. 5-20, 5-30
         # need to check 15,20 again
 
-        total_lfp_np=bandpass_by_site(total_lfp_np, 1, 9, 1000)
+        total_lfp_np=bandpass_by_site(total_lfp_np, 5, 9, 1000)
         #total_lfp_np=np.mean(total_lfp_np, axis=2)
         # total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
         start = 0
@@ -361,11 +361,17 @@ for k00 in pitch_shift_or_not:
                 return datax.corr(datay.shift(lag))
 
 
-        d1 = pd.DataFrame(cropped_data2.fractional_spiketimes)
-        d2 = pd.DataFrame(np.mean(total_lfp_np, axis=2))
+        d1 = (cropped_data2.spiketimes)
+        [hist_d1, bin_edges]=np.histogram(d1, bins=801, range=None, normed=None, weights=None, density=None)
+        d1=pd.DataFrame(hist_d1)
+        plt.plot(hist_d1)
+        plt.plot(d2)
+        plt.show()
+        ##need to do hiscounts of spike times across 800 ms with number of bins
+        d2 =pd.DataFrame(np.mean(np.mean(total_lfp_np, axis=2), axis=0))
         seconds = 0.8
         fps = 1000
-        rs = [crosscorr(d1, d2, lag) for lag in range(-int(seconds * fps), int(seconds * fps + 1))]
+        rs = [crosscorr(d1, d2, lag) for lag in range(0, int(seconds * fps + 1))]
         offset = np.floor(len(rs) / 2) - np.argmax(rs)
         f, ax = plt.subplots(figsize=(14, 3))
         ax.plot(rs)
@@ -376,6 +382,7 @@ for k00 in pitch_shift_or_not:
         # ax.set_xticks([0, 50, 100, 151, 201, 251, 301])
         # ax.set_xticklabels([-150, -100, -50, 0, 50, 100, 150]);
         plt.legend()
+        plt.show()
 
 
 
