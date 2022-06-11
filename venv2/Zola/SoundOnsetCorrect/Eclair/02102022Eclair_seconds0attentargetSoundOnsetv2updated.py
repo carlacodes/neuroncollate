@@ -12,7 +12,7 @@ blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
 blocksOfInterest=[29,31,32,33,34,36,37,39,40 ]
 for i in blocksOfInterest:
-    user_input = 'D:/Electrophysiological Data/F1902_Eclair/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/withmisses2sBB2BB3'
+    user_input = 'D:/Electrophysiological_Data/F1902_Eclair/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/withmisses2sBB2BB3'
     directory = os.listdir(user_input)
 
     searchstring = 'Arrays'#input('What word are you trying to find?')

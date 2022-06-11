@@ -31,7 +31,7 @@ for k00 in pitch_shift_or_not:
     for k0 in left_hand_or_right:
         for i in blocksOfInterest:
             user_input = 'D:/Electrophysiological_Data/'+fid+'/LFP_BlockNellie-' + str(
-                i) + '/targetword//orderingbyLRtime/' + k00 + '/' + k0 + '/'
+                i) + '/noepoch/' + '/' + k0 + '/'
 
             searchstring = 'Arrays'  # input('What word are you trying to find?')
             if os.path.isdir(user_input) is False:
