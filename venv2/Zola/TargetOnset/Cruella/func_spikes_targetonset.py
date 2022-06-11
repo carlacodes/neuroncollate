@@ -32,7 +32,7 @@ def disgustingly_long_func2(pitch_shift_or_not, left_hand_or_right, blocksOfInte
         for k0 in left_hand_or_right:
             for i in blocksOfInterest:
                 user_input = 'D:/Electrophysiological_Data/'+fid+'/HP_BlockNellie-' + str(
-                    i) + '/targetword//orderingbyLRtime/' + k00 + '/' + k0 + '/'
+                    i) + '/noepoch/' + k0 + '/'
                 print(user_input)
                 # directory = os.listdir(user_input)
 

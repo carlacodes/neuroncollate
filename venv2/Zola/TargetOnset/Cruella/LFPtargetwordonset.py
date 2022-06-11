@@ -23,6 +23,7 @@ pitch_shift_or_not=['correctresp']
 for k00 in pitch_shift_or_not:
    # blocksOfInterest = list(range(155,165))
     blocksOfInterest = [92,93,94,95,96,97,98,99,100,101,102]
+    blocksOfInterest=list(range(92,112))
 
 
     blocksOfInterest2 = []
@@ -185,11 +186,11 @@ for k00 in pitch_shift_or_not:
         # in future need to make function to loop this over different bands, e.g. 5-20, 5-30
         # need to check 15,20 again
 
-        total_lfp_np=bandpass_by_site(total_lfp_np, 5, 9, 1000)
+        #total_lfp_np=bandpass_by_site(total_lfp_np, 5, 9, 1000)
         #total_lfp_np=np.mean(total_lfp_np, axis=2)
         # total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
         start = 0
-        stoptime = 2
+        stoptime = 5
         #fs=np.round(24414.0625*(1000/24414))
         lfp_time = np.linspace(start*fs*1000, stoptime*fs*1000, num=int(fs * (stoptime - start)+1))
         start_crop = 0*1000
@@ -387,7 +388,7 @@ for k00 in pitch_shift_or_not:
         # lags = np.arange(-(fs), (fs), 1)  # uncontrained
         #make half or less of the timeseries shifted array have resulting NAN values or else this will return NONSENSICAL results
 
-        lags = np.arange(-(100), (100), 1)  # contrained
+        lags = np.arange(-(200), (200), 1)  # contrained
         rs = np.nan_to_num([crosscorr(d1, d2, lag) for lag in lags])
 
         print(
