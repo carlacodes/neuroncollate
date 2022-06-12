@@ -187,7 +187,7 @@ for k00 in pitch_shift_or_not:
         # in future need to make function to loop this over different bands, e.g. 5-20, 5-30
         # need to check 15,20 again
 
-        #total_lfp_np=bandpass_by_site(total_lfp_np, 5, 9, 1000)
+        #total_lfp_np=bandpass_by_site(total_lfp_np, 1, 50, 1000)
         #total_lfp_np=np.mean(total_lfp_np, axis=2)
         # total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
         start = 0
@@ -205,7 +205,7 @@ for k00 in pitch_shift_or_not:
         lfp_time_crop = lfp_time[tidx]
         stddevcalc= total_lfp_np.std(axis=(1), keepdims=True)
 
-        total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
+        #total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
 
         shift_model_lfp=shift_model.transform(total_lfp_np)[:, :, 0]
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
@@ -271,16 +271,38 @@ for k00 in pitch_shift_or_not:
 
         N = 801
         # sample spacing
-        T = 1.0 / 800.0
+        T = 1.0 / 200.0
         x = np.linspace(0.0, N * T, N, endpoint=False)
         y = np.mean(np.mean(total_lfp_np, axis=2), axis=0)
         yf = fft(y)
         xf = fftfreq(N, T)[:N // 2]
-        import matplotlib.pyplot as plt
 
         plt.plot(xf, 2.0 / N * np.abs(yf[0:N // 2]))
         plt.grid()
         plt.title('FFT of LFP, trial averaged')
+        plt.xlabel('Frequency')
+        plt.xlim((0.01,20))
+        plt.xticks(np.arange(0.01, 20, step=1), rotation=45)  # Set label locations.
+
+        plt.show()
+
+        N = 801
+        # sample spacing
+        T = 1.0 / 200.0
+        x = np.linspace(0.0, N * T, N, endpoint=False)
+        y = np.mean(shift_model_lfp, axis=0)
+        yf = fft(y)
+        xf = fftfreq(N, T)[:N // 2]
+
+
+        plt.plot(xf, 2.0 / N * np.abs(yf[0:N // 2]))
+        plt.grid()
+        plt.title('FFT of LFP shift model, trial averaged')
+        plt.xlabel('Frequency')
+        plt.xlim((0.01,20))
+        plt.xticks(np.arange(0.01, 20, step=1), rotation=45)  # Set label locations.
+
+
         plt.show()
 
         fig2, axes2 = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
