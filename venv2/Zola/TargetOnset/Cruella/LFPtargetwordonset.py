@@ -9,6 +9,7 @@ import mat73
 import seaborn as sns
 import scipy
 import pandas as pd
+from scipy.fft import fft, fftfreq
 from scipy.signal import butter, lfilter
 from func_spikes_targetonset import *
 
@@ -266,6 +267,20 @@ for k00 in pitch_shift_or_not:
             ax.set_xlabel("time (ms)")
 
         fig.tight_layout()
+        plt.show()
+
+        N = 801
+        # sample spacing
+        T = 1.0 / 800.0
+        x = np.linspace(0.0, N * T, N, endpoint=False)
+        y = np.mean(np.mean(total_lfp_np, axis=2), axis=0)
+        yf = fft(y)
+        xf = fftfreq(N, T)[:N // 2]
+        import matplotlib.pyplot as plt
+
+        plt.plot(xf, 2.0 / N * np.abs(yf[0:N // 2]))
+        plt.grid()
+        plt.title('FFT of LFP, trial averaged')
         plt.show()
 
         fig2, axes2 = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
