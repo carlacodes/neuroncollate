@@ -187,7 +187,7 @@ for k00 in pitch_shift_or_not:
         # in future need to make function to loop this over different bands, e.g. 5-20, 5-30
         # need to check 15,20 again
 
-        #total_lfp_np=bandpass_by_site(total_lfp_np, 1, 50, 1000)
+        #total_lfp_np=bandpass_by_site(total_lfp_np, 1*1000, 20*1000, 1000)
         #total_lfp_np=np.mean(total_lfp_np, axis=2)
         # total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
         start = 0
@@ -207,7 +207,7 @@ for k00 in pitch_shift_or_not:
 
         #total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
 
-        shift_model_lfp=shift_model.transform(total_lfp_np)[:, :, 0]
+        shift_model_lfp=shift_model.transform(total_lfp_np)
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
 
         #total_lfp_for_mod=total_lfp_np[:,:, np.newaxis]
@@ -251,7 +251,7 @@ for k00 in pitch_shift_or_not:
         fig, axes = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
 
         axes[0].imshow(np.mean(total_lfp_for_mod, axis=2), **imkw)
-        axes[1].imshow(shift_model_lfp, **imkw)
+        axes[1].imshow(np.mean(total_lfp_for_mod, axis=2), **imkw)
         axes[2].imshow(lin_model_lfp, **imkw)
 
         axes[0].set_title("raw lfp (bandpass-filtered and then z-scored)")
@@ -273,49 +273,83 @@ for k00 in pitch_shift_or_not:
         # sample spacing
         T = 1.0 / 200.0
         x = np.linspace(0.0, N * T, N, endpoint=False)
+
         y = np.mean(np.mean(total_lfp_np, axis=2), axis=0)
+        y=scipy.signal.detrend((y))
         yf = fft(y)
         xf = fftfreq(N, T)[:N // 2]
 
-        plt.plot(xf, 2.0 / N * np.abs(yf[0:N // 2]))
+        from scipy.signal import blackman
+
+        w = blackman(N)
+        ywf = fft(y * w)
+        xf = fftfreq(N, T)[:N // 2]
+
+        plt.plot(xf, 2.0 / N * np.abs(yf[0:N // 2]), label='de-trended only')
+        plt.plot(xf, 2.0 / N * np.abs(ywf[0:N // 2]), label='detrended, with blackman window')
+
         plt.grid()
-        plt.title('FFT of LFP, trial averaged')
+        plt.title('FFT of LFP, trial averaged, de-trended')
         plt.xlabel('Frequency')
-        plt.xlim((0.01,20))
-        plt.xticks(np.arange(0.01, 20, step=1), rotation=45)  # Set label locations.
+        plt.xlim((0,20))
+        plt.xticks(np.arange(0, 20, step=1), rotation=45)  # Set label locations.
+        plt.legend()
 
         plt.show()
+        
+        def fft_with_window(signalx, N, T):
+            signal_fft_grid=np.empty(((shift_model_lfp).shape[0],(shift_model_lfp).shape[1],(shift_model_lfp).shape[2]), dtype = "complex_")
+            for i in range(0, (shift_model_lfp).shape[2]):
+                selected_unit = shift_model_lfp[:, :, i]
+                print(selected_unit.shape)
+
+                for ii in range(0, shift_model_lfp.shape[0]):
+                    selected_trial_ofunit=selected_unit[ii,:]
+                    print(selected_trial_ofunit.shape)
+                    y = selected_trial_ofunit
+                    y=scipy.signal.detrend((y), type='constant')
+
+                    w = blackman(N)
+                    ywf = fft(y * w)
+                    xf = fftfreq(N, T)[:N // 2]
+                    signal_fft_grid[ii,:, i]=ywf
+
+            return signal_fft_grid
 
         N = 801
         # sample spacing
         T = 1.0 / 200.0
+        shift_model_lfp_forfft=scipy.signal.detrend((shift_model_lfp), type='constant')
+        signal_in_grid=fft_with_window(shift_model_lfp_forfft, 801, T)
         x = np.linspace(0.0, N * T, N, endpoint=False)
-        y = np.mean(shift_model_lfp, axis=0)
-        yf = fft(y)
-        xf = fftfreq(N, T)[:N // 2]
+        y = np.mean(np.mean(signal_in_grid, axis=2),axis=0)
 
+        #y = np.mean(signal_in_grid[:,:,2],axis=0)
 
-        plt.plot(xf, 2.0 / N * np.abs(yf[0:N // 2]))
+       # y=scipy.signal.detrend((y), type='constant')
+
+        # yf = fft(y)
+        # xf = fftfreq(N, T)[:N // 2]
+        # 
+        # w = blackman(N)
+        # ywf = fft(y * w)
+        # xf = fftfreq(N, T)[:N // 2]
+
+        plt.plot(xf,  2.0 / N * np.abs(y[0:N // 2]), label='windowed only')
+
         plt.grid()
-        plt.title('FFT of LFP shift model, trial averaged')
+        plt.title('FFT of LFP shift model, blackman window then fft taken per unit per trial, then trial averaged, de-trended')
         plt.xlabel('Frequency')
-        plt.xlim((0.01,20))
-        plt.xticks(np.arange(0.01, 20, step=1), rotation=45)  # Set label locations.
-
+        plt.xlim((0, 20))
+        plt.xticks(np.arange(0, 20, step=1), rotation=45)  # Set label locations.
+        plt.legend()
 
         plt.show()
 
         fig2, axes2 = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
         lfp_np_plt=np.mean(np.mean(total_lfp_np, axis=2), axis=0)
-        shift_model_lfp_plt=np.mean(shift_model_lfp, axis=0)
+        shift_model_lfp_plt=np.mean(np.mean(shift_model_lfp, axis=2), axis=0)
         lin_model_lfp_plt=np.mean(lin_model_lfp, axis=0)
-
-
-        axes2[0].set_title("raw lfp (bandpass-filtered)")
-        axes2[1].set_title("shift aligned")
-        axes2[2].set_title("linear aligned")
-        axes2[0].set_ylabel("trials")
-        plt.show()
 
 
         fig, axes = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
@@ -324,7 +358,7 @@ for k00 in pitch_shift_or_not:
         sns.lineplot(ax=axes[0], x=lfp_time_crop, y=lfp_np_plt)
         sns.lineplot(ax=axes[1], x=lfp_time_crop, y=shift_model_lfp_plt)
         sns.lineplot(ax=axes[2], x=lfp_time_crop, y=lin_model_lfp_plt)
-        axes[0].set_title("raw, normalised lfp (bandpass-filtered, then z-scored) "+ fid)
+        axes[0].set_title("raw, normalised lfp (bandpass-filtered) "+ fid)
         axes[1].set_title("shift aligned on normalised LFP")
         axes[2].set_title("linear aligned on normalised LFP")
 
@@ -355,7 +389,7 @@ for k00 in pitch_shift_or_not:
         axes2[0].imshow(np.mean(total_lfp_for_mod, axis=2), **imkw)
         axes2[1].imshow(lfp_sm_transf, **imkw)
 
-        axes2[0].set_title("raw lfp (bandpass-filtered and then z-scored) "+fid)
+        axes2[0].set_title("raw lfp "+fid)
         axes2[1].set_title("shift aligned, fit on lfp")
 
         axes2[0].set_ylabel("trials")
@@ -366,11 +400,11 @@ for k00 in pitch_shift_or_not:
         plttest=total_lfp_for_mod[:,:,0]
         sns.lineplot(ax=axes[0], x=lfp_time_crop, y=lfp_np_plt)
         sns.lineplot(ax=axes[1], x=lfp_time_crop, y=np.mean(lfp_sm_transf, axis=0))
-        axes[0].set_title("raw lfp (bandpass-filtered) "+fid)
+        axes[0].set_title("raw lfp (trial-averaged) "+fid)
         axes[1].set_title("shift aligned-- fit on lfp " + fid)
 
 
-        axes[0].set_ylabel("a.u.")
+        axes[0].set_ylabel("mV")
         plt.show()
 
         fig, axes = plt.subplots(1, 2, figsize=(15, 5), sharey=True)
