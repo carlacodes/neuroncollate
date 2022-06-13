@@ -195,12 +195,15 @@ for k00 in pitch_shift_or_not:
         #fs=np.round(24414.0625*(1000/24414))
         lfp_time = np.linspace(start*fs*1000, stoptime*fs*1000, num=int(fs * (stoptime - start)+1))
         start_crop = 0*1000
+        start_crop_lfp=0*1000
         stoptime_crop = 0.8*1000
+        stoptime_crop_lfp=5*1000
 
         tidx = (lfp_time>= start_crop*fs) & (lfp_time <= stoptime_crop*fs)
-        total_lfp_np = total_lfp_np[:, tidx, :]
 
-        
+        tidx_lfp=(lfp_time>= start_crop_lfp*fs) & (lfp_time <= stoptime_crop_lfp*fs)
+        total_lfp_np = total_lfp_np[:, tidx_lfp, :]
+
 
         lfp_time_crop = lfp_time[tidx]
         stddevcalc= total_lfp_np.std(axis=(1), keepdims=True)
@@ -269,7 +272,7 @@ for k00 in pitch_shift_or_not:
         fig.tight_layout()
         plt.show()
 
-        N = 801
+        N = 5001
         # sample spacing
         T = 1.0 / 200.0
         x = np.linspace(0.0, N * T, N, endpoint=False)
@@ -296,55 +299,77 @@ for k00 in pitch_shift_or_not:
         plt.legend()
 
         plt.show()
-        
-        def fft_with_window(signalx, N, T):
-            signal_fft_grid=np.empty(((shift_model_lfp).shape[0],(shift_model_lfp).shape[1],(shift_model_lfp).shape[2]), dtype = "complex_")
-            for i in range(0, (shift_model_lfp).shape[2]):
-                selected_unit = shift_model_lfp[:, :, i]
-                print(selected_unit.shape)
 
-                for ii in range(0, shift_model_lfp.shape[0]):
-                    selected_trial_ofunit=selected_unit[ii,:]
-                    print(selected_trial_ofunit.shape)
+
+        def fft_with_window(signalx, N, T):
+            signal_fft_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2]), dtype="complex_")
+            for i in range(0, (signalx).shape[2]):
+                selected_unit = signalx[:, :, i]
+                #print(selected_unit.shape)
+
+                for ii in range(0, signalx.shape[0]):
+                    selected_trial_ofunit = selected_unit[ii, :]
+                    #print(selected_trial_ofunit.shape)
                     y = selected_trial_ofunit
-                    y=scipy.signal.detrend((y), type='constant')
+                    #y = y - np.mean(y)
 
                     w = blackman(N)
                     ywf = fft(y * w)
                     xf = fftfreq(N, T)[:N // 2]
-                    signal_fft_grid[ii,:, i]=ywf
+                    signal_fft_grid[ii, :, i] = ywf
 
             return signal_fft_grid
 
-        N = 801
+
         # sample spacing
         T = 1.0 / 200.0
-        shift_model_lfp_forfft=scipy.signal.detrend((shift_model_lfp), type='constant')
-        signal_in_grid=fft_with_window(shift_model_lfp_forfft, 801, T)
+        shift_model_lfp_forfft = scipy.signal.detrend((shift_model_lfp), axis=1)
+        signal_in_grid = fft_with_window(shift_model_lfp_forfft, N, T)
         x = np.linspace(0.0, N * T, N, endpoint=False)
-        y = np.mean(np.mean(signal_in_grid, axis=2),axis=0)
+        y = np.mean(np.mean(signal_in_grid, axis=2), axis=0)
 
-        #y = np.mean(signal_in_grid[:,:,2],axis=0)
+        # y = np.mean(signal_in_grid[:,:,2],axis=0)
 
-       # y=scipy.signal.detrend((y), type='constant')
+        # y=scipy.signal.detrend((y), type='constant')
 
         # yf = fft(y)
         # xf = fftfreq(N, T)[:N // 2]
-        # 
+        #
         # w = blackman(N)
         # ywf = fft(y * w)
         # xf = fftfreq(N, T)[:N // 2]
 
-        plt.plot(xf,  2.0 / N * np.abs(y[0:N // 2]), label='windowed only')
+        plt.plot(xf, 2.0 / N * np.abs(y[0:N // 2]), label='shift model, 5s duration')
 
         plt.grid()
-        plt.title('FFT of LFP shift model, blackman window then fft taken per unit per trial, then trial averaged, de-trended')
+        plt.title('FFT blackman window then fft taken per unit per trial, then trial averaged, de-trended', fontsize=9)
         plt.xlabel('Frequency')
         plt.xlim((0, 20))
         plt.xticks(np.arange(0, 20, step=1), rotation=45)  # Set label locations.
         plt.legend()
 
         plt.show()
+
+        # sample spacing
+        T = 1.0 / 200.0
+        lfp_forfft = scipy.signal.detrend((total_lfp_np), axis=1)
+        signal_in_grid2 = fft_with_window(lfp_forfft, N, T)
+        x = np.linspace(0.0, N * T, N, endpoint=False)
+        y = np.mean(np.mean(signal_in_grid2, axis=2), axis=0)
+
+        plt.plot(xf, 2.0 / N * np.abs(y[0:N // 2]), label='LFP, 5s duration')
+
+        plt.grid()
+        plt.title(
+            'FFT of LFP, blackman window then fft taken per unit per trial, then trial averaged, de-trended', fontsize=9)
+        plt.xlabel('Frequency')
+        plt.xlim((0, 20))
+        plt.xticks(np.arange(0, 20, step=1), rotation=45)  # Set label locations.
+        plt.legend()
+
+        plt.show()
+
+
 
         fig2, axes2 = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
         lfp_np_plt=np.mean(np.mean(total_lfp_np, axis=2), axis=0)
