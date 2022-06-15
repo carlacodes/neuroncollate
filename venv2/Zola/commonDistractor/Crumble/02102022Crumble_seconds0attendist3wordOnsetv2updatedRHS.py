@@ -9,11 +9,11 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-pitch_shift_option=['pitchshift','nopitchshift']
+pitch_shift_option=['pitchshift'] #'nopitchshift
 list_of_distractors=[2,3,4,5,6,7,8]
 meaning_of_word=["craft", "incontrast to", "when a", "accurate", "rev instruments", "of science", "pink noise instruments"]
 #blocksOfInterest=[8,9, 10, 11, 12, 13,14,15]
-left_or_right_side=['BB2BB3', 'BB4BB5'] #BB4BB5
+left_or_right_side=['BB2BB3'] #BB4BB5
 for k00 in left_or_right_side:
     for k0 in pitch_shift_option:
         blocksOfInterest = [8,9, 10, 11, 12, 13,14,15, 18,19,20,21,22,23,24]
@@ -27,7 +27,7 @@ for k00 in left_or_right_side:
         for i0 in list_of_distractors:
 
             for i in blocksOfInterest:
-                user_input = 'D:/Electrophysiological Data/F1901_Crumble/HP_BlockNellie-' + str(
+                user_input = 'D:/Electrophysiological_Data/F1901_Crumble/HP_BlockNellie-' + str(
                     i) + '/distF'+str(i0)+'/orderingbyLRtime/'+ k0+ '2s'+k00
                 #directory = os.listdir(user_input)
 
@@ -446,7 +446,7 @@ for k00 in left_or_right_side:
             # fig.subplots_adjust(top=10)
             plt.show();
             #
-            # BASE_PATH='D:/Electrophysiological Data/F1901_Crumble/dynamictimewarping/soundOnset/withLRmetadata'
+            # BASE_PATH='D:/Electrophysiological_Data/F1901_Crumble/dynamictimewarping/soundOnset/withLRmetadata'
             # file_name='alignedDataBlockweekjune07may17242021ShiftModellickrelease'
             # np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
             # np.save(os.path.join(BASE_PATH, 'june07may172421neuronIDsnPS'), shift_aligned_data["neurons"])
@@ -457,11 +457,11 @@ for k00 in left_or_right_side:
             # np.save(os.path.join(BASE_PATH, 'june07may172421linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
             # np.save(os.path.join(BASE_PATH, 'june07may172421linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
-            BASE_PATH = 'D:/Electrophysiological Data/F1901_Crumble/dynamictimewarping/'
+            BASE_PATH = 'D:/Electrophysiological_Data/F1901_Crumble/dynamictimewarping/'
             file_name = 'alignedDataBlockweekmarch072022ShiftModellickrelease'
             if os.path.isdir(BASE_PATH) is False:
                 os.mkdir(BASE_PATH)
-            BASE_PATH2='D:/Electrophysiological Data/F1901_Crumble/dynamictimewarping/l22'+k0+'distF'+str(i0)+'/'+k00+'/'
+            BASE_PATH2='D:/Electrophysiological_Data/F1901_Crumble/dynamictimewarping/l22'+k0+'distF'+str(i0)+'/'+k00+'/'
             if os.path.isdir(BASE_PATH2) is False:
                 os.makedirs(BASE_PATH2)
             np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])

@@ -11,10 +11,10 @@ f={}
 blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
 blocksOfInterest=[1,2,8,9,10, 11,12,13,14, 15]
-left_hand_or_right=['BB4BB5'] ##'BB2BB3'
+left_hand_or_right=['BB2BB3'] ##'BB2BB3'
 for k0 in left_hand_or_right:
     for i in blocksOfInterest:
-        user_input = 'D:/Electrophysiological Data/F1901_Crumble/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/withmisses2s'+k0+'/'
+        user_input = 'D:/Electrophysiological_Data/F1901_Crumble/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/withmisses2s'+k0+'/'
         directory = os.listdir(user_input)
 
         searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -239,7 +239,7 @@ for k0 in left_hand_or_right:
                 print('something good')
                 goodChanlist=np.append(goodChanlist, int(key))
         else:
-            if (selectedmeans) >= abs(1.5*selectedmeansb):  # selectedmeans-counter: #-(0.1*(counter)):
+            if (selectedmeans) >= abs(2*selectedmeansb):  # selectedmeans-counter: #-(0.1*(counter)):
                 print('something good')
                 goodChanlist = np.append(goodChanlist, int(key))
 
