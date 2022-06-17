@@ -16,7 +16,7 @@ from func_spikes_targetonset import *
 f={}
 blockData={}
 
-left_hand_or_right=['BB2BB3']
+left_hand_or_right=['BB4BB5']
 #ferret ID:
 fid='F1702_Zola_Nellie'
 fid='F1815_Cruella'
@@ -24,7 +24,7 @@ pitch_shift_or_not=['correctresp']
 for k00 in pitch_shift_or_not:
    # blocksOfInterest = list(range(155,165))
     blocksOfInterest = [92,93,94,95,96,97,98,99,100,101,102]
-    blocksOfInterest=list(range(92,112))
+    blocksOfInterest=list(range(92, 123))
 
 
     blocksOfInterest2 = []
@@ -205,7 +205,7 @@ for k00 in pitch_shift_or_not:
         total_lfp_np = total_lfp_np[:, tidx_lfp, :]
 
 
-        lfp_time_crop = lfp_time[tidx]
+        lfp_time_crop = lfp_time[tidx_lfp]
         stddevcalc= total_lfp_np.std(axis=(1), keepdims=True)
 
         #total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
