@@ -13,11 +13,12 @@ pitch_shift_option=['nopitchshift', 'pitchshift']
 list_of_distractors=[2,3,4,5,6,7,8]
 meaning_of_word=["craft", "incontrast to", "when a", "accurate", "rev instruments", "of science", "pink noise instruments"]
 #blocksOfInterest=[8,9, 10, 11, 12, 13,14,15]
-left_or_right_side=['BB4BB5'] #'BB2BB3', BB4BB5
+left_or_right_side=['BB2BB3'] #'BB2BB3', BB4BB5
 for k00 in left_or_right_side:
     for k0 in pitch_shift_option:
         #blocksOfInterest = [29, 31, 32, 33, 34, 36, 37, 39, 40]
         blocksOfInterest = [29, 31, 32, 33, 34, 36, 37, 39, 40,41,42,44,45,46,47,48,49,50,51]
+
         blocksOfInterest = [52, 53, 55, 56, 57, 58, 59, 60]
 
 
@@ -28,7 +29,7 @@ for k00 in left_or_right_side:
         for i0 in list_of_distractors:
 
             for i in blocksOfInterest:
-                user_input = 'D:/Electrophysiological Data/F1902_Eclair/HP_BlockNellie-' + str(
+                user_input = 'D:/Electrophysiological_Data/F1902_Eclair/HP_BlockNellie-' + str(
                     i) + '/distF'+str(i0)+'/orderingbyLRtime/'+ k0+ '2s'+k00
                 #directory = os.listdir(user_input)
 
@@ -410,13 +411,13 @@ for k00 in left_or_right_side:
 
             fig, axes = rasters(cropped_data, sorted_array, (5, 8), style='white');
             fig.suptitle('Original Data (all lick releases 07/02/2022 Aligned to Distractor Word Onset ' + str(
-                meaning_of_word[i0 - 2]) + ' Eclair bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
+                meaning_of_word[i0 - 2]) + ' ECLAIR  '+k00, fontsize=10, color='0', y='1')
 
             plt.show()  # original data
 
             fig, axes = rasters(cropped_data2, sorted_array, subplots=(5, 8), style='white');
             fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Distractor Word Onset ' + str(
-                meaning_of_word[i0 - 2]) + '  07/02/2022, Eclair BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
+                meaning_of_word[i0 - 2]) + 'Eclair '+k00, fontsize=10, color='0', y='1')
 
             plt.show()  # original data
             #

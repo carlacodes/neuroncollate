@@ -16,7 +16,7 @@ from func_spikes_targetonset import *
 f={}
 blockData={}
 
-left_hand_or_right=['BB4BB5']
+left_hand_or_right=['BB2BB3']
 #ferret ID:
 fid='F1702_Zola_Nellie'
 fid='F1815_Cruella'

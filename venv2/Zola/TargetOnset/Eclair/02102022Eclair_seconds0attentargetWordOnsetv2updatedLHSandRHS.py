@@ -12,14 +12,15 @@ blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
 blocksOfInterest=[29,31,32,33,34,36,37,39,40 ]
 blocksOfInterest=[29,31,32,33,34,36,37,39,40,41,42,45,46,47,48,49] #feb21
+
 blocksOfInterest = [52, 53, 54, 55, 56, 57, 58, 59, 60]
 
-left_hand_or_right=['BB4BB5', 'BB2BB3']
+left_hand_or_right=['BB2BB3']
 pitch_shift_or_not=['nopitchshift', 'pitchshift']
 for k00 in pitch_shift_or_not:
     for k0 in left_hand_or_right:
         for i in blocksOfInterest:
-            user_input = 'D:/Electrophysiological Data/F1902_Eclair/HP_BlockNellie-'+str(i)+'/targetword/targetword/orderingbyLRtime/'+k00+ '2s'+k0+'/'
+            user_input = 'D:/Electrophysiological_Data/F1902_Eclair/HP_BlockNellie-'+str(i)+'/targetword/targetword/orderingbyLRtime/'+k00+ '2s'+k0+'/'
             directory = os.listdir(user_input)
 
             searchstring = 'Arrays'#input('What word are you trying to find?')
@@ -367,24 +368,24 @@ for k00 in pitch_shift_or_not:
 
         from visualization1006 import rasters
         fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
-        fig.suptitle('Original Data (all lick releases 31/01/2022 Crumble bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
+        fig.suptitle('Original Data (all target lick releases 31/01/2022 Eclair) ', fontsize=10, color='0', y='1')
 
         plt.show() #original data
 
         fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-        fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Sound Onset 31/01/2022, Crumble BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
+        fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Target Onset, Eclair) '+k00+''+k0, fontsize=10, color='0', y='1')
 
         plt.show() #original data
 
         fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-        fig.suptitle(' Rasters after Shift Model (CORRECT releases  31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
-        #plt.title('Rasters after Shift Model (18/03/2021 Crumble) ')
+        fig.suptitle(' Rasters after Shift Model (CORRECT releases  31/01/2022 Eclair) '+k00+''+k0, fontsize=10, color='0', y='1')
+        #plt.title('Rasters after Shift Model (18/03/2021 Eclair) ')
         plt.show()
 
         fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-        fig.suptitle(' Rasters after Linear Model (CORRECT releases  31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
+        fig.suptitle(' Rasters after Linear Model (CORRECT releases  31/01/2022 Eclair) '+k00+''+k0, fontsize=10, color='0', y='1')
         #make_space_above(axes, topmargin=10)
-        #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
+        #plt.title('Rasters after Linear Model (18/03/2021 Eclair)')
         # fig.tight_layout()
         # fig.subplots_adjust(top=10)
         plt.show();
@@ -392,11 +393,11 @@ for k00 in pitch_shift_or_not:
 
 
         fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
-        fig.suptitle(' Rasters after Linear Model (ordered by LR onset 31/01/2022 Crumble) ', fontsize=10, color='0', y='1')
+        fig.suptitle(' Rasters after Linear Model (ordered by LR onset 31/01/2022 Eclair) ', fontsize=10, color='0', y='1')
 
         #make_space_above(axes, topmargin=10)
 
-        #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
+        #plt.title('Rasters after Linear Model (18/03/2021 Eclair)')
         # fig.tight_layout()
         # fig.subplots_adjust(top=10)
         plt.show();
