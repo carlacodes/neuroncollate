@@ -9,14 +9,14 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-pitch_shift_option=['pitchshift'] #'nopitchshift
+pitch_shift_option=['pitchshift', 'nopitchshift'] #'nopitchshift
 list_of_distractors=[2,3,4,5,6,7,8]
 meaning_of_word=["craft", "incontrast to", "when a", "accurate", "rev instruments", "of science", "pink noise instruments"]
 #blocksOfInterest=[8,9, 10, 11, 12, 13,14,15]
 left_or_right_side=['BB2BB3'] #BB4BB5
 for k00 in left_or_right_side:
     for k0 in pitch_shift_option:
-        blocksOfInterest = [8,9, 10, 11, 12, 13,14,15, 18,19,20,21,22,23,24]
+        blocksOfInterest = [2,3,4,5,6,7,8,9, 10, 11, 12, 13,14,15, 18,19,20,21,22,23,24]
         blocksOfInterest = [28, 29, 30, 31, 32, 33, 34, 35, 36, 37]
 
 
@@ -28,7 +28,7 @@ for k00 in left_or_right_side:
 
             for i in blocksOfInterest:
                 user_input = 'D:/Electrophysiological_Data/F1901_Crumble/HP_BlockNellie-' + str(
-                    i) + '/distF'+str(i0)+'/orderingbyLRtime/'+ k0+ '2s'+k00
+                    i) + '/distF'+str(i0)+'/orderingbyLRtime_new/'+ k0+ '2s'+k00
                 #directory = os.listdir(user_input)
 
                 searchstring = 'Arrays'  # input('What word are you trying to find?')
@@ -412,24 +412,24 @@ for k00 in left_or_right_side:
 
             from visualization1006 import rasters
             fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
-            fig.suptitle('Original Data (all lick releases 07/02/2022 Aligned to Distractor Word Onset '+str(meaning_of_word[i0-2])+ ' Eclair bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
+            fig.suptitle('Original Data (all lick releases 07/02/2022 Aligned to Distractor Word Onset '+str(meaning_of_word[i0-2])+ ' Crumble bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
 
             plt.show() #original data
 
             fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-            fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Distractor Word Onset ' +str(meaning_of_word[i0-2])+ '  07/02/2022, Eclair BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
+            fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Distractor Word Onset ' +str(meaning_of_word[i0-2])+ '  07/02/2022, Crumble BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
 
             plt.show() #original data
             #
             # fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-            # fig.suptitle(' Rasters after Shift Model 07/02/2022 Eclair) ', fontsize=10, color='0', y='1')
-            # #plt.title('Rasters after Shift Model (18/03/2021 Eclair) ')
+            # fig.suptitle(' Rasters after Shift Model 07/02/2022 Crumble) ', fontsize=10, color='0', y='1')
+            # #plt.title('Rasters after Shift Model (18/03/2021 Crumble) ')
             # plt.show()
             #
             # fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-            # fig.suptitle(' Rasters after Linear Model (  07/02/2022 Eclair) ', fontsize=10, color='0', y='1')
+            # fig.suptitle(' Rasters after Linear Model (  07/02/2022 Crumble) ', fontsize=10, color='0', y='1')
             # #make_space_above(axes, topmargin=10)
-            # #plt.title('Rasters after Linear Model (18/03/2021 Eclair)')
+            # #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
             # # fig.tight_layout()
             # # fig.subplots_adjust(top=10)
             # plt.show();
@@ -437,11 +437,11 @@ for k00 in left_or_right_side:
             #
             #
             # fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
-            # fig.suptitle(' Rasters after Linear Model (ordered by LR onset 07/02/2022 Eclair) ', fontsize=10, color='0', y='1')
+            # fig.suptitle(' Rasters after Linear Model (ordered by LR onset 07/02/2022 Crumble) ', fontsize=10, color='0', y='1')
 
             #make_space_above(axes, topmargin=10)
 
-            #plt.title('Rasters after Linear Model (18/03/2021 Eclair)')
+            #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
             # fig.tight_layout()
             # fig.subplots_adjust(top=10)
             plt.show();
