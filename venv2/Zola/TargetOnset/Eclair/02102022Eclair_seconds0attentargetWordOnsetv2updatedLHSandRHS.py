@@ -401,7 +401,7 @@ for k00 in pitch_shift_or_not:
         # fig.tight_layout()
         # fig.subplots_adjust(top=10)
         plt.show();
-        BASE_PATH2 = 'D:/Electrophysiological Data/F1902_Eclair/dynamictimewarping/l22targetword/'+k00+'/'+k0+'/'
+        BASE_PATH2 = 'D:/Electrophysiological_Data/F1902_Eclair/dynamictimewarping/l22targetword/'+k00+'/'+k0+'/'
         if os.path.isdir(BASE_PATH2) is False:
             os.makedirs(BASE_PATH2)
         file_name='alignedDataBlockweekmarch072022ShiftModellickrelease'

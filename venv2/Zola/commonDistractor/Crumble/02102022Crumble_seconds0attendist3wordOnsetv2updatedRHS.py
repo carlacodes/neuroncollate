@@ -9,15 +9,17 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-pitch_shift_option=['pitchshift', 'nopitchshift'] #'nopitchshift
+pitch_shift_option=[ 'nopitchshift', 'pitchshift'] #'nopitchshift
 list_of_distractors=[2,3,4,5,6,7,8]
+#list_of_distractors=[6]
 meaning_of_word=["craft", "incontrast to", "when a", "accurate", "rev instruments", "of science", "pink noise instruments"]
+#meaning_of_word=['rev instruments']
 #blocksOfInterest=[8,9, 10, 11, 12, 13,14,15]
 left_or_right_side=['BB2BB3'] #BB4BB5
 for k00 in left_or_right_side:
     for k0 in pitch_shift_option:
         blocksOfInterest = [2,3,4,5,6,7,8,9, 10, 11, 12, 13,14,15, 18,19,20,21,22,23,24]
-        blocksOfInterest = [28, 29, 30, 31, 32, 33, 34, 35, 36, 37]
+        blocksOfInterest = [28, 29, 30, 31, 32, 33, 34, 35, 36, 37] #33, 34, 35, 36, 37
 
 
         blocksOfInterest2 = []
@@ -80,8 +82,7 @@ for k00 in left_or_right_side:
             # BINSIZE = 0.01*1000  # 10 ms
             # NBINS = int((TMAX - TMIN) / BINSIZE)
 
-            TMIN2=0
-            TMAX2=1.2; #I made the maximum trial length 1.2 seconds
+
             # LFP parameters.
             LOW_CUTOFF = 10  # Hz
             HIGH_CUTOFF = 30  # Hz
@@ -412,12 +413,12 @@ for k00 in left_or_right_side:
 
             from visualization1006 import rasters
             fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
-            fig.suptitle('Original Data (all lick releases 07/02/2022 Aligned to Distractor Word Onset '+str(meaning_of_word[i0-2])+ ' Crumble bb4bb5 LEFT) ', fontsize=10, color='0', y='1')
+            fig.suptitle('Original Data (all lick releases 07/02/2022 Aligned to Distractor Word Onset '+str(meaning_of_word[i0-2])+ ' Crumble '+k0+k00, fontsize=10, color='0', y='1')
 
             plt.show() #original data
 
             fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
-            fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Distractor Word Onset ' +str(meaning_of_word[i0-2])+ '  07/02/2022, Crumble BB4 BB5 LEFT) ', fontsize=10, color='0', y='1')
+            fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Distractor Word Onset ' +str(meaning_of_word[i0-2])+ '  07/02/2022, Crumble) '+k0+k00, fontsize=10, color='0', y='1')
 
             plt.show() #original data
             #
@@ -475,6 +476,6 @@ for k00 in left_or_right_side:
 
             file_name = 'alignedDataBlockweekmarch072022OriginalModellickrelease'
 
-            np.save(os.path.join(BASE_PATH2, file_name), cropped_data2["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'march072022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'march072022OriginalModeltrialIDsPS'), cropped_data2["trials"])
+            np.save(os.path.join(BASE_PATH2, file_name), cropped_data["spiketimes"])
+            np.save(os.path.join(BASE_PATH2, 'march072022OriginalModelneuronIDsPS'), cropped_data["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'march072022OriginalModeltrialIDsPS'), cropped_data["trials"])

@@ -12,7 +12,7 @@ blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
 blocksOfInterest=[1,2,8,9,10, 11,12,13,14, 15]
 blocksOfInterest=[18,19,20,22,23,24]
-left_hand_or_right=['BB4BB5', 'BB2BB3']
+left_hand_or_right=['BB2BB3']
 
 
 pitch_shift_or_not=['nopitchshift', 'pitchshift']
@@ -25,7 +25,7 @@ for k00 in pitch_shift_or_not:
     blockData = {}
     for k0 in left_hand_or_right:
         for i in blocksOfInterest:
-            user_input = 'D:/Electrophysiological Data/F1902_Eclair/HP_BlockNellie-' + str(
+            user_input = 'D:/Electrophysiological_Data/F1902_Eclair/HP_BlockNellie-' + str(
                 i) + '/targetword/targetword/orderingbyLRtime/' + k00 + '2s' + k0 + '/'
             # directory = os.listdir(user_input)
 
@@ -437,7 +437,7 @@ for k00 in pitch_shift_or_not:
         # fig.tight_layout()
         # fig.subplots_adjust(top=10)
         plt.show();
-        BASE_PATH2 = 'D:/Electrophysiological Data/F1902_Eclair/dynamictimewarping/l22targetword/'+k00+'/'+k0+'/'
+        BASE_PATH2 = 'D:/Electrophysiological_Data/F1902_Eclair/dynamictimewarping/l22targetword/'+k00+'/'+k0+'/'
         if os.path.isdir(BASE_PATH2) is False:
             os.makedirs(BASE_PATH2)
         file_name='alignedDataBlockweekmarch072022ShiftModellickrelease'
