@@ -208,7 +208,7 @@ for k00 in pitch_shift_or_not:
         lfp_time_crop = lfp_time[tidx_lfp]
         stddevcalc= total_lfp_np.std(axis=(1), keepdims=True)
 
-        #total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
+        total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
 
         shift_model_lfp=shift_model.transform(total_lfp_np)
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
@@ -240,10 +240,10 @@ for k00 in pitch_shift_or_not:
         )
 
         # Fit my silly model to the LFP and ideally then compare the spike times to the LFP
-        shift_model_on_lfp.fit(total_lfp_for_mod, iterations=50)
+        shift_model_on_lfp.fit(total_lfp_for_mod, iterations=3)
         lfp_sm_transf=shift_model_on_lfp.transform(total_lfp_for_mod)[:, :, 0]
 
-        lin_model_on_lfp.fit(total_lfp_for_mod, iterations=50)
+        lin_model_on_lfp.fit(total_lfp_for_mod, iterations=3)
 
 
         import numpy as np
@@ -339,6 +339,13 @@ for k00 in pitch_shift_or_not:
         # ywf = fft(y * w)
         # xf = fftfreq(N, T)[:N // 2]
 
+        # f, Pxx_den = signal.welch(y, fs, nperseg=1024)
+        # plt.semilogy(f, Pxx_den)
+        # plt.ylim([0.5e-3, 1])
+        # plt.xlabel('frequency [Hz]')
+        # plt.ylabel('PSD [V**2/Hz]')
+        # plt.show()
+
         plt.plot(xf, 2.0 / N * np.abs(y[0:N // 2]), label='shift model, 5s duration')
 
         plt.grid()
@@ -349,6 +356,7 @@ for k00 in pitch_shift_or_not:
         plt.legend()
 
         plt.show()
+
 
         # sample spacing
         T = 1.0 / 200.0

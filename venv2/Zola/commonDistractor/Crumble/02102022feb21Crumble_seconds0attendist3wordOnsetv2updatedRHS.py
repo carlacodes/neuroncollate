@@ -9,17 +9,17 @@ import numpy as np
 #user_input = input('What is the name of your directory')
 
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-pitch_shift_option=['nopitchshift', 'pitchshift']
+pitch_shift_option=[ 'pitchshift'] #'nopitchshift
 list_of_distractors=[2,3,4,5,6,7,8]
+#list_of_distractors=[6]
 meaning_of_word=["craft", "incontrast to", "when a", "accurate", "rev instruments", "of science", "pink noise instruments"]
+#meaning_of_word=['rev instruments']
 #blocksOfInterest=[8,9, 10, 11, 12, 13,14,15]
-left_or_right_side=['BB2BB3'] #'BB2BB3', BB4BB5
+left_or_right_side=['BB2BB3'] #BB4BB5
 for k00 in left_or_right_side:
     for k0 in pitch_shift_option:
-        #blocksOfInterest = [29, 31, 32, 33, 34, 36, 37, 39, 40]
-        blocksOfInterest = [29, 31, 32, 33, 34, 36, 37, 39, 40,41,42,44,45,46,47,48,49,50,51]
-
-        blocksOfInterest = [52, 53, 55, 56, 57, 58, 59, 60]
+        blocksOfInterest = [2,3,4,5,6,7,8,9, 10, 11, 12, 13,14,15, 18,19,20,21,22,23,24]
+        #blocksOfInterest = [28, 29, 30, 31, 32, 33, 34, 35, 36, 37] #33, 34, 35, 36, 37
 
 
         blocksOfInterest2 = []
@@ -29,8 +29,8 @@ for k00 in left_or_right_side:
         for i0 in list_of_distractors:
 
             for i in blocksOfInterest:
-                user_input = 'D:/Electrophysiological_Data/F1902_Eclair/HP_BlockNellie-' + str(
-                    i) + '/distF'+str(i0)+'/orderingbyLRtime_new2/'+ k0+ '2s'+k00
+                user_input = 'D:/Electrophysiological_Data/F1901_Crumble/HP_BlockNellie-' + str(
+                    i) + '/distF'+str(i0)+'/orderingbyLRtime_new3/'+ k0+ '2s'+k00
                 #directory = os.listdir(user_input)
 
                 searchstring = 'Arrays'  # input('What word are you trying to find?')
@@ -82,8 +82,7 @@ for k00 in left_or_right_side:
             # BINSIZE = 0.01*1000  # 10 ms
             # NBINS = int((TMAX - TMIN) / BINSIZE)
 
-            TMIN2=0
-            TMAX2=1.2; #I made the maximum trial length 1.2 seconds
+
             # LFP parameters.
             LOW_CUTOFF = 10  # Hz
             HIGH_CUTOFF = 30  # Hz
@@ -117,9 +116,20 @@ for k00 in left_or_right_side:
                 else:
                     adjustedTrial[i2]=blockData[blocksOfInterest2[i2+1]]["oneDtrialIDarray"]+max(adjustedTrial[i2-1])
 
-            combinedTrialsAdjusted=np.concatenate([v for k,v in sorted(adjustedTrial.items())], 0)
-            firsttrialarray=blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
-            combinedTrials=np.append(firsttrialarray, combinedTrialsAdjusted)
+
+            if bool(adjustedTrial):
+                combinedTrialsAdjusted = np.concatenate([v for k, v in sorted(adjustedTrial.items())], 0)
+                firsttrialarray = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
+                combinedTrials = np.append(firsttrialarray, combinedTrialsAdjusted)
+            else:
+                combinedTrialsAdjusted = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
+                #firsttrialarray = blockData[blocksOfInterest2[0]]["oneDtrialIDarray"]
+                combinedTrials = combinedTrialsAdjusted
+
+
+
+
+
             for i in range(len(combinedTrials)):
                 combinedTrials[i] -= 1
 
@@ -298,8 +308,6 @@ for k00 in left_or_right_side:
             # Define bandpass filtering function for LFP
             from scipy.signal import butter, filtfilt, freqz
 
-
-
             def bandpass(x, lowcut, highcut, fs, order=5, axis=-1, kind='butter'):
                 """
                 Bandpass filters analog time series.
@@ -330,7 +338,6 @@ for k00 in left_or_right_side:
                     raise ValueError("Filter kind not recognized.")
                 return filtfilt(b, a, x, axis=axis)
 
-
             # Load LFP.
             # L = dict(np.load("umi_lfp_data.npz"))
             #
@@ -345,6 +352,7 @@ for k00 in left_or_right_side:
             # # Z-score LFP.
             # lfp -= lfp.mean(axis=1, keepdims=True)
             # lfp /= lfp.std(axis=1, keepdims=True)
+
 
             # Specify model.
             shift_model = ShiftWarping(
@@ -373,14 +381,12 @@ for k00 in left_or_right_side:
 
             # Apply inverse warping functions to data.
             linear_aligned_data = lin_model.transform(data2).crop_spiketimes(TMIN, TMAX)
-            # trialrows=np.array([ i in (max((combinedTrials)))])
+            #trialrows=np.array([ i in (max((combinedTrials)))])
 
             lin_model.fit(binnedLR, iterations=50)
 
             # Apply inverse warping functions to data.
             linear_aligned_dataLR = lin_model.transform(data22).crop_spiketimes(TMIN, TMAX)
-
-
             #
             # plt.plot(shift_model.loss_hist, label="shift")
             # plt.plot(lin_model.loss_hist, label="linear")
@@ -397,39 +403,34 @@ for k00 in left_or_right_side:
                 s = fig.subplotpars
                 w, h = fig.get_size_inches()
 
-                figh = h - (1 - s.top) * h + topmargin
-                fig.subplots_adjust(bottom=s.bottom * h / figh, top=1 - topmargin / figh)
+                figh = h - (1-s.top)*h  + topmargin
+                fig.subplots_adjust(bottom=s.bottom*h/figh, top=1-topmargin/figh)
                 fig.set_figheight(figh)
-
-
             import numpy as np
             import matplotlib.pyplot as plt
 
             ##adding yticks with the actual lick release time in ms relative to the start trial lick
 
             from visualization1006 import rasters
+            fig, axes=rasters(cropped_data, sorted_array,(5, 8), style='white');
+            fig.suptitle('Original Data (all lick releases 07/02/2022 Aligned to Distractor Word Onset '+str(meaning_of_word[i0-2])+ ' Crumble '+k0+k00, fontsize=10, color='0', y='1')
 
-            fig, axes = rasters(cropped_data, sorted_array, (5, 8), style='white');
-            fig.suptitle('Original Data (all lick releases 07/02/2022 Aligned to Distractor Word Onset ' + str(
-                meaning_of_word[i0 - 2]) + ' ECLAIR  '+k00, fontsize=10, color='0', y='1')
+            plt.show() #original data
 
-            plt.show()  # original data
+            fig, axes=rasters(cropped_data2,sorted_array, subplots=(5, 8), style='white');
+            fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Distractor Word Onset ' +str(meaning_of_word[i0-2])+ '  07/02/2022, Crumble) '+k0+k00, fontsize=10, color='0', y='1')
 
-            fig, axes = rasters(cropped_data2, sorted_array, subplots=(5, 8), style='white');
-            fig.suptitle('Original Data Reorganised by Lick Release, Aligned to Distractor Word Onset ' + str(
-                meaning_of_word[i0 - 2]) + 'Eclair '+k00, fontsize=10, color='0', y='1')
-
-            plt.show()  # original data
+            plt.show() #original data
             #
             # fig, axes=rasters(shift_aligned_data, sorted_array, subplots=(5, 8),style='white');
-            # fig.suptitle(' Rasters after Shift Model 07/02/2022 Eclair) ', fontsize=10, color='0', y='1')
-            # #plt.title('Rasters after Shift Model (18/03/2021 Eclair) ')
+            # fig.suptitle(' Rasters after Shift Model 07/02/2022 Crumble) ', fontsize=10, color='0', y='1')
+            # #plt.title('Rasters after Shift Model (18/03/2021 Crumble) ')
             # plt.show()
             #
             # fig, axes= rasters(linear_aligned_data, sorted_array, subplots=(5, 8),style='white');
-            # fig.suptitle(' Rasters after Linear Model (  07/02/2022 Eclair) ', fontsize=10, color='0', y='1')
+            # fig.suptitle(' Rasters after Linear Model (  07/02/2022 Crumble) ', fontsize=10, color='0', y='1')
             # #make_space_above(axes, topmargin=10)
-            # #plt.title('Rasters after Linear Model (18/03/2021 Eclair)')
+            # #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
             # # fig.tight_layout()
             # # fig.subplots_adjust(top=10)
             # plt.show();
@@ -437,16 +438,16 @@ for k00 in left_or_right_side:
             #
             #
             # fig, axes= rasters(linear_aligned_dataLR, sorted_array, subplots=(5, 8),style='white');
-            # fig.suptitle(' Rasters after Linear Model (ordered by LR onset 07/02/2022 Eclair) ', fontsize=10, color='0', y='1')
+            # fig.suptitle(' Rasters after Linear Model (ordered by LR onset 07/02/2022 Crumble) ', fontsize=10, color='0', y='1')
 
-            # make_space_above(axes, topmargin=10)
+            #make_space_above(axes, topmargin=10)
 
-            # plt.title('Rasters after Linear Model (18/03/2021 Eclair)')
+            #plt.title('Rasters after Linear Model (18/03/2021 Crumble)')
             # fig.tight_layout()
             # fig.subplots_adjust(top=10)
             plt.show();
             #
-            # BASE_PATH='D:/Electrophysiological_Data/F1902_Eclair/dynamictimewarping/soundOnset/withLRmetadata'
+            # BASE_PATH='D:/Electrophysiological_Data/F1901_Crumble/dynamictimewarping/soundOnset/withLRmetadata'
             # file_name='alignedDataBlockweekjune07may17242021ShiftModellickrelease'
             # np.save(os.path.join(BASE_PATH, file_name), shift_aligned_data["spiketimes"])
             # np.save(os.path.join(BASE_PATH, 'june07may172421neuronIDsnPS'), shift_aligned_data["neurons"])
@@ -457,25 +458,24 @@ for k00 in left_or_right_side:
             # np.save(os.path.join(BASE_PATH, 'june07may172421linearModelneuronIDsnPS'), linear_aligned_data["neurons"])
             # np.save(os.path.join(BASE_PATH, 'june07may172421linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
-            BASE_PATH = 'D:/Electrophysiological_Data/F1902_Eclair/dynamictimewarping/'
-            file_name = 'alignedDataBlockweekmarch072022ShiftModellickrelease'
+            BASE_PATH = 'D:/Electrophysiological_Data/F1901_Crumble/dynamictimewarping/'
+            file_name = 'alignedDataBlockweekfebruary212022ShiftModellickrelease'
             if os.path.isdir(BASE_PATH) is False:
                 os.mkdir(BASE_PATH)
-            BASE_PATH2 = 'D:/Electrophysiological_Data/F1902_Eclair/dynamictimewarping/l22' + k0 + 'distF' + str(
-                i0) + '/' + k00 + '/'
+            BASE_PATH2='D:/Electrophysiological_Data/F1901_Crumble/dynamictimewarping/l22'+k0+'distF'+str(i0)+'/'+k00+'/'
             if os.path.isdir(BASE_PATH2) is False:
                 os.makedirs(BASE_PATH2)
             np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'march072022neuronIDsPS'), shift_aligned_data["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'march072022trialIDsPS'), shift_aligned_data["trials"])
+            np.save(os.path.join(BASE_PATH2, 'february212022neuronIDsPS'), shift_aligned_data["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'february212022trialIDsPS'), shift_aligned_data["trials"])
 
-            file_name = 'alignedDataBlockweekmarch072022LinearModellickrelease'
+            file_name = 'alignedDataBlockweekfebruary212022LinearModellickrelease'
             np.save(os.path.join(BASE_PATH2, file_name), linear_aligned_data["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'march072022linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'march072022linearModeltrialIDsPS'), linear_aligned_data["trials"])
+            np.save(os.path.join(BASE_PATH2, 'february212022linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'february212022linearModeltrialIDsPS'), linear_aligned_data["trials"])
 
-            file_name = 'alignedDataBlockweekmarch072022OriginalModellickrelease'
+            file_name = 'alignedDataBlockweekfebruary212022OriginalModellickrelease'
 
-            np.save(os.path.join(BASE_PATH2, file_name), cropped_data2["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'march072022OriginalModelneuronIDsPS'), cropped_data2["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'march072022OriginalModeltrialIDsPS'), cropped_data2["trials"])
+            np.save(os.path.join(BASE_PATH2, file_name), cropped_data["spiketimes"])
+            np.save(os.path.join(BASE_PATH2, 'february212022OriginalModelneuronIDsPS'), cropped_data["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'february212022OriginalModeltrialIDsPS'), cropped_data["trials"])
