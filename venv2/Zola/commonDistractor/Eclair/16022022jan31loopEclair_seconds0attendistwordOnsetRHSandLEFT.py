@@ -30,7 +30,7 @@ for k00 in left_or_right_side:
 
             for i in blocksOfInterest:
                 user_input = 'D:/Electrophysiological_Data/F1902_Eclair/HP_BlockNellie-' + str(
-                    i) + '/distF'+str(i0)+'/orderingbyLRtime_new2/'+ k0+ '2s'+k00
+                    i) + '/distF'+str(i0)+'/orderingbyLRtime_new3/'+ k0+ '2s'+k00
                 #directory = os.listdir(user_input)
 
                 searchstring = 'Arrays'  # input('What word are you trying to find?')
