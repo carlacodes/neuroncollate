@@ -10,6 +10,8 @@ import seaborn as sns
 import scipy
 import pandas as pd
 from scipy.fft import fft, fftfreq
+from scipy.signal import cwt, find_peaks_cwt
+
 from scipy.signal import butter, lfilter
 from func_spikes_targetonset import *
 
@@ -319,6 +321,22 @@ for k00 in pitch_shift_or_not:
                     signal_fft_grid[ii, :, i] = ywf
 
             return signal_fft_grid
+
+        def wavelet_with_window(signalx, N, T):
+            signal_wavelet_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2]), dtype="complex_")
+            for i in range(0, (signalx).shape[2]):
+                selected_unit = signalx[:, :, i]
+                #print(selected_unit.shape)
+
+                for ii in range(0, signalx.shape[0]):
+                    selected_trial_ofunit = selected_unit[ii, :]
+                    #print(selected_trial_ofunit.shape)
+                    y = selected_trial_ofunit
+                    widths = np.arange(1, 31)
+                    cwtmatr = signal.cwt(sig, signal.ricker, widths)
+                    signal_wavelet_grid[ii, :, i] = cwtmatr
+
+            return signal_wavelet_grid
 
 
         # sample spacing
