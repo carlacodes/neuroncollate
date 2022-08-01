@@ -323,7 +323,8 @@ for k00 in pitch_shift_or_not:
             return signal_fft_grid
 
         def wavelet_with_window(signalx, N, T):
-            signal_wavelet_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2]), dtype="complex_")
+            signal_wavelet_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 30),dtype="complex_")
+            #print(signal_wavelet_grid.shape())
             for i in range(0, (signalx).shape[2]):
                 selected_unit = signalx[:, :, i]
                 #print(selected_unit.shape)
@@ -333,8 +334,8 @@ for k00 in pitch_shift_or_not:
                     #print(selected_trial_ofunit.shape)
                     y = selected_trial_ofunit
                     widths = np.arange(1, 31)
-                    cwtmatr = signal.cwt(sig, signal.ricker, widths)
-                    signal_wavelet_grid[ii, :, i] = cwtmatr
+                    cwtmatr = signal.cwt(y, signal.ricker, widths)
+                    signal_wavelet_grid[ii, :, i, :] = np.transpose(cwtmatr)
 
             return signal_wavelet_grid
 
@@ -345,6 +346,8 @@ for k00 in pitch_shift_or_not:
         signal_in_grid = fft_with_window(shift_model_lfp_forfft, N, T)
         x = np.linspace(0.0, N * T, N, endpoint=False)
         y = np.mean(np.mean(signal_in_grid, axis=2), axis=0)
+
+        signal_wavelet=wavelet_with_window(shift_model_lfp_forfft, N, T)
 
         # y = np.mean(signal_in_grid[:,:,2],axis=0)
 
