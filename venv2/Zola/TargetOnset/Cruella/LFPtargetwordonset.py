@@ -379,7 +379,7 @@ for k00 in pitch_shift_or_not:
         fig, ax = plt.subplots()
         T, S = np.meshgrid(signal_wavelettime_grid, signal_waveletscales_grid)
         ax.contourf(T, S, np.transpose(signal_waveletpower_grid3), 100)
-        
+        ax.set_yticks(np.linspace(0, 100, 10))
         #ax.set_yscale('log')
         plt.show()
 
