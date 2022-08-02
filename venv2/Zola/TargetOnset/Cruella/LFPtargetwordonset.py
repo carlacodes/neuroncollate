@@ -322,6 +322,31 @@ for k00 in pitch_shift_or_not:
 
             return signal_fft_grid
 
+
+        from wavelets import WaveletAnalysis
+
+        def wavelet_wvanalysis(signalx, dt=0.1):
+            signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
+            signal_waveletscales_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
+            signal_wavelettime_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
+
+            for i in range(0, (signalx).shape[2]):
+                selected_unit = signalx[:, :, i]
+
+                for ii in range(0, signalx.shape[0]):
+                    selected_trial_ofunit = selected_unit[ii, :]
+                    #print(selected_trial_ofunit.shape)
+                    y = selected_trial_ofunit
+                    wa = WaveletAnalysis(y, dt=dt)
+                    signal_waveletpower_grid[ii, :, i, :] = np.transpose(wa.wavelet_power)
+                    signal_waveletscales_grid = wa.scales
+
+                    # associated time vector
+                    signal_wavelettime_grid = wa.time
+
+            return signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid
+
+
         def wavelet_with_window(signalx, N, T):
             signal_wavelet_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 50),dtype="float")
             #print(signal_wavelet_grid.shape())
@@ -348,6 +373,17 @@ for k00 in pitch_shift_or_not:
         y = np.mean(np.mean(signal_in_grid, axis=2), axis=0)
 
         signal_wavelet=wavelet_with_window(shift_model_lfp_forfft, N, T)
+        signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid =wavelet_wvanalysis(shift_model_lfp_forfft)
+        signal_waveletpower_grid2=np.mean(signal_waveletpower_grid, axis=0)
+        signal_waveletpower_grid3=np.mean(signal_waveletpower_grid2, axis=1)
+        fig, ax = plt.subplots()
+        T, S = np.meshgrid(signal_wavelettime_grid, signal_waveletscales_grid)
+        ax.contourf(T, S, np.transpose(signal_waveletpower_grid3), 100)
+        
+        #ax.set_yscale('log')
+        plt.show()
+
+
 
         cwtmatr0=np.mean(signal_wavelet, axis=0)
         cwtmatr2=np.mean(cwtmatr0, axis=1)
