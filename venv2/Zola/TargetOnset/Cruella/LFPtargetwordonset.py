@@ -323,7 +323,7 @@ for k00 in pitch_shift_or_not:
             return signal_fft_grid
 
         def wavelet_with_window(signalx, N, T):
-            signal_wavelet_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 30),dtype="complex_")
+            signal_wavelet_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 50),dtype="float")
             #print(signal_wavelet_grid.shape())
             for i in range(0, (signalx).shape[2]):
                 selected_unit = signalx[:, :, i]
@@ -333,8 +333,8 @@ for k00 in pitch_shift_or_not:
                     selected_trial_ofunit = selected_unit[ii, :]
                     #print(selected_trial_ofunit.shape)
                     y = selected_trial_ofunit
-                    widths = np.arange(1, 31)
-                    cwtmatr = signal.cwt(y, signal.ricker, widths)
+                    widths = np.arange(1, 51)
+                    cwtmatr = signal.cwt(y, signal.morlet2, widths)
                     signal_wavelet_grid[ii, :, i, :] = np.transpose(cwtmatr)
 
             return signal_wavelet_grid
@@ -348,6 +348,16 @@ for k00 in pitch_shift_or_not:
         y = np.mean(np.mean(signal_in_grid, axis=2), axis=0)
 
         signal_wavelet=wavelet_with_window(shift_model_lfp_forfft, N, T)
+
+        cwtmatr0=np.mean(signal_wavelet, axis=0)
+        cwtmatr2=np.mean(cwtmatr0, axis=1)
+        cwtmatr2=np.transpose(cwtmatr2)
+        plt.imshow(cwtmatr2, extent=[-1, 1, 51, 1], cmap='PRGn', aspect='auto',
+                   vmax=abs(cwtmatr2).max(), vmin=-abs(cwtmatr2).max())
+        plt.show()
+        plt.title('trial-averaged global LFP, wavelet transform morlet2')
+
+
 
         # y = np.mean(signal_in_grid[:,:,2],axis=0)
 
