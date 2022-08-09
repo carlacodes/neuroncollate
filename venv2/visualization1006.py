@@ -105,8 +105,8 @@ def rasters(data,sorted_array, subplots=(5, 6), fig=None, axes=None, figsize=(9*
         elif max(sorted_array[:, 0]) == 0.0:
             ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:,1])), math.ceil(max(sorted_array[:,1])), math.ceil(max(sorted_array[:,1])/5)))
 
-        else:
-            ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])/5)))
+        # else:
+        #     ax.set_yticklabels(np.arange(math.floor(min(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])), math.ceil(max(sorted_array[:,0])/5)))
         ax.set_xlabel('milliseconds')
         ax.set_ylabel('LR Time (ms)')
 
