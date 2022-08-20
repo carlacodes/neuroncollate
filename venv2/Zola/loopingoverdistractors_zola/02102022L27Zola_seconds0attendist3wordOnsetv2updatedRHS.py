@@ -35,7 +35,6 @@ for k00 in left_or_right_side:
         for i0 in list_of_distractors:
 
             blocksOfInterest = np.linspace(100, 186, (186 - 100), dtype=int).tolist()
-            # blocksOfInterest = [28, 29, 30, 31, 32, 33, 34, 35, 36, 37] #33, 34, 35, 36, 37
 
             blocksOfInterest2 = []
             f = {}
