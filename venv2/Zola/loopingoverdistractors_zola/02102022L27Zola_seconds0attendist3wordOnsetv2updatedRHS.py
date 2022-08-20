@@ -10,7 +10,7 @@ import numpy as np
 
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
 pitch_shift_option=[ 'pitchshift', 'nopitchshift'] #'nopitchshift
-list_of_distractors=[ 32, 42, 2, 5]
+list_of_distractors=[ 20, 57, 32, 56, 42, 2, 5]
 #craft
 # in contrast to
 # when a
@@ -22,7 +22,8 @@ list_of_distractors=[ 32, 42, 2, 5]
 # in contrast to repeat
 
 #list_of_distractors=[6]
-meaning_of_word=[ "of science", 'accurate', 'when a', 'craft']
+
+meaning_of_word=["in contrast to repeat", "pink noise", "of science","rev instruments" 'accurate', 'when a', 'craft']
 #meaning_of_word=['rev instruments']
 #blocksOfInterest=[8,9, 10, 11, 12, 13,14,15]
 left_or_right_side=['BB2BB3'] #BB4BB5
@@ -30,7 +31,7 @@ left_or_right_side=['BB2BB3'] #BB4BB5
 for k00 in left_or_right_side:
     for k0 in pitch_shift_option:
 
-        count = 0
+        count = -1
         for i0 in list_of_distractors:
 
             blocksOfInterest = np.linspace(100, 186, (186 - 100), dtype=int).tolist()
