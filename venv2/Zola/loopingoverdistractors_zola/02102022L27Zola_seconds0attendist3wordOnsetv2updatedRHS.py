@@ -472,23 +472,23 @@ for k00 in left_or_right_side:
             # np.save(os.path.join(BASE_PATH, 'june07may172421linearModeltrialIDsnPS'), linear_aligned_data["trials"])
 
             BASE_PATH = 'D:/Electrophysiological_Data/F1702_Zola_Nellie/dynamictimewarping/'
-            file_name = 'alignedDataBlockweeksummer2021ShiftModellickrelease'
+            file_name = 'alignedDataBlockweekl27ShiftModellickrelease'
             if os.path.isdir(BASE_PATH) is False:
                 os.mkdir(BASE_PATH)
             BASE_PATH2='D:/Electrophysiological_Data/F1702_Zola_Nellie/dynamictimewarping/l27'+k0+'distF'+str(i0)+'/'+k00+'/'
             if os.path.isdir(BASE_PATH2) is False:
                 os.makedirs(BASE_PATH2)
             np.save(os.path.join(BASE_PATH2, file_name), shift_aligned_data["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'summer2021neuronIDsPS'), shift_aligned_data["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'summer2021trialIDsPS'), shift_aligned_data["trials"])
+            np.save(os.path.join(BASE_PATH2, 'l27neuronIDsPS'), shift_aligned_data["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'l27trialIDsPS'), shift_aligned_data["trials"])
 
-            file_name = 'alignedDataBlockweeksummer2021LinearModellickrelease'
+            file_name = 'alignedDataBlockweekl27LinearModellickrelease'
             np.save(os.path.join(BASE_PATH2, file_name), linear_aligned_data["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'summer2021linearModelneuronIDsPS'), linear_aligned_data["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'summer2021linearModeltrialIDsPS'), linear_aligned_data["trials"])
+            np.save(os.path.join(BASE_PATH2, 'l27linearModelneuronIDsPS'), linear_aligned_data["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'l27linearModeltrialIDsPS'), linear_aligned_data["trials"])
 
-            file_name = 'alignedDataBlockweeksummer2021OriginalModellickrelease'
+            file_name = 'alignedDataBlockweekl27OriginalModellickrelease'
 
             np.save(os.path.join(BASE_PATH2, file_name), cropped_data["spiketimes"])
-            np.save(os.path.join(BASE_PATH2, 'summer2021OriginalModelneuronIDsPS'), cropped_data["neurons"])
-            np.save(os.path.join(BASE_PATH2, 'summer2021OriginalModeltrialIDsPS'), cropped_data["trials"])
+            np.save(os.path.join(BASE_PATH2, 'l27OriginalModelneuronIDsPS'), cropped_data["neurons"])
+            np.save(os.path.join(BASE_PATH2, 'l27OriginalModeltrialIDsPS'), cropped_data["trials"])
