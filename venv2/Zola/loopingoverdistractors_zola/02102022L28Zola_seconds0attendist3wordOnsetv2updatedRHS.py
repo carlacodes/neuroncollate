@@ -151,7 +151,7 @@ for k00 in left_or_right_side:
                 combinedLickReleaseTimes=np.append(combinedLickReleaseTimes,selectedLickReleaseIDs)
 
             #combinedSpikeTimes=np.concatenate([v for k,v in sorted(blockData.items())], key='oneDspiketimearray',  axis=0)
-            TMAX =0.8*1000#max(combinedLickReleaseTimes) # s
+            TMAX =1.06*1000#max(combinedLickReleaseTimes) # s
             BINSIZE = 0.01*1000  # 10 ms
             NBINS = int((TMAX - TMIN) / BINSIZE)
             TMINz=0.2*1000;
