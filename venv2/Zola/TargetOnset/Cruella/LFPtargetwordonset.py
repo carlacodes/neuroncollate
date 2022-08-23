@@ -324,8 +324,10 @@ for k00 in pitch_shift_or_not:
 
 
         from wavelets import WaveletAnalysis
+        import pycwt
+        from pycwt import wavelet
 
-        def wavelet_wvanalysis(signalx, dt=0.1):
+        def wavelet_kpanalysis(signalx, dt=0.25):
             signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
             signal_waveletscales_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
             signal_wavelettime_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
@@ -337,7 +339,61 @@ for k00 in pitch_shift_or_not:
                     selected_trial_ofunit = selected_unit[ii, :]
                     #print(selected_trial_ofunit.shape)
                     y = selected_trial_ofunit
-                    wa = WaveletAnalysis(y, dt=dt)
+                    slevel = 0.95  # Significance level
+
+                    std = data.std()  # Standard deviation
+                    std2 = std ** 2  # Variance
+                    var = (data - data.mean()) / std  # Calculating anomaly and normalizing
+
+                    dj = 0.25  # Four sub-octaves per octaves
+                    s0 = -1  # 2 * dt                      # Starting scale, here 6 months
+                    J = -1  # 7 / dj                      # Seven powers of two with dj sub-octaves
+
+                    mother = wavelet.Morlet(6.)  # Morlet mother wavelet with wavenumber=6
+
+                    wave, scales, freqs, coi, fft, fftfreqs = wavelet.cwt(y, dt, dj, s0, J,
+                                                                          mother)
+
+                    iwave = wavelet.icwt(wave, scales, dt, dj, mother)
+                    power = (abs(wave)) ** 2  # Normalized wavelet power spectrum
+                    fft_power = std2 * abs(fft) ** 2  # FFT power spectrum
+                    period = 1. / freqs
+
+                    signif, fft_theor = wavelet.significance(1.0, dt, scales, 0, alpha,
+                                                             significance_level=slevel, wavelet=mother)
+                    sig95 = (signif * np.ones((N, 1))).transpose()
+                    sig95 = power / sig95  # Where ratio > 1, power is significant
+
+                    # Calculates the global wavelet spectrum and determines its significance level.
+                    glbl_power = std2 * power.mean(axis=1)
+                    dof = N - scales  # Correction for padding at edges
+                    glbl_signif, tmp = wavelet.significance(std2, dt, scales, 1, alpha,
+                                                            significance_level=slevel, dof=dof, wavelet=mother)
+
+
+                    signal_waveletpower_grid[ii, :, i, :] = np.transpose(power)
+                    signal_waveletscales_grid =scales
+
+                    # associated time vector
+
+                    N = y.size;
+                    signal_wavelettime_grid = np.arange(0, N) * dt + t0
+
+            return signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period
+
+        def wavelet_wvanalysis(signalx, dt=5):
+            signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
+            signal_waveletscales_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
+            signal_wavelettime_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
+
+            for i in range(0, (signalx).shape[2]):
+                selected_unit = signalx[:, :, i]
+
+                for ii in range(0, signalx.shape[0]):
+                    selected_trial_ofunit = selected_unit[ii, :]
+                    #print(selected_trial_ofunit.shape)
+                    y = selected_trial_ofunit
+                    wa = WaveletAnalysis(y, dt=800)
                     signal_waveletpower_grid[ii, :, i, :] = np.transpose(wa.wavelet_power)
                     signal_waveletscales_grid = wa.scales
 
@@ -377,21 +433,34 @@ for k00 in pitch_shift_or_not:
         signal_waveletpower_grid2=np.mean(signal_waveletpower_grid, axis=0)
         signal_waveletpower_grid3=np.mean(signal_waveletpower_grid2, axis=1)
         fig, ax = plt.subplots()
+
+
         T, S = np.meshgrid(signal_wavelettime_grid, signal_waveletscales_grid)
         ax.contourf(T, S, np.transpose(signal_waveletpower_grid3), 100)
-        ax.set_yticks(np.linspace(0, 100, 10))
+        #ax.set_yticks(np.linspace(0, 100, 10))
         #ax.set_yscale('log')
         plt.show()
 
 
+        signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period =wavelet_kpanalysis(shift_model_lfp_forfft)
+        signal_waveletpower_grid4=np.mean(signal_waveletpower_grid, axis=0)
+        signal_waveletpower_grid5=np.mean(signal_waveletpower_grid4, axis=1)
 
-        cwtmatr0=np.mean(signal_wavelet, axis=0)
-        cwtmatr2=np.mean(cwtmatr0, axis=1)
-        cwtmatr2=np.transpose(cwtmatr2)
-        plt.imshow(cwtmatr2, extent=[-1, 1, 51, 1], cmap='PRGn', aspect='auto',
-                   vmax=abs(cwtmatr2).max(), vmin=-abs(cwtmatr2).max())
+        f, ax = plt.subplots(figsize=(15, 10))
+        ax.contourf(time, np.log2(period), np.log2(signal_waveletpower_grid5), np.log2(levels),
+                    extend='both')
+        plt.title('kPywavelet version')
         plt.show()
-        plt.title('trial-averaged global LFP, wavelet transform morlet2')
+
+
+        #
+        # cwtmatr0=np.mean(signal_wavelet, axis=0)
+        # cwtmatr2=np.mean(cwtmatr0, axis=1)
+        # cwtmatr2=np.transpose(cwtmatr2)
+        # plt.imshow(cwtmatr2, extent=[-1, 1, 51, 1], cmap='PRGn', aspect='auto',
+        #            vmax=abs(cwtmatr2).max(), vmin=-abs(cwtmatr2).max())
+        # plt.show()
+        # plt.title('trial-averaged global LFP, wavelet transform morlet2')
 
 
 
