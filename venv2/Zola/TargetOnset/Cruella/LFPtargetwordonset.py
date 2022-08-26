@@ -328,9 +328,10 @@ for k00 in pitch_shift_or_not:
         from pycwt import wavelet
 
         def wavelet_kpanalysis(signalx, dt=0.25):
-            signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
-            signal_waveletscales_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
-            signal_wavelettime_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
+            signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="float")
+            signal_waveletscales_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="float")
+            signal_wavelettime_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="float")
+            signal_waveletsignif_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="float")
 
             for i in range(0, (signalx).shape[2]):
                 selected_unit = signalx[:, :, i]
@@ -341,9 +342,9 @@ for k00 in pitch_shift_or_not:
                     y = selected_trial_ofunit
                     slevel = 0.95  # Significance level
 
-                    std = data.std()  # Standard deviation
+                    std = y.std()  # Standard deviation
                     std2 = std ** 2  # Variance
-                    var = (data - data.mean()) / std  # Calculating anomaly and normalizing
+                    var = (y - y.mean()) / std  # Calculating anomaly and normalizing
 
                     dj = 0.25  # Four sub-octaves per octaves
                     s0 = -1  # 2 * dt                      # Starting scale, here 6 months
@@ -358,6 +359,12 @@ for k00 in pitch_shift_or_not:
                     power = (abs(wave)) ** 2  # Normalized wavelet power spectrum
                     fft_power = std2 * abs(fft) ** 2  # FFT power spectrum
                     period = 1. / freqs
+                    #alpha=0.05
+                    N = y.size;
+                    #print(N)
+
+                    #alpha, _, _ = wavelet.ar1(y)
+                    alpha=np.corrcoef(y[:-1], y[1:])[0, 1]
 
                     signif, fft_theor = wavelet.significance(1.0, dt, scales, 0, alpha,
                                                              significance_level=slevel, wavelet=mother)
@@ -371,15 +378,15 @@ for k00 in pitch_shift_or_not:
                                                             significance_level=slevel, dof=dof, wavelet=mother)
 
 
-                    signal_waveletpower_grid[ii, :, i, :] = np.transpose(power)
+                    signal_waveletpower_grid[ii, :, i, :] =np.transpose(power)
                     signal_waveletscales_grid =scales
+                    signal_waveletsignif_grid[ii, :, i, :]=np.transpose(sig95)
 
                     # associated time vector
 
-                    N = y.size;
-                    signal_wavelettime_grid = np.arange(0, N) * dt + t0
+                    signal_wavelettime_grid = np.arange(0, N) * dt
 
-            return signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period
+            return signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period, signal_waveletsignif_grid
 
         def wavelet_wvanalysis(signalx, dt=5):
             signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
@@ -442,13 +449,24 @@ for k00 in pitch_shift_or_not:
         plt.show()
 
 
-        signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period =wavelet_kpanalysis(shift_model_lfp_forfft)
+        signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period, signal_waveletsignif_grid =wavelet_kpanalysis(shift_model_lfp_forfft)
         signal_waveletpower_grid4=np.mean(signal_waveletpower_grid, axis=0)
         signal_waveletpower_grid5=np.mean(signal_waveletpower_grid4, axis=1)
 
+        signal_waveletsignif_grid2=np.mean(signal_waveletsignif_grid, axis=0)
+        signal_waveletsignif_grid3=np.mean(signal_waveletsignif_grid2, axis=1)
+
+
         f, ax = plt.subplots(figsize=(15, 10))
-        ax.contourf(time, np.log2(period), np.log2(signal_waveletpower_grid5), np.log2(levels),
+        levels = [0.0625, 0.125, 0.25, 0.5, 1, 2, 4, 8, 16]
+        levels=10
+
+        ax.contourf(signal_wavelettime_grid, np.log2(period), np.log2(np.transpose(signal_waveletpower_grid5)),
                     extend='both')
+        ax.contour(signal_wavelettime_grid, np.log2(period), signal_waveletsignif_grid3, [-99, 1], colors='k',
+                   linewidths=2.)
+
+
         plt.title('kPywavelet version')
         plt.show()
 
