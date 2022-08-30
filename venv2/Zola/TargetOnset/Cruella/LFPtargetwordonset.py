@@ -331,6 +331,7 @@ for k00 in pitch_shift_or_not:
             signal_waveletscales_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="float")
             signal_wavelettime_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="float")
             signal_waveletsignif_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="float")
+            signal_waveletperiod_grid=np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="float")
 
             for i in range(0, (signalx).shape[2]):
                 selected_unit = signalx[:, :, i]
@@ -366,7 +367,7 @@ for k00 in pitch_shift_or_not:
                     alpha=np.corrcoef(y[:-1], y[1:])[0, 1]
 
                     signif, fft_theor = wavelet.significance(1.0, dt, scales, 0, alpha,
-                                                             significance_level=slevel, wavelet=mother)
+                                                              significance_level=slevel, wavelet=mother)
                     sig95 = (signif * np.ones((N, 1))).transpose()
                     sig95 = power / sig95  # Where ratio > 1, power is significant
 
@@ -381,11 +382,13 @@ for k00 in pitch_shift_or_not:
                     signal_waveletscales_grid =scales
                     signal_waveletsignif_grid[ii, :, i, :]=np.transpose(sig95)
 
+                    signal_waveletperiod_grid[ii, :, i, :]=np.transpose(period)
+
                     # associated time vector
 
                     signal_wavelettime_grid = np.arange(0, N) * dt
 
-            return signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period, signal_waveletsignif_grid
+            return signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period, signal_waveletsignif_grid, signal_waveletperiod_grid
 
         def wavelet_wvanalysis(signalx, dt=5):
             signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
@@ -449,12 +452,15 @@ for k00 in pitch_shift_or_not:
         plt.show()
 
 
-        signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period, signal_waveletsignif_grid =wavelet_kpanalysis(total_lfp_np_cwt)
+        signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period, signal_waveletsignif_grid, signal_waveletperiod_grid =wavelet_kpanalysis(total_lfp_np_cwt)
         signal_waveletpower_grid4=np.mean(signal_waveletpower_grid, axis=0)
         signal_waveletpower_grid5=np.mean(signal_waveletpower_grid4, axis=1)
 
         signal_waveletsignif_grid2=np.mean(signal_waveletsignif_grid, axis=0)
         signal_waveletsignif_grid3=np.mean(signal_waveletsignif_grid2, axis=1)
+        signal_waveletperiod_grid2=np.mean(signal_waveletperiod_grid, axis=0)
+        signal_waveletperiod_grid3 = np.mean(signal_waveletperiod_grid2, axis=1)
+        signal_waveletperiod_grid4=np.mean(signal_waveletperiod_grid3, axis=0)
 
 
         f, ax = plt.subplots(figsize=(15, 10))
@@ -463,15 +469,21 @@ for k00 in pitch_shift_or_not:
         vmin=-30
         vmax=10
 
-        cruellacwt=ax.contourf(signal_wavelettime_grid*4, np.log2(period), np.log2(np.transpose(signal_waveletpower_grid5)),levels, vmin=vmin, vmax=vmax,
+        cruellacwt=ax.contourf(signal_wavelettime_grid*4, np.log2(signal_waveletperiod_grid4), np.log2(np.transpose(signal_waveletpower_grid5)),levels, vmin=vmin, vmax=vmax,
                     extend='both')
-        cruellacwtlines=ax.contour(signal_wavelettime_grid*4, np.log2(period), np.transpose(signal_waveletsignif_grid3), [-99, 1], colors='k',
+        cruellacwtlines=ax.contour(signal_wavelettime_grid*4, np.log2((signal_waveletperiod_grid4)), np.transpose(signal_waveletsignif_grid3), [-99, 1], colors='k',
                    linewidths=2.)
+        ax.set_yticks(np.arange(0,10,1))
+
+
+        ax.set_xticks(np.arange(0,5000, 500))
 
         cbar = f.colorbar(cruellacwt)
         cbar.add_lines(cruellacwtlines)
         cbar.ax.set_ylabel('power')
+
         plt.xlabel('Time (ms), trial onset = 0.5s, 500ms')
+        plt.ylabel('frequency')
         plt.title('kPywavelet version - Cruella lfp, original lfp, 3s<time to target word<4s')
         plt.show()
 
