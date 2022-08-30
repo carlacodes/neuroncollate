@@ -459,15 +459,19 @@ for k00 in pitch_shift_or_not:
 
         f, ax = plt.subplots(figsize=(15, 10))
         levels = [0.0625, 0.125, 0.25, 0.5, 1, 2, 4, 8, 16]
-        levels=10
+        levels=20
+        vmin=-30
+        vmax=10
 
-        ax.contourf(signal_wavelettime_grid, np.log2(period), np.log2(np.transpose(signal_waveletpower_grid5)),
+        cruellacwt=ax.contourf(signal_wavelettime_grid, np.log2(period), np.log2(np.transpose(signal_waveletpower_grid5)),vmin=vmin, vmax=vmax,
                     extend='both')
-        ax.contour(signal_wavelettime_grid, np.log2(period), signal_waveletsignif_grid3, [-99, 1], colors='k',
+        cruellacwtlines=ax.contour(signal_wavelettime_grid, np.log2(period), np.transpose(signal_waveletsignif_grid3), [-99, 1], colors='k',
                    linewidths=2.)
 
-
-        plt.title('kPywavelet version')
+        cbar = f.colorbar(cruellacwt)
+        cbar.add_lines(cruellacwtlines)
+        cbar.ax.set_ylabel('power')
+        plt.title('kPywavelet version - Cruella lfp')
         plt.show()
 
 
