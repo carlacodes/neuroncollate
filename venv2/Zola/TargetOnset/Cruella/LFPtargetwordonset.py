@@ -215,7 +215,6 @@ for k00 in pitch_shift_or_not:
         shift_model_lfp=shift_model.transform(total_lfp_np)
         lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
 
-        #total_lfp_for_mod=total_lfp_np[:,:, np.newaxis]
         total_lfp_for_mod=total_lfp_np
 
 
@@ -431,6 +430,7 @@ for k00 in pitch_shift_or_not:
         # sample spacing
         T = 1.0 / 200.0
         shift_model_lfp_forfft = scipy.signal.detrend((shift_model_lfp), axis=1)
+        total_lfp_np_cwt=scipy.signal.detrend(total_lfp_np, axis=1)
         signal_in_grid = fft_with_window(shift_model_lfp_forfft, N, T)
         x = np.linspace(0.0, N * T, N, endpoint=False)
         y = np.mean(np.mean(signal_in_grid, axis=2), axis=0)
@@ -449,7 +449,7 @@ for k00 in pitch_shift_or_not:
         plt.show()
 
 
-        signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period, signal_waveletsignif_grid =wavelet_kpanalysis(shift_model_lfp_forfft)
+        signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period, signal_waveletsignif_grid =wavelet_kpanalysis(total_lfp_np_cwt)
         signal_waveletpower_grid4=np.mean(signal_waveletpower_grid, axis=0)
         signal_waveletpower_grid5=np.mean(signal_waveletpower_grid4, axis=1)
 
@@ -463,15 +463,16 @@ for k00 in pitch_shift_or_not:
         vmin=-30
         vmax=10
 
-        cruellacwt=ax.contourf(signal_wavelettime_grid, np.log2(period), np.log2(np.transpose(signal_waveletpower_grid5)),vmin=vmin, vmax=vmax,
+        cruellacwt=ax.contourf(signal_wavelettime_grid*4, np.log2(period), np.log2(np.transpose(signal_waveletpower_grid5)),levels, vmin=vmin, vmax=vmax,
                     extend='both')
-        cruellacwtlines=ax.contour(signal_wavelettime_grid, np.log2(period), np.transpose(signal_waveletsignif_grid3), [-99, 1], colors='k',
+        cruellacwtlines=ax.contour(signal_wavelettime_grid*4, np.log2(period), np.transpose(signal_waveletsignif_grid3), [-99, 1], colors='k',
                    linewidths=2.)
 
         cbar = f.colorbar(cruellacwt)
         cbar.add_lines(cruellacwtlines)
         cbar.ax.set_ylabel('power')
-        plt.title('kPywavelet version - Cruella lfp')
+        plt.xlabel('Time (ms), trial onset = 0.5s, 500ms')
+        plt.title('kPywavelet version - Cruella lfp, original lfp, 3s<time to target word<4s')
         plt.show()
 
 
