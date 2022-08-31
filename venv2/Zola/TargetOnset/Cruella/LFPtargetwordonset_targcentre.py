@@ -189,7 +189,7 @@ for k00 in pitch_shift_or_not:
         # in future need to make function to loop this over different bands, e.g. 5-20, 5-30
         # need to check 15,20 again
 
-        total_lfp_np=bandpass_by_site(total_lfp_np, 1, 20, 1000)
+        #total_lfp_np=bandpass_by_site(total_lfp_np, 1, 20, 1000)
         #total_lfp_np=np.mean(total_lfp_np, axis=2)
         # total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
         start = 0
@@ -325,6 +325,58 @@ for k00 in pitch_shift_or_not:
         from wavelets import WaveletAnalysis
         import pycwt
         from pycwt import wavelet
+        from superlets import superlet, scale_from_period
+
+
+
+        def wavelet_superletsanalysis2(signalx, dt=0.25):
+
+            # frequencies of interest in Hz
+            foi = np.linspace(1, 100, 50)
+            scales = scale_from_period(1 / foi)
+            signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 50),
+                                                dtype="float")
+            signal_waveletscales_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 50),
+                                                 dtype="float")
+            signal_wavelettime_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 50),
+                                               dtype="float")
+            signal_waveletsignif_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 50),
+                                                 dtype="float")
+            signal_waveletperiod_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 50),
+                                                 dtype="float")
+
+            for i in range(0, (signalx).shape[2]):
+                selected_unit = signalx[:, :, i]
+
+                for ii in range(0, signalx.shape[0]):
+                    selected_trial_ofunit = selected_unit[ii, :]
+                    # print(selected_trial_ofunit.shape)
+                    y = selected_trial_ofunit
+                    foi = np.linspace(1, 100, 50)
+                    scales = scale_from_period(1 / foi)
+
+                    spec = superlet(
+                        y,
+                        samplerate=1000,
+                        scales=scales,
+                        order_max=30,
+                        order_min=1,
+                        c_1=5,
+                        adaptive=True,
+                    )
+
+
+                    signal_waveletpower_grid[ii, :, i, :] = np.transpose(spec)
+                    signal_waveletscales_grid = scales
+                    N = y.size;
+
+                    signal_wavelettime_grid = np.arange(0, N) * dt
+
+            return signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid
+
+
+
+
 
         def wavelet_kpanalysis(signalx, dt=0.25):
             signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="float")
@@ -434,22 +486,51 @@ for k00 in pitch_shift_or_not:
         T = 1.0 / 200.0
         # shift_model_lfp_forfft = scipy.signal.detrend((shift_model_lfp), axis=1)
         total_lfp_np_cwt=scipy.signal.detrend(total_lfp_np, axis=1)
-        # signal_in_grid = fft_with_window(shift_model_lfp_forfft, N, T)
-        # x = np.linspace(0.0, N * T, N, endpoint=False)
-        # y = np.mean(np.mean(signal_in_grid, axis=2), axis=0)
-        #
-        # signal_wavelet=wavelet_with_window(shift_model_lfp_forfft, N, T)
-        # signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid =wavelet_wvanalysis(shift_model_lfp_forfft)
-        # signal_waveletpower_grid2=np.mean(signal_waveletpower_grid, axis=0)
-        # signal_waveletpower_grid3=np.mean(signal_waveletpower_grid2, axis=1)
-        # fig, ax = plt.subplots()
-        #
-        #
-        # T, S = np.meshgrid(signal_wavelettime_grid, signal_waveletscales_grid)
-        # ax.contourf(T, S, np.transpose(signal_waveletpower_grid3), 100)
-        # #ax.set_yticks(np.linspace(0, 100, 10))
-        # #ax.set_yscale('log')
-        # plt.show()
+
+
+
+        signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid =wavelet_superletsanalysis2(total_lfp_np_cwt)
+        signal_waveletpower_grid2=np.mean(signal_waveletpower_grid, axis=0)
+        signal_waveletpower_grid3=np.mean(signal_waveletpower_grid4, axis=1)
+        foi = np.linspace(1, 100, 50)
+        scales = scale_from_period(1 / foi)
+        f, ax = plt.subplots(figsize=(15, 10))
+
+        extent = [0, len(signal) / fs, foi[0], foi[-1]]
+        im = ax.imshow(ampls, cmap="magma", aspect="auto", extent=extent, origin='lower')
+
+        ppl.colorbar(im, ax=ax, orientation='horizontal',
+                     shrink=0.7, pad=0.2, label='amplitude (a.u.)')
+        plt.title('superlets v')
+
+        plt.show()
+
+
+
+        f, ax = plt.subplots(figsize=(15, 10))
+        levels = [0.0625, 0.125, 0.25, 0.5, 1, 2, 4, 8, 16]
+        levels=20
+        vmin=-30
+        vmax=10
+
+        cruellacwt=ax.contourf(signal_wavelettime_grid*4, np.log2(signal_waveletperiod_grid4), np.log2(np.transpose(signal_waveletpower_grid5)),levels, vmin=vmin, vmax=vmax,
+                    extend='both')
+        cruellacwtlines=ax.contour(signal_wavelettime_grid*4, np.log2((signal_waveletperiod_grid4)), np.transpose(signal_waveletsignif_grid3), [-99, 1], colors='k',
+                   linewidths=2.)
+        ax.set_yticks(np.arange(0,10,1))
+
+
+        ax.set_xticks(np.arange(0,5000, 500))
+
+        cbar = f.colorbar(cruellacwt)
+        cbar.add_lines(cruellacwtlines)
+        cbar.ax.set_ylabel('power')
+
+        plt.xlabel('Time (ms), target onset = 4000 ms')
+        plt.ylabel('frequency')
+        plt.title('kPywavelet version - Cruella lfp, original lfp, target word = 4000 ms')
+        plt.show()
+
 
 
         signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period, signal_waveletsignif_grid, signal_waveletperiod_grid =wavelet_kpanalysis(total_lfp_np_cwt)
