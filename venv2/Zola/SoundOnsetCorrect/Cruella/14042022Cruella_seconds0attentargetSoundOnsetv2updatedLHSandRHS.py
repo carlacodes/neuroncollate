@@ -15,7 +15,7 @@ blocksOfInterest=[51,52,53,54,56,57,58,59]
 #            highpassfilterParentName=['D:\Electrophysiological Data\F1815_Cruella\HP_' num2str(currBlockName) '\targetword\soundOnset\orderingbyLRtime\withmisses2s\' left_hand_or_right{k0}]; %bb4bb5\TARGETonset\rhstim
 
 
-left_hand_or_right=['BB2BB3'] ##'BB2BB3'
+left_hand_or_right=['BB4BB5'] ##'BB2BB3'
 #            highpassfilterParentName=['D:\Electrophysiological Data\F1604_Cruella\HP_' num2str(currBlockName) '\soundonset\correctresp\orderingbyLRtime\' middleword '2sBB2BB3']; %bb4bb5\TARGETonset\rhstim
 #            highpassfilterParentName=['D:\Electrophysiological Data\F1604_Cruella\HP_' num2str(currBlockName) '\soundonset\correctresp\orderingbyLRtime\2sBB2BB3']; %bb4bb5\TARGETonset\rhstim
 

@@ -35,7 +35,7 @@ for k00 in pitch_shift_or_not:
     for k0 in left_hand_or_right:
         for i in blocksOfInterest:
             user_input = 'D:/Electrophysiological_Data/'+fid+'/LFP_BlockNellie-' + str(
-                i) + '/noepoch/' + '/' + k0 + '/'
+                i) + '/noepochtargcentred/' + '/' + k0 + '/'
 
             searchstring = 'Arrays'  # input('What word are you trying to find?')
             if os.path.isdir(user_input) is False:
@@ -189,7 +189,7 @@ for k00 in pitch_shift_or_not:
         # in future need to make function to loop this over different bands, e.g. 5-20, 5-30
         # need to check 15,20 again
 
-        #total_lfp_np=bandpass_by_site(total_lfp_np, 1*1000, 20*1000, 1000)
+        total_lfp_np=bandpass_by_site(total_lfp_np, 1, 20, 1000)
         #total_lfp_np=np.mean(total_lfp_np, axis=2)
         # total_lfp_modelfit=total_lfp_modelfit[:,:, np.newaxis]
         start = 0
@@ -212,8 +212,8 @@ for k00 in pitch_shift_or_not:
 
         #total_lfp_np /= total_lfp_np.std(axis=1, keepdims=True)
 
-        shift_model_lfp=shift_model.transform(total_lfp_np)
-        lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
+        # shift_model_lfp=shift_model.transform(total_lfp_np)
+        # lin_model_lfp=lin_model.transform(total_lfp_np)[:, :, 0]
 
         total_lfp_for_mod=total_lfp_np
 
@@ -250,77 +250,77 @@ for k00 in pitch_shift_or_not:
         import numpy as np
         import matplotlib.pyplot as plt
 
-        imkw = dict(clim=(-2, 2), cmap='bwr', interpolation="none", aspect="auto")
-
-        fig, axes = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
-
-        axes[0].imshow(np.mean(total_lfp_for_mod, axis=2), **imkw)
-        axes[1].imshow(np.mean(total_lfp_for_mod, axis=2), **imkw)
-        axes[2].imshow(lin_model_lfp, **imkw)
-
-        axes[0].set_title("raw lfp (bandpass-filtered and then z-scored)")
-        axes[1].set_title("shift aligned")
-        axes[2].set_title("linear aligned")
-
-        axes[0].set_ylabel("trials")
-
-        for ax in axes:
-            i = np.linspace(0, lfp_time_crop.size - 1, 3).astype(int)
-            ax.set_xticks(i)
-            ax.set_xticklabels(lfp_time_crop[i])
-            ax.set_xlabel("time (ms)")
-
-        fig.tight_layout()
-        plt.show()
-
-        N = 5001
-        # sample spacing
-        T = 1.0 / 200.0
-        x = np.linspace(0.0, N * T, N, endpoint=False)
-
-        y = np.mean(np.mean(total_lfp_np, axis=2), axis=0)
-        y=scipy.signal.detrend((y))
-        yf = fft(y)
-        xf = fftfreq(N, T)[:N // 2]
-
-        from scipy.signal import blackman
-
-        w = blackman(N)
-        ywf = fft(y * w)
-        xf = fftfreq(N, T)[:N // 2]
-
-        plt.plot(xf, 2.0 / N * np.abs(yf[0:N // 2]), label='de-trended only')
-        plt.plot(xf, 2.0 / N * np.abs(ywf[0:N // 2]), label='detrended, with blackman window')
-
-        plt.grid()
-        plt.title('FFT of LFP, trial averaged, de-trended')
-        plt.xlabel('Frequency')
-        plt.xlim((0,20))
-        plt.xticks(np.arange(0, 20, step=1), rotation=45)  # Set label locations.
-        plt.legend()
-
-        plt.show()
-
-
-        def fft_with_window(signalx, N, T):
-            signal_fft_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2]), dtype="complex_")
-            for i in range(0, (signalx).shape[2]):
-                selected_unit = signalx[:, :, i]
-                #print(selected_unit.shape)
-
-                for ii in range(0, signalx.shape[0]):
-                    selected_trial_ofunit = selected_unit[ii, :]
-                    #print(selected_trial_ofunit.shape)
-                    y = selected_trial_ofunit
-                    #y = y - np.mean(y)
-
-                    w = blackman(N)
-                    ywf = fft(y * w)
-                    xf = fftfreq(N, T)[:N // 2]
-                    signal_fft_grid[ii, :, i] = ywf
-
-            return signal_fft_grid
-
+        # imkw = dict(clim=(-2, 2), cmap='bwr', interpolation="none", aspect="auto")
+        #
+        # fig, axes = plt.subplots(1, 3, sharey=True, figsize=(10, 3.5))
+        #
+        # axes[0].imshow(np.mean(total_lfp_for_mod, axis=2), **imkw)
+        # axes[1].imshow(np.mean(total_lfp_for_mod, axis=2), **imkw)
+        # axes[2].imshow(lin_model_lfp, **imkw)
+        #
+        # axes[0].set_title("raw lfp (bandpass-filtered and then z-scored)")
+        # axes[1].set_title("shift aligned")
+        # axes[2].set_title("linear aligned")
+        #
+        # axes[0].set_ylabel("trials")
+        #
+        # for ax in axes:
+        #     i = np.linspace(0, lfp_time_crop.size - 1, 3).astype(int)
+        #     ax.set_xticks(i)
+        #     ax.set_xticklabels(lfp_time_crop[i])
+        #     ax.set_xlabel("time (ms)")
+        #
+        # fig.tight_layout()
+        # plt.show()
+        #
+        # N = 5001
+        # # sample spacing
+        # T = 1.0 / 200.0
+        # x = np.linspace(0.0, N * T, N, endpoint=False)
+        #
+        # y = np.mean(np.mean(total_lfp_np, axis=2), axis=0)
+        # y=scipy.signal.detrend((y))
+        # yf = fft(y)
+        # xf = fftfreq(N, T)[:N // 2]
+        #
+        # from scipy.signal import blackman
+        #
+        # w = blackman(N)
+        # ywf = fft(y * w)
+        # xf = fftfreq(N, T)[:N // 2]
+        #
+        # plt.plot(xf, 2.0 / N * np.abs(yf[0:N // 2]), label='de-trended only')
+        # plt.plot(xf, 2.0 / N * np.abs(ywf[0:N // 2]), label='detrended, with blackman window')
+        #
+        # plt.grid()
+        # plt.title('FFT of LFP, trial averaged, de-trended')
+        # plt.xlabel('Frequency')
+        # plt.xlim((0,20))
+        # plt.xticks(np.arange(0, 20, step=1), rotation=45)  # Set label locations.
+        # plt.legend()
+        #
+        # plt.show()
+        #
+        #
+        # def fft_with_window(signalx, N, T):
+        #     signal_fft_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2]), dtype="complex_")
+        #     for i in range(0, (signalx).shape[2]):
+        #         selected_unit = signalx[:, :, i]
+        #         #print(selected_unit.shape)
+        #
+        #         for ii in range(0, signalx.shape[0]):
+        #             selected_trial_ofunit = selected_unit[ii, :]
+        #             #print(selected_trial_ofunit.shape)
+        #             y = selected_trial_ofunit
+        #             #y = y - np.mean(y)
+        #
+        #             w = blackman(N)
+        #             ywf = fft(y * w)
+        #             xf = fftfreq(N, T)[:N // 2]
+        #             signal_fft_grid[ii, :, i] = ywf
+        #
+        #     return signal_fft_grid
+        #
 
         from wavelets import WaveletAnalysis
         import pycwt
@@ -432,24 +432,24 @@ for k00 in pitch_shift_or_not:
 
         # sample spacing
         T = 1.0 / 200.0
-        shift_model_lfp_forfft = scipy.signal.detrend((shift_model_lfp), axis=1)
+        # shift_model_lfp_forfft = scipy.signal.detrend((shift_model_lfp), axis=1)
         total_lfp_np_cwt=scipy.signal.detrend(total_lfp_np, axis=1)
-        signal_in_grid = fft_with_window(shift_model_lfp_forfft, N, T)
-        x = np.linspace(0.0, N * T, N, endpoint=False)
-        y = np.mean(np.mean(signal_in_grid, axis=2), axis=0)
-
-        signal_wavelet=wavelet_with_window(shift_model_lfp_forfft, N, T)
-        signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid =wavelet_wvanalysis(shift_model_lfp_forfft)
-        signal_waveletpower_grid2=np.mean(signal_waveletpower_grid, axis=0)
-        signal_waveletpower_grid3=np.mean(signal_waveletpower_grid2, axis=1)
-        fig, ax = plt.subplots()
-
-
-        T, S = np.meshgrid(signal_wavelettime_grid, signal_waveletscales_grid)
-        ax.contourf(T, S, np.transpose(signal_waveletpower_grid3), 100)
-        #ax.set_yticks(np.linspace(0, 100, 10))
-        #ax.set_yscale('log')
-        plt.show()
+        # signal_in_grid = fft_with_window(shift_model_lfp_forfft, N, T)
+        # x = np.linspace(0.0, N * T, N, endpoint=False)
+        # y = np.mean(np.mean(signal_in_grid, axis=2), axis=0)
+        #
+        # signal_wavelet=wavelet_with_window(shift_model_lfp_forfft, N, T)
+        # signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid =wavelet_wvanalysis(shift_model_lfp_forfft)
+        # signal_waveletpower_grid2=np.mean(signal_waveletpower_grid, axis=0)
+        # signal_waveletpower_grid3=np.mean(signal_waveletpower_grid2, axis=1)
+        # fig, ax = plt.subplots()
+        #
+        #
+        # T, S = np.meshgrid(signal_wavelettime_grid, signal_waveletscales_grid)
+        # ax.contourf(T, S, np.transpose(signal_waveletpower_grid3), 100)
+        # #ax.set_yticks(np.linspace(0, 100, 10))
+        # #ax.set_yscale('log')
+        # plt.show()
 
 
         signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period, signal_waveletsignif_grid, signal_waveletperiod_grid =wavelet_kpanalysis(total_lfp_np_cwt)
@@ -482,9 +482,9 @@ for k00 in pitch_shift_or_not:
         cbar.add_lines(cruellacwtlines)
         cbar.ax.set_ylabel('power')
 
-        plt.xlabel('Time (ms), trial onset = 0.5s, 500ms')
+        plt.xlabel('Time (ms), target onset = 4000 ms')
         plt.ylabel('frequency')
-        plt.title('kPywavelet version - Cruella lfp, original lfp, 3s<time to target word<4s')
+        plt.title('kPywavelet version - Cruella lfp, original lfp, target word = 4000 ms')
         plt.show()
 
 
