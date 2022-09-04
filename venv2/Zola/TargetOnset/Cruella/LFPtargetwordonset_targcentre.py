@@ -335,15 +335,15 @@ for k00 in pitch_shift_or_not:
             foi = np.linspace(1, 100, 50)
             scales = scale_from_period(1 / foi)
             signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 50),
-                                                dtype="void")
+                                                dtype="cfloat")
             signal_waveletscales_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 50),
-                                                 dtype="void")
+                                                 dtype="cfloat")
             signal_wavelettime_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 50),
-                                               dtype="void")
+                                               dtype="cfloat")
             signal_waveletsignif_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 50),
-                                                 dtype="void")
+                                                 dtype="cfloat")
             signal_waveletperiod_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 50),
-                                                 dtype="void")
+                                                 dtype="cfloat")
 
             for i in range(0, (signalx).shape[2]):
                 selected_unit = signalx[:, :, i]
@@ -379,11 +379,11 @@ for k00 in pitch_shift_or_not:
 
 
         def wavelet_kpanalysis(signalx, dt=0.25):
-            signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="void")
-            signal_waveletscales_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="void")
-            signal_wavelettime_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="void")
-            signal_waveletsignif_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="void")
-            signal_waveletperiod_grid=np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="void")
+            signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="cfloat")
+            signal_waveletscales_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="cfloat")
+            signal_wavelettime_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="cfloat")
+            signal_waveletsignif_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="cfloat")
+            signal_waveletperiod_grid=np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 46),dtype="cfloat")
 
             for i in range(0, (signalx).shape[2]):
                 selected_unit = signalx[:, :, i]
@@ -443,9 +443,9 @@ for k00 in pitch_shift_or_not:
             return signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, period, signal_waveletsignif_grid, signal_waveletperiod_grid
 
         def wavelet_wvanalysis(signalx, dt=5):
-            signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
-            signal_waveletscales_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
-            signal_wavelettime_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="float")
+            signal_waveletpower_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="complex")
+            signal_waveletscales_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="complex")
+            signal_wavelettime_grid = np.empty(((signalx).shape[0], (signalx).shape[1], (signalx).shape[2], 91),dtype="complex")
 
             for i in range(0, (signalx).shape[2]):
                 selected_unit = signalx[:, :, i]
@@ -493,12 +493,13 @@ for k00 in pitch_shift_or_not:
         signal_waveletpower_grid2=np.mean(signal_waveletpower_grid, axis=0)
         signal_waveletpower_grid3=np.mean(signal_waveletpower_grid2, axis=1)
         signal_waveletpower_grid3_plot=np.transpose(signal_waveletpower_grid3)
+        signal_waveletpower_grid3_plot=np.abs(signal_waveletpower_grid3_plot)
         foi = np.linspace(1, 100, 50)
         scales = scale_from_period(1 / foi)
         f, ax = plt.subplots(figsize=(15, 10))
 
         extent = [0, len(signal_waveletpower_grid3) / fs, foi[0], foi[-1]]
-        im = ax.imshow(np.transpose(signal_waveletpower_grid3), cmap="magma", aspect="auto", extent=extent, origin='lower')
+        im = ax.imshow(np.transpose(signal_waveletpower_grid3_plot), cmap="magma", aspect="auto", extent=extent, origin='lower')
 
         # ppl.colorbar(im, ax=ax, orientation='horizontal',
         #              shrink=0.7, pad=0.2, label='amplitude (a.u.)')
