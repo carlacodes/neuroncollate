@@ -372,7 +372,7 @@ for k00 in pitch_shift_or_not:
 
                     signal_wavelettime_grid = np.arange(0, N) * dt
 
-            return signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid
+            return signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, spec
 
 
 
@@ -489,7 +489,7 @@ for k00 in pitch_shift_or_not:
 
 
 
-        signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid =wavelet_superletsanalysis2(total_lfp_np_cwt)
+        signal_waveletpower_grid, signal_wavelettime_grid, signal_waveletscales_grid, spec =wavelet_superletsanalysis2(total_lfp_np_cwt)
         signal_waveletpower_grid2=np.mean(signal_waveletpower_grid, axis=0)
         signal_waveletpower_grid3=np.mean(signal_waveletpower_grid2, axis=1)
         signal_waveletpower_grid3_plot=np.transpose(signal_waveletpower_grid3)
@@ -499,11 +499,11 @@ for k00 in pitch_shift_or_not:
         f, ax = plt.subplots(figsize=(15, 10))
 
         extent = [0, len(signal_waveletpower_grid3) / fs, foi[0], foi[-1]]
-        im = ax.imshow(np.transpose(signal_waveletpower_grid3_plot), cmap="magma", aspect="auto", extent=extent, origin='lower')
+        im = ax.imshow((np.abs(spec)), cmap="magma", aspect="auto", extent=extent, origin='lower')
 
         # ppl.colorbar(im, ax=ax, orientation='horizontal',
         #              shrink=0.7, pad=0.2, label='amplitude (a.u.)')
-        plt.title('superlets version, cruella lfp relative to target onset = 4s ')
+        plt.title('superlets version one trial, cruella lfp relative to target onset = 4s ')
         plt.xlabel('time')
         plt.ylabel('frequency (hz)')
 
