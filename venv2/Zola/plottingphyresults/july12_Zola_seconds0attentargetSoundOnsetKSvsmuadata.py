@@ -31,7 +31,7 @@ for k0 in left_hand_or_right:
     for i in blocksOfInterest:
         #        highpassfilterParentName=['D:\Electrophysiological Data\F1702_Zola_Nellie\HP_' num2str(currBlockName) '\\bothstim\orderingbyLRtime\300msepoch']; %BB2BB3\TARGETonset\rhstim
 
-        user_input = 'D:/Electrophysiological Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/bothstim/orderingbyLRtime/300msepoch/'
+        user_input = 'D:/Electrophysiological_Data/F1702_Zola_Nellie/HP_BlockNellie-'+str(i)+'/bothstim/orderingbyLRtime/300msepoch/'
         directory = os.listdir(user_input)
 
         searchstring = 'Arrays'#input('What word are you trying to find?')
