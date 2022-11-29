@@ -10,11 +10,11 @@ import numpy as np
 f={}
 blockData={}
 #blocksOfInterest=[118, 119,123,126,127,128,129, 135,136, 137,139,140,141,142,143]
-blocksOfInterest=[ 50,51,52,53,54,55,56,57,58,59,60] #change as needed
-left_hand_or_right=['BB4BB5'] ##'BB2BB3'
+blocksOfInterest=[25,26,28,30,32,33,34] #change as needed
+left_hand_or_right=['BB2BB3'] ##'BB2BB3'
 for k0 in left_hand_or_right:
     for i in blocksOfInterest:
-        user_input = 'D:/Electrophysiological Data/F1815_Cruella/HP_BlockNellie-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/withmisses2s/'+k0+'/'
+        user_input = 'D:/Electrophysiological_Data/F1815_Cruella/HP_BlockNellie-AA-'+str(i)+'/targetword/soundOnset/orderingbyLRtime/withmisses2s/'+k0+'/'
         directory = os.listdir(user_input)
 
         searchstring = 'Arrays'#input('What word are you trying to find?')

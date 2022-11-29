@@ -29,7 +29,7 @@ for k00 in pitch_shift_or_not:
     for k0 in left_hand_or_right:
         for i in blocksOfInterest:
             user_input = 'D:/Electrophysiological_Data/F1815_Cruella/HP_BlockNellie-AA-' + str(
-                i) + '/targetword//orderingbyLRtime/' + k00 + '/' + k0 + '/'
+                i) + '/targetword//soundOnset/' + k00 + '/' + k0 + '/'
             # directory = os.listdir(user_input)
 
             searchstring = 'Arrays'  # input('What word are you trying to find?')
