@@ -248,7 +248,7 @@ for k0 in left_hand_or_right:
                 print('something good')
                 goodChanlist=np.append(goodChanlist, int(key))
         else:
-            if (selectedmeans) >= abs(1.1*selectedmeansb):  # selectedmeans-counter: #-(0.1*(counter)):
+            if (selectedmeans) >= abs(1.2*selectedmeansb):  # selectedmeans-counter: #-(0.1*(counter)):
                 print('something good')
                 goodChanlist = np.append(goodChanlist, int(key))
 
